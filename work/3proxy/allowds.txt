@@ -1,0 +1,1 @@
+*microsoft*,*gov*,*gov.ua*,*org*,*org.ua,*google*,*gmail*,*wik*,*yandex*,*ya.ru,*rambler*,*aport*,*meta*,*bigmir*,*blogspot*,*guon.kiev.ua*,*mail*,*osvita*,*drweb*,*avg*,www.i.ua,*ukr.net,*avast*,freemail.ukr.net*,*profspilka.kiev.ua*,*tutor.in.ua*,*dnz.kiev.ua*,*office365*,*dnz.kiev.ua*,*eset*

@@ -1,0 +1,40 @@
+internal 10.4.41.25
+external 10.69.0.5
+nserver 217.25.192.69
+nserver 217.25.192.61
+ 
+daemon
+
+maxconn 300
+flush
+users ds:CL:ds
+
+auth iponly strong
+allow ds $/home/adminuser/3proxy/ds.txt $/home/adminuser/3proxy/allowds.txt 80,8080-8088,443,8443 * 1-7 00:00:00-23:59:59
+deny *
+
+log /home/adminuser/3proxy/logs/LogPRoxy.log D
+rotate 20
+
+proxy -p2589 -a -t -n
+
+#Web admin
+flush
+writable
+auth iponly strong
+users adm:CL:123
+allow adm * * 80 *
+admin
+
+
+#mail ukr.net.
+flush
+auth iponly
+allow * * * 110,143,993,995,25,465,587,3110,3995,3143,3993,3025,3465,3587 *
+tcppm 3110 pop.ukr.net 110
+tcppm 3995 pop.ukr.net 995
+tcppm 3143 imap.ukr.net 143
+tcppm 3993 imap.ukr.net 993
+tcppm 3025 smtp.ukr.net 25
+tcppm 3465 smtp.ukr.net 465
+tcppm 3587 smtp.ukr.net 587
