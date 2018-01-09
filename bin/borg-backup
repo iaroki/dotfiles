@@ -1,0 +1,1 @@
+sudo borg create --stats /home/max/data/borgbackup::20171215 / --exclude /dev --exclude /proc --exclude /sys --exclude /run --exclude /var/run --exclude /home

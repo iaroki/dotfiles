@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker run -it --rm --name=pass -v /home/max/data/fakedata/pass:/home/iaroki iaroki/pass

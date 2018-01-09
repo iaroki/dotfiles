@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker run -it --rm --name=pelican -v /home/max/tmp/bb:/home/iaroki/blog pelican

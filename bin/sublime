@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker run --rm --name=sublime -v /tmp/.X11-unix:/tmp/.X11-unix:ro -v /home/max/data/fakedata/sublime:/home/iaroki -e DISPLAY=:0 iaroki/sublime

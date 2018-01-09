@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker run --rm --name=transmission -v /tmp/.X11-unix:/tmp/.X11-unix:ro -e DISPLAY=:0 -v /home/max/data/fakedata/transmission:/home/iaroki iaroki/transmission

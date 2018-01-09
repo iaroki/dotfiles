@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker run --rm --name=chrome --privileged -m 1024m -v /tmp/.X11-unix:/tmp/.X11-unix:ro -e DISPLAY=:0 --device /dev/snd --device /dev/dri --group-add 12 iaroki/chrome

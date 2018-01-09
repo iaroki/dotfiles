@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker run --rm --name=zeal -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=:0 -v /home/max/data/fakedata/zeal:/root iaroki/zeal
