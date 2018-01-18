@@ -1,8 +1,9 @@
 syntax on
-set background=light
+set background=dark
+color gruvbox
 set noshowmode
 set t_Co=256
-let g:lightline = {'colorscheme': 'solarized', }
+let g:lightline = {'colorscheme': 'gruvbox', }
 set enc=utf-8
 set ls=2
 set incsearch
