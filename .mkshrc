@@ -1,0 +1,7 @@
+# Full PS1 with username@hostname
+PS1=$'\e[35;1m${USER:=$(id -un)}\e[37;1m@\e[36;1m${HOSTNAME:=$(hostname -s)}\e[33;1m ${PWD} \e[34;1m$(git branch 2>/dev/null) \e[31;1m>\e[33;1m>\e[32;1m>\e[00m '
+
+alias ls='ls --color=auto'
+alias ll='ls -la'
+
+export GPG_TTY=$(tty)
