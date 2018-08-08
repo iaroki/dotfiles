@@ -1,0 +1,20 @@
+set realname='iaroki'
+set editor=vim
+set mbox_type=Maildir
+set folder = ~/mail/iaroki@disroot.org/
+set mbox=+mbox
+set spoolfile=+INBOX
+set record=+Sent
+set postponed=+Drafts
+set trash=+Trash
+set sendmail="/usr/bin/msmtp"
+set envelope_from=yes
+
+set sidebar_visible = yes
+bind index,pager \Cp sidebar-prev
+bind index,pager \Cn sidebar-next
+bind index,pager \Co sidebar-open
+
+mailboxes +INBOX +Sent +Drafts +Trash +Ukrnet +Mcontinium +Maximilian
+
+macro generic S "<shell-escape>offlineimap\r"

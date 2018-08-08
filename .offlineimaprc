@@ -1,0 +1,18 @@
+[general]
+accounts = iaroki@disroot.org
+
+[Account iaroki@disroot.org]
+localrepository = local-iaroki@disroot.org
+remoterepository = remote-iaroki@disroot.org
+
+[Repository local-iaroki@disroot.org]
+type = Maildir
+localfolders = ~/mail/iaroki@disroot.org
+
+[Repository remote-iaroki@disroot.org]
+type = IMAP
+remotehost = disroot.org
+remoteuser = iaroki
+remotepass = password
+ssl = yes
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
