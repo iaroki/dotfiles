@@ -3,6 +3,7 @@ set background=dark
 color gruvbox
 set noshowmode
 set t_Co=256
+let g:rainbow_active = 1
 let g:lightline = {
     \ 'colorscheme': 'gruvbox',
     \ 'active': {
