@@ -27,7 +27,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wget vim tmux git firefox bspwm sxhkd polybar dmenu slock remmina mpv
+    wget vim tmux git firefox bspwm sxhkd polybar dmenu slock remmina mpv zathura htop
   ];
 
   environment.homeBinInPath = true;
