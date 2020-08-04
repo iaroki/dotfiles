@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<channel name="thunar" version="1.0">
+  <property name="last-view" type="string" value="ThunarCompactView"/>
+  <property name="misc-single-click" type="bool" value="false"/>
+  <property name="default-view" type="string" value="ThunarCompactView"/>
+  <property name="misc-thumbnail-mode" type="string" value="THUNAR_THUMBNAIL_MODE_NEVER"/>
+  <property name="last-location-bar" type="string" value="ThunarLocationEntry"/>
+  <property name="last-window-width" type="int" value="1125"/>
+  <property name="last-window-height" type="int" value="628"/>
+  <property name="last-window-maximized" type="bool" value="true"/>
+</channel>
