@@ -27,6 +27,7 @@
     wget vim tmux git firefox remmina mpv htop xarchiver vagrant tdesktop tree rofi
     xfce.xfce4-battery-plugin xfce.xfce4-clipman-plugin xfce.xfce4-datetime-plugin
     xfce.xfce4-xkb-plugin xfce.xfdashboard xorg.xhost unzip polybar bspwm
+    jetbrains.idea-ultimate
   ];
 
   environment.homeBinInPath = true;
