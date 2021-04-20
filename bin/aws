@@ -1,0 +1,4 @@
+#!/bin/bash
+
+docker run -it --rm -v ~/.aws:/home/awsuser/.aws iaroki/awscli:1.18.17 aws "$@"
+
