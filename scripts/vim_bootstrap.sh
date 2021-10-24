@@ -16,6 +16,7 @@ fi
 
 echo "VIM plugins initialization..."
 git clone -q https://github.com/fatih/vim-go.git ~/.vim/pack/plugins/start/vim-go
+git clone -q https://github.com/LnL7/vim-nix.git ~/.vim/pack/plugins/start/vim-nix
 git clone -q https://github.com/preservim/nerdtree.git ~/.vim/pack/plugins/start/nerdtree
 git clone -q https://github.com/tpope/vim-fugitive.git ~/.vim/pack/plugins/start/vim-fugitive
 git clone -q https://github.com/itchyny/lightline.vim ~/.vim/pack/plugins/start/lightline
