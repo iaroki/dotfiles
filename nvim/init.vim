@@ -8,10 +8,12 @@ Plug 'fatih/vim-go'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'preservim/tagbar'
 Plug 'preservim/nerdtree'
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 Plug 'frazrepo/vim-rainbow'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'Yggdroot/indentLine'
@@ -20,11 +22,14 @@ Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
 map <C-n> :NERDTreeToggle<CR>
+nmap <C-P> :FZF<CR>
 inoremap kj <esc>
 cnoremap kj <C-C>
 
 color gruvbox
+set background=dark
 set nu
+syntax on
 set enc=utf-8
 set ls=2
 set noshowmode
@@ -50,4 +55,5 @@ let g:lightline = {
     \ 'component_function': {
     \   'gitbranch': 'gitbranch#name'
     \ },
-    \ 
+    \ }
+
