@@ -20,6 +20,9 @@ Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
 map <C-n> :NERDTreeToggle<CR>
+inoremap kj <esc>
+cnoremap kj <C-C>
+
 color gruvbox
 set nu
 set enc=utf-8
