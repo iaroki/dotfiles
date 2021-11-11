@@ -1,11 +1,12 @@
 runtime ./plug.vim
 
-map <C-n> :NERDTreeToggle<CR>
+map <C-n> :NvimTreeToggle<CR>
 inoremap kj <esc>
 cnoremap kj <C-C>
 
 colorscheme gruvbox
 set background=dark
+set termguicolors
 set number
 syntax on
 set encoding=UTF-8
