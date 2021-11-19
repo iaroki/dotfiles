@@ -1,7 +1,7 @@
 require('packer-bootstrap')
+require('plugins')
 require('mapping')
 require('config')
-require('plugins')
 require('lualine-conf')
 require('nvim-tree-conf')
 require('nvim-tabline-conf')
