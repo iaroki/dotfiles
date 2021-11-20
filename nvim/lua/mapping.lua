@@ -6,4 +6,10 @@ vim.api.nvim_set_keymap('n', '<leader>ff', '<cmd>Telescope find_files<cr>', {nor
 vim.api.nvim_set_keymap('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>fb', '<cmd>Telescope buffers<cr>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>fh', '<cmd>Telescope help_tags<cr>', {noremap = true})
+vim.api.nvim_set_keymap('n', 'fl', '<cmd>HopLine<cr>', {noremap = true})
+vim.api.nvim_set_keymap('n', 'fL', '<cmd>HopLineStart<cr>', {noremap = true})
+vim.api.nvim_set_keymap('n', 'fw', '<cmd>HopWord<cr>', {noremap = true})
+vim.api.nvim_set_keymap('n', 'fp', '<cmd>HopPattern<cr>', {noremap = true})
+vim.api.nvim_set_keymap('n', 'fc', '<cmd>HopChar1<cr>', {noremap = true})
+vim.api.nvim_set_keymap('n', 'fC', '<cmd>HopChar2<cr>', {noremap = true})
 
