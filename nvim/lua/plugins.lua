@@ -19,6 +19,7 @@ use { 'kyazdani42/nvim-tree.lua' }
 use { 'hoob3rt/lualine.nvim' }
 use { 'crispgm/nvim-tabline' }
 use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+use { 'p00f/nvim-ts-rainbow' }
 use { 'gruvbox-community/gruvbox' }
 use { 'preservim/tagbar' }
 use { 'tpope/vim-surround' }
