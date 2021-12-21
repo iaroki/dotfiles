@@ -13,6 +13,7 @@ use { 'onsails/lspkind-nvim' }
 use { 'glepnir/lspsaga.nvim' }
 use { 'nvim-lua/popup.nvim' }
 use { 'nvim-lua/plenary.nvim' }
+use { 'folke/todo-comments.nvim' }
 use { 'nvim-telescope/telescope.nvim' }
 use { 'kyazdani42/nvim-web-devicons' }
 use { 'kyazdani42/nvim-tree.lua' }
