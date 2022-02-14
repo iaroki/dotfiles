@@ -24,3 +24,8 @@ map('n', '<leader>N', ':NvimTreeFindFile<CR>', { noremap = true, silent = false 
 -- Telescope mappings
 map('n', '<leader>tf', ':Telescope find_files<CR>', { noremap = true, silent = false })
 map('n', '<leader>tg', ':Telescope live_grep<CR>', { noremap = true, silent = false })
+
+-- Hop mappings
+map('n', '<leader>hl', ':HopLine<CR>', { noremap = true, silent = false })
+map('n', '<leader>hL', ':HopLineStart<CR>', { noremap = true, silent = false })
+map('n', '<leader>hw', ':HopWord<CR>', { noremap = true, silent = false })
