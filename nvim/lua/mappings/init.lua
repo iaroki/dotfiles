@@ -29,3 +29,6 @@ map('n', '<leader>tg', ':Telescope live_grep<CR>', { noremap = true, silent = fa
 map('n', '<leader>hl', ':HopLine<CR>', { noremap = true, silent = false })
 map('n', '<leader>hL', ':HopLineStart<CR>', { noremap = true, silent = false })
 map('n', '<leader>hw', ':HopWord<CR>', { noremap = true, silent = false })
+
+-- Gitsigns mappings
+map('n', '<leader>gb', ':Gitsigns toggle_current_line_blame<CR>', { noremap = true, silent = false })

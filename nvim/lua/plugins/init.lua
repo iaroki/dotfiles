@@ -50,6 +50,12 @@ return require('packer').startup(function(use)
   use 'p00f/nvim-ts-rainbow'
   use 'phaazon/hop.nvim'
   use 'numToStr/Comment.nvim'
+  use {
+    'lewis6991/gitsigns.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim'
+    },
+  }
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
