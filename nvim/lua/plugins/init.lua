@@ -56,6 +56,7 @@ return require('packer').startup(function(use)
       'nvim-lua/plenary.nvim'
     },
   }
+  use 'windwp/nvim-autopairs'
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
