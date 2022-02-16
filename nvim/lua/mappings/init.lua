@@ -10,7 +10,7 @@ map('i', 'jk', '<ESC>', { noremap = true, silent = false })
 map('i', 'kj', '<ESC>', { noremap = true, silent = false })
 map('v', '<', '<gv', { noremap = true, silent = false })
 map('v', '>', '>gv', { noremap = true, silent = false })
-map('n', '<leader>w', ':bdelete<CR>', { noremap = true, silent = false })
+map('n', '<leader>w', ':b#|bd#<CR>', { noremap = true, silent = false })
 
 -- Bufferline mappings
 map('n', '<TAB>', ':BufferLineCycleNext<CR>', { noremap = true, silent = true })
