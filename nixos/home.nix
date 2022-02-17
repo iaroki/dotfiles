@@ -48,15 +48,6 @@ in
             NODE_PATH = "/home/msytnyk/.npm-packages/lib/node_modules";
         };
 
-        programs.neovim = {
-            enable = true;
-            plugins = with pkgs.vimPlugins; [
-            ];
-            viAlias = true;
-            vimAlias = true;
-            vimdiffAlias = true;
-        };
-
         programs.zsh = {
             enable = true;
             autocd = true;
