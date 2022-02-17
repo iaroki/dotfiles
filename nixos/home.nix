@@ -26,7 +26,7 @@ in
             pkgs.awscli2
             pkgs.kubectl
             pkgs.kubernetes-helm
-            pkgs.go
+            pkgs.go_1_17
             pkgs.gopls
             pkgs.gotags
             pkgs.ctags
