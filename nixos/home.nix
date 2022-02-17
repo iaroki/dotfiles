@@ -115,7 +115,7 @@ in
             userEmail = "iaroki@protonmail.com";
             signing = {
                 key = "F3456398396F1A5E";
-                signByDefault = true;
+                signByDefault = false;
             };
             aliases = {
                 prettylog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";

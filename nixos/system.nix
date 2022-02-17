@@ -20,11 +20,13 @@
 
   environment.homeBinInPath = true;
   programs.vim.defaultEditor = true;
+  programs.zsh.enable = true;
 
   users.users.msytnyk = {
       isNormalUser = true;
       createHome = true;
       home = "/home/msytnyk";
+      shell = pkgs.zsh;
       extraGroups = [ "wheel" "docker" ];
   };
 
