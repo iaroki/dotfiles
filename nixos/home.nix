@@ -1,24 +1,14 @@
 { config, pkgs, ... }:
 let
     home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
-    unstableTarball = builtins.fetchTarball "https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz";
 in
 {
-    nixpkgs.config = {
-      packageOverrides = pkgs: {
-        unstable = import unstableTarball {
-          config = config.nixpkgs.config;
-        };
-      };
-    };
-
     imports = [
         (import "${home-manager}/nixos")
     ];
 
     home-manager.users.msytnyk = {
         home.packages = [
-            unstable.neovim
             pkgs.exa
             pkgs.bat
             pkgs.fzf
@@ -65,25 +55,6 @@ in
             viAlias = true;
             vimAlias = true;
             vimdiffAlias = true;
-        };
-
-        programs.bash = {
-            enable = true;
-            shellOptions = [];
-            historyControl = [ "ignoredups" "ignorespace" ];
-            shellAliases = {
-                ll = "exa -l";
-                ls = "exa";
-                ga = "git add";
-                gc = "git commit";
-                gco = "git checkout";
-                gcp = "git cherry-pick";
-                gdiff = "git diff";
-                gl = "git prettylog";
-                gp = "git push";
-                gs = "git status";
-                gt = "git tag";
-            };
         };
 
         programs.zsh = {
