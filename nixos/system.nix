@@ -1,7 +1,27 @@
 { config, pkgs, ... }:
 
+let
+    unstableTarball = builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
+in
+
 {
-  imports = [ ./home.nix ];
+  imports = [ 
+    ./home.nix
+    ./xfce.nix
+    ./vmware.nix
+  ];
+
+  nixpkgs.config = {
+    packageOverrides = pkgs: {
+      unstable = import unstableTarball {
+        config = config.nixpkgs.config;
+      };
+    };
+  };
+
+  environment.systemPackages = with pkgs; [
+  wget tmux git htop tree unzip unstable.neovim
+  ];
 
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
@@ -14,17 +34,15 @@
 
   time.timeZone = "Europe/Kiev";
 
-  environment.systemPackages = with pkgs; [
-  wget vim tmux git htop tree unzip
-  ];
-
   environment.homeBinInPath = true;
   programs.vim.defaultEditor = true;
+  programs.zsh.enable = true;
 
   users.users.msytnyk = {
       isNormalUser = true;
       createHome = true;
       home = "/home/msytnyk";
+      shell = pkgs.zsh;
       extraGroups = [ "wheel" "docker" ];
   };
 

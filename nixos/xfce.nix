@@ -7,7 +7,12 @@
   xfce.xfce4-xkb-plugin xfce.xfdashboard
   ];
 
-  fonts.fonts = [ pkgs.fira-mono pkgs.unifont pkgs.siji ];
+  fonts.fonts = [
+    pkgs.fira-mono
+    pkgs.unifont
+    pkgs.siji
+    (pkgs.nerdfonts.override { fonts = [ "FiraCode" ]; })
+  ];
 
   programs.slock.enable = true;
   programs.nm-applet.enable = true;

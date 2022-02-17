@@ -48,34 +48,6 @@ in
             NODE_PATH = "/home/msytnyk/.npm-packages/lib/node_modules";
         };
 
-        programs.neovim = {
-            enable = true;
-            plugins = with pkgs.vimPlugins; [
-            ];
-            viAlias = true;
-            vimAlias = true;
-            vimdiffAlias = true;
-        };
-
-        programs.bash = {
-            enable = true;
-            shellOptions = [];
-            historyControl = [ "ignoredups" "ignorespace" ];
-            shellAliases = {
-                ll = "exa -l";
-                ls = "exa";
-                ga = "git add";
-                gc = "git commit";
-                gco = "git checkout";
-                gcp = "git cherry-pick";
-                gdiff = "git diff";
-                gl = "git prettylog";
-                gp = "git push";
-                gs = "git status";
-                gt = "git tag";
-            };
-        };
-
         programs.zsh = {
             enable = true;
             autocd = true;
@@ -115,7 +87,7 @@ in
             userEmail = "iaroki@protonmail.com";
             signing = {
                 key = "F3456398396F1A5E";
-                signByDefault = true;
+                signByDefault = false;
             };
             aliases = {
                 prettylog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
