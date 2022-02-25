@@ -1,6 +1,6 @@
+require('plugins')
 require('options')
 require('mappings')
-require('plugins')
 require('themes.catppuccin')
 require('configs.treesitter')
 require('configs.lualine')
