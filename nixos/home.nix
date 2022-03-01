@@ -23,6 +23,7 @@ in
             pkgs.terragrunt
             pkgs.ansible
             pkgs.ansible-lint
+            pkgs.sshpass
             pkgs.awscli2
             pkgs.kubectl
             pkgs.kubernetes-helm
