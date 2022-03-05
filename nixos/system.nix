@@ -7,7 +7,7 @@ in
 {
   imports = [ 
     ./home.nix
-    ./xfce.nix
+    ./dwm.nix
     ./vmware.nix
   ];
 
@@ -20,7 +20,7 @@ in
   };
 
   environment.systemPackages = with pkgs; [
-  wget tmux git htop tree unzip unstable.neovim
+  vim wget tmux git htop tree unzip unstable.neovim
   ];
 
   networking.hostName = "nixos";

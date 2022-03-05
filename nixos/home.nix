@@ -1,41 +1,55 @@
 { config, pkgs, ... }:
+
 let
     home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
+    unstableTarball = builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
 in
+
 {
     imports = [
         (import "${home-manager}/nixos")
     ];
 
+	nixpkgs.config = {
+	    packageOverrides = pkgs: {
+	      unstable = import unstableTarball {
+		config = config.nixpkgs.config;
+	      };
+	    };
+	  };
+
     home-manager.users.msytnyk = {
-        home.packages = [
-            pkgs.exa
-            pkgs.bat
-            pkgs.fzf
-            pkgs.ripgrep
-            pkgs.jq
-            pkgs.yq
-            pkgs.tree
-            pkgs.terraform_0_14
-            pkgs.terraform-docs
-            pkgs.terraform-ls
-            pkgs.tflint
-            pkgs.terragrunt
-            pkgs.ansible
-            pkgs.ansible-lint
-            pkgs.sshpass
-            pkgs.awscli2
-            pkgs.kubectl
-            pkgs.kubernetes-helm
-            pkgs.go_1_17
-            pkgs.gopls
-            pkgs.gotags
-            pkgs.ctags
-            pkgs.python39
-            pkgs.python39Packages.pip
-            pkgs.gcc
-            pkgs.skopeo
-            pkgs.buildah
+        home.packages = with pkgs; [
+            exa
+            bat
+            fzf
+            ripgrep
+            jq
+            yq
+            tree
+	    nomad
+	    consul
+	    vault
+            terraform_0_14
+            terraform-docs
+            terraform-ls
+            tflint
+            terragrunt
+            ansible
+            ansible-lint
+            sshpass
+            awscli2
+            kubectl
+            kubernetes-helm
+            go_1_17
+            gopls
+            gotags
+            ctags
+            python39
+            python39Packages.pip
+            gcc
+            skopeo
+            buildah
         ];
 
         home.sessionVariables = {
@@ -132,6 +146,10 @@ in
                 set-option -g status-right "#[bg=colour237,fg=colour239 nobold, nounderscore, noitalics]#[bg=colour239,fg=colour246] %Y-%m-%d | %H:%M #[bg=colour239,fg=colour248,nobold,noitalics,nounderscore]#[bg=colour248,fg=colour237] #h "
                 set-window-option -g window-status-current-format "#[bg=colour214,fg=colour237,nobold,noitalics,nounderscore]#[bg=colour214,fg=colour239] #I #[bg=colour214,fg=colour239,bold] #W#{?window_zoomed_flag,*Z,} #[bg=colour237,fg=colour214,nobold,noitalics,nounderscore]"
                 set-window-option -g window-status-format "#[bg=colour239,fg=colour237,noitalics]#[bg=colour239,fg=colour223] #I #[bg=colour239,fg=colour223] #W #[bg=colour237,fg=colour239,noitalics]"
+		setw -g mode-keys vi
+		bind -T copy-mode-vi v send -X begin-selection
+		bind-key -T copy-mode-vi y send -X copy-pipe-and-cancel "xclip -sel clip -i"
+		bind P paste-buffer
             '';
         };
     };
