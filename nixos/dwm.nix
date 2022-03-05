@@ -26,9 +26,7 @@ nixpkgs.overlays = [
   ];
 
   environment.systemPackages = with pkgs; [
-  firefox remmina mpv xorg.xhost
-  dmenu st dwm dwm-status xclip
-  rofi
+    xorg.xhost dmenu st dwm dwm-status xclip rofi
   ];
 
   fonts.fonts = [
