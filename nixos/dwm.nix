@@ -8,8 +8,8 @@ nixpkgs.overlays = [
       src = super.fetchFromGitHub {
         owner = "iaroki";
         repo = "dwm";
-        rev = "674ab0aaf7f46e2402c1b7eb8a1d34c375b35b6a";
-        sha256 = "08dscz5il14qn18yp7idmknizics42p6l2mx2a2axwzfxmz4333z";
+        rev = "d9aaf84d190d77a391ae4cee49d24815d5cbb4b3";
+        sha256 = "0qvjqragad0bz5gj2qaxpb1wig88wmr90hkc70prz0s6y0g99sil";
       };
     });
 
