@@ -1,9 +1,5 @@
 { config, pkgs, ... }:
 
-let
-    unstableTarball = builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
-in
-
 {
   imports = [ 
     ./home.nix
@@ -11,19 +7,11 @@ in
     ./vmware.nix
   ];
 
-  nixpkgs.config = {
-    packageOverrides = pkgs: {
-      unstable = import unstableTarball {
-        config = config.nixpkgs.config;
-      };
-    };
-  };
-
   environment.systemPackages = with pkgs; [
-  vim wget tmux git htop tree unzip unstable.neovim
+  vim wget tmux git htop tree unzip
   ];
 
-  networking.hostName = "nixos";
+  networking.hostName = "nixstation";
   networking.networkmanager.enable = true;
 
   i18n.defaultLocale = "en_US.UTF-8";
@@ -45,6 +33,8 @@ in
       shell = pkgs.zsh;
       extraGroups = [ "wheel" "docker" ];
   };
+
+  security.sudo.wheelNeedsPassword = false;
 
   virtualisation.docker.enable = true;
   virtualisation.podman.enable = true;
