@@ -10,7 +10,7 @@ in
     (import "${home-manager}/nixos")
   ];
 
-	nixpkgs.config = {
+  nixpkgs.config = {
     packageOverrides = pkgs: {
       unstable = import unstableTarball {
         config = config.nixpkgs.config;
@@ -30,6 +30,7 @@ in
       jq
       yq
       tree
+      unstable.neovim
       unstable.nomad
       unstable.consul
       unstable.vault
