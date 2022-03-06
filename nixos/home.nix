@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 
 let
+  username = "msytnyk";
   home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
   unstableTarball = builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
 in
@@ -18,7 +19,15 @@ in
     };
   };
 
-  home-manager.users.msytnyk = {
+  users.users."${username}" = {
+      isNormalUser = true;
+      createHome = true;
+      home = "/home/${username}";
+      shell = pkgs.zsh;
+      extraGroups = [ "wheel" "docker" ];
+  };
+
+  home-manager.users."${username}" = {
     home.packages = with pkgs; [
       firefox
       remmina
@@ -63,8 +72,8 @@ in
       EDITOR = "nvim";
       PAGER = "less -FirSwX";
       MANPAGER = "less -FirSwX";
-      PATH = "/home/msytnyk/.npm-packages/bin:$PATH";
-      NODE_PATH = "/home/msytnyk/.npm-packages/lib/node_modules";
+      PATH = "/home/${username}/.npm-packages/bin:$PATH";
+      NODE_PATH = "/home/${username}/.npm-packages/lib/node_modules";
     };
 
     programs.zsh = {

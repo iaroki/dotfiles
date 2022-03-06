@@ -26,14 +26,6 @@
   programs.vim.defaultEditor = true;
   programs.zsh.enable = true;
 
-  users.users.msytnyk = {
-      isNormalUser = true;
-      createHome = true;
-      home = "/home/msytnyk";
-      shell = pkgs.zsh;
-      extraGroups = [ "wheel" "docker" ];
-  };
-
   security.sudo.wheelNeedsPassword = false;
 
   virtualisation.docker.enable = true;
