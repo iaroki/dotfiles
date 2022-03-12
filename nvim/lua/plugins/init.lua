@@ -27,9 +27,10 @@ return require('packer').startup(function(use)
   use {'numToStr/Comment.nvim'}
   use {'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'}}
   use {'windwp/nvim-autopairs'}
-  use {'lukas-reineke/indent-blankline.nvim'} 
-  use {'cappyzawa/trim.nvim'} 
+  use {'lukas-reineke/indent-blankline.nvim'}
+  use {'cappyzawa/trim.nvim'}
   use {'folke/todo-comments.nvim', requires = {'nvim-lua/plenary.nvim'}}
+  use {'akinsho/toggleterm.nvim'}
   use {'norcalli/nvim-colorizer.lua'}
 
   if packer_bootstrap then
