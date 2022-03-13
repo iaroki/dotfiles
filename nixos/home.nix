@@ -63,6 +63,7 @@ in
       gcc
       skopeo
       buildah
+      mosh
     ];
 
     home.sessionVariables = {
