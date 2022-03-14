@@ -25,6 +25,7 @@ in
       home = "/home/${username}";
       shell = pkgs.zsh;
       extraGroups = [ "wheel" "docker" ];
+      openssh.authorizedKeys.keyFiles = [ /etc/nixos/ssh/authorized_keys ];
   };
 
   home-manager.users."${username}" = {
@@ -168,4 +169,3 @@ in
     };
   };
 }
-
