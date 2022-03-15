@@ -45,6 +45,7 @@ in
       unstable.nomad
       unstable.consul
       unstable.vault
+      unstable.hcloud
       terraform_0_14
       terraform-docs
       terraform-ls
