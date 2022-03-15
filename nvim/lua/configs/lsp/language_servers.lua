@@ -30,7 +30,7 @@ local on_attach = function(client, bufnr)
 end
 
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-local servers = { 'gopls', 'ansiblels', 'bashls', 'dockerls', 'terraformls', 'tflint', 'yamlls' }
+local servers = { 'gopls', 'ansiblels', 'bashls', 'dockerls', 'terraformls', 'tflint', 'yamlls', 'pyright' }
 for _, lsp in pairs(servers) do
   require('lspconfig')[lsp].setup {
     capabilities = capabilities,
