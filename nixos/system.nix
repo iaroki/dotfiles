@@ -1,9 +1,11 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ 
+  imports = [
     ./home.nix
     ./dwm.nix
+    # ./xfce.nix
+    ./remote.nix
     ./vmware.nix
   ];
 
