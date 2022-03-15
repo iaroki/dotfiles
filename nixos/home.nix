@@ -32,6 +32,7 @@ in
     home.packages = with pkgs; [
       firefox
       remmina
+      zathura
       mpv
       exa
       bat
