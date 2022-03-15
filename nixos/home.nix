@@ -63,6 +63,8 @@ in
       ctags
       python39
       python39Packages.pip
+      nodePackages.npm
+      nodePackages.pyright
       gcc
       skopeo
       buildah
