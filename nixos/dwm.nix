@@ -36,6 +36,7 @@
 
   environment.systemPackages = with pkgs; [
     xorg.xhost dmenu st dwm slstatus xclip rofi
+    firefox remmina zathura mpv
   ];
 
   fonts.fonts = [

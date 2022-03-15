@@ -2,7 +2,7 @@
 
 {
   environment.systemPackages = with pkgs; [
-  firefox remmina mpv xorg.xhost
+  firefox remmina zathura mpv xorg.xhost
   xfce.xfce4-battery-plugin xfce.xfce4-clipman-plugin xfce.xfce4-datetime-plugin
   xfce.xfce4-xkb-plugin xfce.xfdashboard
   ];
