@@ -15,9 +15,6 @@
 
   networking.hostName = "nixstation";
   networking.networkmanager.enable = true;
-  networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ 7777 ]; # web expose
-  networking.firewall.allowedTCPPorts = [ 60000 60001 ]; # mosh-server
 
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
