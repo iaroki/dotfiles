@@ -42,6 +42,7 @@ in
       unstable.consul
       unstable.vault
       unstable.hcloud
+      gnumake
       terraform_0_14
       terraform-docs
       terraform-ls
