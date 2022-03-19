@@ -61,6 +61,7 @@ in
       ctags
       python39
       python39Packages.pip
+      nodejs
       nodePackages.npm
       nodePackages.pyright
       gcc
