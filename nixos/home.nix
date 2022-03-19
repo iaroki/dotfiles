@@ -34,6 +34,7 @@ in
       bat
       fzf
       ripgrep
+      fd
       jq
       yq
       tree
