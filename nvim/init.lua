@@ -1,7 +1,6 @@
 require('plugins')
 require('options')
 require('mappings')
-require('themes.catppuccin')
 require('configs.treesitter')
 require('configs.lualine')
 require('configs.bufferline')

@@ -1,4 +1,5 @@
-vim.cmd('colorscheme catppuccin')
+vim.g.gruvbox_contrast_dark = 'hard'
+vim.cmd('colorscheme gruvbox')
 vim.cmd('filetype plugin indent on')
 vim.o.shortmess = vim.o.shortmess .. 'c'
 vim.o.hidden = true

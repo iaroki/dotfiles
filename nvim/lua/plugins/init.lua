@@ -6,7 +6,6 @@ end
 
 return require('packer').startup(function(use)
   use {'wbthomason/packer.nvim'}
-  use {'catppuccin/nvim', as = 'catppuccin'}
   use {'gruvbox-community/gruvbox'}
   use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
   use {'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons', opt = true}}
