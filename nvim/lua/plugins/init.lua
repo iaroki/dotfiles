@@ -24,6 +24,7 @@ return require('packer').startup(function(use)
   use {'p00f/nvim-ts-rainbow'}
   use {'phaazon/hop.nvim'}
   use {'numToStr/Comment.nvim'}
+  use {'ur4ltz/surround.nvim'}
   use {'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'}}
   use {'windwp/nvim-autopairs'}
   use {'lukas-reineke/indent-blankline.nvim'}
