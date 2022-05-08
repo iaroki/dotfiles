@@ -39,12 +39,8 @@ in
       yq
       tree
       unstable.neovim
-      unstable.nomad
-      unstable.consul
-      unstable.vault
-      unstable.hcloud
       gnumake
-      terraform_0_14
+      terraform
       terraform-docs
       terraform-ls
       tflint
