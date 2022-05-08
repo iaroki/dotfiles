@@ -30,6 +30,11 @@ in
 
   home-manager.users."${username}" = {
     home.packages = with pkgs; [
+      firefox
+      tdesktop
+      remmina
+      zathura
+      mpv
       exa
       bat
       fzf
