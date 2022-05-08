@@ -34,6 +34,7 @@ in
       tdesktop
       remmina
       zathura
+      scrot
       mpv
       exa
       bat
