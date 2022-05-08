@@ -8,8 +8,8 @@
         src = super.fetchFromGitHub {
           owner = "iaroki";
           repo = "dwm";
-          rev = "7ca9968358e51942084adf225c5b1cb8b8c77fee";
-          sha256 = "1rhirl946jj40m856v4lvjh636fhm0q266sgrxmbz1by1ac7q2qq";
+          rev = "06e687f5d6a8a34e05f3abb4b0f2b50a0cd17665";
+          sha256 = "1i08psnbdrfm6i412b58dhc95m0jv66c5n6470mma4769rflxdjd";
         };
       });
 
