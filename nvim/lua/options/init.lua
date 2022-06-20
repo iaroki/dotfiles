@@ -1,5 +1,4 @@
-vim.g.gruvbox_contrast_dark = 'hard'
-vim.cmd('colorscheme gruvbox')
+vim.cmd('colorscheme kanagawa')
 vim.cmd('filetype plugin indent on')
 vim.o.shortmess = vim.o.shortmess .. 'c'
 vim.o.hidden = true
