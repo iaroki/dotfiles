@@ -1,11 +1,42 @@
 { config, pkgs, ... }:
 
 {
+
+  nixpkgs.overlays = [
+    (self: super: {
+      dwm = super.dwm.overrideAttrs (oldAttrs: rec {
+        src = super.fetchFromGitHub {
+          owner = "iaroki";
+          repo = "dwm";
+          rev = "06e687f5d6a8a34e05f3abb4b0f2b50a0cd17665";
+          sha256 = "1i08psnbdrfm6i412b58dhc95m0jv66c5n6470mma4769rflxdjd";
+        };
+      });
+
+      st = super.st.overrideAttrs (oldAttrs: rec {
+        src = super.fetchFromGitHub {
+          owner = "iaroki";
+          repo = "st";
+          rev = "e8583132fde5e23ede931acabddc776f9a29d81c";
+          sha256 = "0b0bjpih9xq39rx66hlq9gb6qpg2qzyb4564fnmkxfq806ih7mrs";
+        };
+        buildInputs = oldAttrs.buildInputs ++  [ super.harfbuzz ];
+      });
+
+      slstatus = super.slstatus.overrideAttrs (oldAttrs: rec {
+        src = super.fetchFromGitHub {
+          owner = "iaroki";
+          repo = "slstatus";
+          rev = "de91b3f738fcd42f88ad4653c3ac20ab1564961d";
+          sha256 = "00lpdw1d4r1sn4ccw4dr5qw7m7fcv19ma1ajw5jbm6vcpnm9x74f";
+        };
+      });
+    })
+  ];
+
   environment.systemPackages = with pkgs; [
-  xorg.xhost rofi tdesktop pulseaudio pavucontrol pasystray
-  xfce.xfce4-battery-plugin xfce.xfce4-clipman-plugin xfce.xfce4-datetime-plugin
-  xfce.xfce4-xkb-plugin xfce.xfce4-volumed-pulse xfce.xfce4-pulseaudio-plugin
-  xfce.xfdashboard
+    xorg.xhost dmenu st dwm slstatus xclip rofi
+    pulseaudio pavucontrol pasystray dunst
   ];
 
   fonts.fonts = [
@@ -59,7 +90,7 @@
   services.xserver.xkbVariant = "winkeys";
   services.xserver.xkbOptions = "grp:caps_toggle";
 
-  services.xserver.desktopManager.xfce.enable = true;
-  services.xserver.desktopManager.xfce.thunarPlugins = [ pkgs.xfce.thunar-archive-plugin pkgs.xfce.thunar-volman ];
-  services.xserver.displayManager.defaultSession = "xfce";
+  services.xserver.windowManager.dwm.enable = true;
+  services.xserver.displayManager.defaultSession = "none+dwm";
+
 }

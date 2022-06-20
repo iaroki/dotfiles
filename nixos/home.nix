@@ -30,6 +30,12 @@ in
 
   home-manager.users."${username}" = {
     home.packages = with pkgs; [
+      firefox
+      tdesktop
+      remmina
+      zathura
+      scrot
+      mpv
       exa
       bat
       fzf
@@ -39,12 +45,8 @@ in
       yq
       tree
       unstable.neovim
-      unstable.nomad
-      unstable.consul
-      unstable.vault
-      unstable.hcloud
       gnumake
-      terraform_0_14
+      terraform
       terraform-docs
       terraform-ls
       tflint
