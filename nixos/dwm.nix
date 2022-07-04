@@ -38,6 +38,10 @@
     xorg.xhost dmenu st dwm slstatus xclip rofi
   ];
 
+  environment.sessionVariables = {
+    GTK_THEME = "Adwaita:dark";
+  };
+
   fonts.fonts = [
     pkgs.fira-mono
     pkgs.unifont
@@ -59,6 +63,6 @@
   services.xserver.windowManager.dwm.enable = true;
   services.xserver.displayManager.defaultSession = "none+dwm";
 
-  services.xserver.dpi = 220;
+  #services.xserver.dpi = 220;
 
 }

@@ -29,8 +29,8 @@ in
   };
 
   home-manager.users."${username}" = {
+    home.stateVersion = "22.05";
     home.packages = with pkgs; [
-      firefox
       tdesktop
       remmina
       zathura
@@ -57,7 +57,7 @@ in
       awscli2
       kubectl
       kubernetes-helm
-      go_1_17
+      go
       gopls
       gotags
       ctags
@@ -72,6 +72,36 @@ in
       mosh
     ];
 
+    services.pasystray.enable = true;
+
+    programs.rofi = {
+      enable = true;
+      theme = "DarkBlue";
+    };
+
+    programs.firefox = {
+      enable = true;
+      profiles.firenix = {
+        settings = {
+            "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+        };
+        userChrome = ''
+          /* hides the native tabs */
+          #TabsToolbar {
+            visibility: collapse;
+          }
+
+          #titlebar {
+            visibility: collapse;
+          }
+
+          #sidebar-header {
+            visibility: collapse !important;
+          }
+        '';
+      };
+    };
+
     home.sessionVariables = {
       LANG = "en_US.UTF-8";
       LC_CTYPE = "en_US.UTF-8";
@@ -81,6 +111,7 @@ in
       MANPAGER = "less -FirSwX";
       PATH = "/home/${username}/.npm-packages/bin:$PATH";
       NODE_PATH = "/home/${username}/.npm-packages/lib/node_modules";
+      GTK_THEME = "Adwaita:dark";
     };
 
     programs.zsh = {
