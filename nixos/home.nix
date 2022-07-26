@@ -2,7 +2,7 @@
 
 let
   username = "msytnyk";
-  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
+  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/release-22.05.tar.gz";
   unstableTarball = builtins.fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz";
 in
 
@@ -134,7 +134,7 @@ in
       };
       oh-my-zsh = {
         enable = true;
-        plugins = [];
+        plugins = [ "aws" "kubectx" "nomad" ];
         theme = "robbyrussell";
       };
     };
