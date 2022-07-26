@@ -35,7 +35,8 @@
   ];
 
   environment.systemPackages = with pkgs; [
-    xorg.xhost dmenu st dwm slstatus xclip rofi
+    xorg.xhost dmenu st dwm slstatus xclip rofi libnotify
+    pulseaudio pavucontrol dunst
   ];
 
   environment.sessionVariables = {
