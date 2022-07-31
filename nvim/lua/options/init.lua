@@ -1,4 +1,3 @@
-vim.cmd('colorscheme kanagawa')
 vim.cmd('filetype plugin indent on')
 vim.o.shortmess = vim.o.shortmess .. 'c'
 vim.o.hidden = true
@@ -22,6 +21,7 @@ vim.o.scrolloff = 3
 vim.o.sidescrolloff = 5
 vim.wo.wrap = false
 vim.wo.number = true
+vim.wo.relativenumber = true
 vim.o.cursorline = true
 vim.wo.signcolumn = 'yes'
 vim.o.tabstop = 2
