@@ -10,7 +10,7 @@ return require('packer').startup(function(use)
   use {'rebelot/kanagawa.nvim'}
   use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
   use {'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons', opt = true}}
-  use {'akinsho/bufferline.nvim', requires = {'kyazdani42/nvim-web-devicons'}}
+  use {'akinsho/bufferline.nvim', tag = 'v2.*', requires = {'kyazdani42/nvim-web-devicons'}}
   use {'kyazdani42/nvim-tree.lua', requires = {'kyazdani42/nvim-web-devicons'}}
   use {'nvim-telescope/telescope.nvim', requires = {'nvim-lua/plenary.nvim'}}
   use {'neovim/nvim-lspconfig'}
@@ -31,7 +31,7 @@ return require('packer').startup(function(use)
   use {'lukas-reineke/indent-blankline.nvim'}
   use {'cappyzawa/trim.nvim'}
   use {'folke/todo-comments.nvim', requires = {'nvim-lua/plenary.nvim'}}
-  use {'akinsho/toggleterm.nvim'}
+  use {'akinsho/toggleterm.nvim', tag = 'v2.*'}
   use {'norcalli/nvim-colorizer.lua'}
 
   if packer_bootstrap then
