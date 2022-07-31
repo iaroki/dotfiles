@@ -45,6 +45,7 @@ in
       jq
       yq
       tree
+      lazygit
       unstable.neovim
       gnumake
       terraform
