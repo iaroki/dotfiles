@@ -35,6 +35,7 @@ in
       remmina
       zathura
       scrot
+      flameshot
       mpv
       exa
       bat
@@ -56,6 +57,7 @@ in
       sshpass
       awscli2
       kubectl
+      kubectx
       kubernetes-helm
       go
       gopls
@@ -73,6 +75,7 @@ in
     ];
 
     services.pasystray.enable = true;
+    services.blueman-applet.enable = true;
 
     programs.rofi = {
       enable = true;
@@ -134,7 +137,7 @@ in
       };
       oh-my-zsh = {
         enable = true;
-        plugins = [ "aws" "kubectx" "nomad" ];
+        plugins = [ "aws" "kubectl" "kubectx" "nomad" ];
         theme = "robbyrussell";
       };
     };
