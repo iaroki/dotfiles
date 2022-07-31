@@ -34,6 +34,7 @@ return require('packer').startup(function(use)
   use {'folke/todo-comments.nvim', requires = {'nvim-lua/plenary.nvim'}}
   use {'akinsho/toggleterm.nvim', tag = 'v2.*'}
   use {'norcalli/nvim-colorizer.lua'}
+  use {'ThePrimeagen/harpoon'}
 
   if packer_bootstrap then
     require('packer').sync()

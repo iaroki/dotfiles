@@ -32,3 +32,12 @@ map('n', '<leader>hw', ':HopWord<CR>', { noremap = true, silent = false })
 
 -- Gitsigns mappings
 map('n', '<leader>gb', ':Gitsigns toggle_current_line_blame<CR>', { noremap = true, silent = false })
+
+-- Harpoon mappings
+map('n', '<leader>ht', ':lua require("harpoon.ui").toggle_quick_menu()<CR>', { noremap = true, silent = false })
+map('n', '<leader>ha', ':lua require("harpoon.mark").add_file()<CR>', { noremap = true, silent = false })
+map('n', '<leader>hn', ':lua require("harpoon.ui").nav_next()<CR>', { noremap = true, silent = false })
+map('n', '<leader>hp', ':lua require("harpoon.ui").nav_prev()<CR>', { noremap = true, silent = false })
+map('n', '<leader>h1', ':lua require("harpoon.ui").nav_file(1)<CR>', { noremap = true, silent = false })
+map('n', '<leader>h2', ':lua require("harpoon.ui").nav_file(2)<CR>', { noremap = true, silent = false })
+map('n', '<leader>h3', ':lua require("harpoon.ui").nav_file(3)<CR>', { noremap = true, silent = false })
