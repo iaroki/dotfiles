@@ -9,6 +9,7 @@
     shellAliases = {
       ll = "exa -l";
       ls = "exa";
+      lg = "lazygit";
       ga = "git add";
       gc = "git commit";
       gco = "git checkout";
