@@ -5,6 +5,7 @@
     gnumake
     go
     gopls
+    gcc
   ];
 
   programs.fzf = {

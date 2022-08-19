@@ -1,14 +1,15 @@
 {
   description = "nixstation";
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-unstable"; 
+    nixpkgs.url = "nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
+    inputs.nur.url = "github:nix-community/NUR";
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@attrs:
+  outputs = { self, nixpkgs, home-manager, nur, ... }@attrs:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -22,7 +23,10 @@
       };
       homeConfigurations.${hostname} = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        modules = [ ./home.nix ];
+        modules = [
+          nur.nixosModules.nur
+          ./home.nix
+        ];
       };
     };
 }
