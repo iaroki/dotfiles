@@ -13,6 +13,7 @@
     ./services.nix
     ./session.nix
     ./tmux.nix
+    # ./work.nix
     ./zathura.nix
     ./zsh.nix
   ];

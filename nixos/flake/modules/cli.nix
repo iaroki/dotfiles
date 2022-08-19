@@ -16,6 +16,7 @@
     yq
     tree
     btop
+    mosh
   ];
 
   programs.fzf = {

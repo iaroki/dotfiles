@@ -7,8 +7,4 @@
     gopls
     gcc
   ];
-
-  programs.fzf = {
-    enable = true;
-  };
 }
