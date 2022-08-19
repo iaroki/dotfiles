@@ -33,6 +33,12 @@ map('n', '<leader>hw', ':HopWord<CR>', { noremap = true, silent = false })
 -- Gitsigns mappings
 map('n', '<leader>gb', ':Gitsigns toggle_current_line_blame<CR>', { noremap = true, silent = false })
 
+-- Telekasten mappings
+map('n', '<leader>z', ':Telekasten panel<CR>', { noremap = true, silent = false })
+map('n', '<leader>zn', ':Telekasten new_note<CR>', { noremap = true, silent = false })
+map('n', '<leader>zf', ':Telekasten find_notes<CR>', { noremap = true, silent = false })
+map('n', '<leader>zg', ':Telekasten search_notes<CR>', { noremap = true, silent = false })
+
 -- Harpoon mappings
 map('n', '<leader>ht', ':lua require("harpoon.ui").toggle_quick_menu()<CR>', { noremap = true, silent = false })
 map('n', '<leader>ha', ':lua require("harpoon.mark").add_file()<CR>', { noremap = true, silent = false })
