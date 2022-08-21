@@ -18,7 +18,7 @@
       set -g status-right-style ""
       set -g status-right-length 25
       set -g window-status-current-style "bold"
-      set -g window-status-style "fg=#DCD7BA"
+      set -g window-status-style ""
       set -g window-status-format " #[fg=#C8C093]#{?#{==:#W,zsh},[#I]#{b:pane_current_path},#W}#F "
       set -g window-status-current-format " #[fg=#C8C093]#{?#{==:#W,zsh},#{b:pane_current_path},#W}#F "
       set -g window-status-separator ""

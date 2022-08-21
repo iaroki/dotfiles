@@ -6,6 +6,15 @@
     autocd = true;
     enableAutosuggestions = true;
     enableCompletion = true;
+    enableSyntaxHighlighting = true;
+    defaultKeymap = "viins";
+    initExtra = ''
+      bindkey jk vi-cmd-mode
+      zstyle ':completion::complete:make:*:targets' call-command true
+    '';
+    localVariables = {
+        VI_MODE_SET_CURSOR = true;
+      };
     shellAliases = {
       ll = "exa -l";
       ls = "exa";
@@ -24,7 +33,7 @@
     };
     oh-my-zsh = {
       enable = true;
-      plugins = [ "aws" "kubectl" "kubectx" "nomad" ];
+      plugins = [ "aws" "kubectl" "kubectx" "vi-mode" ];
       theme = "robbyrussell";
     };
   };
