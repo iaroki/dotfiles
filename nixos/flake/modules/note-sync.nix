@@ -2,6 +2,6 @@
 
 {
   home.packages = [
-    attrs.note-sync.packages."${system}".note-sync
+    attrs.note-sync.packages."x86_64-linux".note-sync
   ];
 }
