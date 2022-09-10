@@ -9,6 +9,7 @@
     ./git.nix
     ./gpg.nix
     ./nnn.nix
+    ./note-sync.nix
     ./rofi.nix
     ./services.nix
     ./session.nix
