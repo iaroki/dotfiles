@@ -36,6 +36,39 @@
         "type": "indirect"
       }
     },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1662019588,
+        "narHash": "sha256-oPEjHKGGVbBXqwwL+UjsveJzghWiWV0n9ogo1X6l4cw=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "2da64a81275b68fdad38af669afeda43d401e94b",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "ref": "nixos-unstable",
+        "type": "indirect"
+      }
+    },
+    "note-sync": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1662822268,
+        "narHash": "sha256-DNzxKB5eeGh7R21D1WcPuVxOUou0qC4Ckzum0nxkgf8=",
+        "owner": "iaroki",
+        "repo": "note-sync",
+        "rev": "351c0306c46bd17eabca93dd72d43c21412ef277",
+        "type": "github"
+      },
+      "original": {
+        "owner": "iaroki",
+        "repo": "note-sync",
+        "type": "github"
+      }
+    },
     "nur": {
       "locked": {
         "lastModified": 1662790518,
@@ -55,6 +88,7 @@
       "inputs": {
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
+        "note-sync": "note-sync",
         "nur": "nur"
       }
     },
