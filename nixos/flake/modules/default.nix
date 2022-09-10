@@ -3,6 +3,7 @@
 {
   imports = [
     ./cli.nix
+    ./bonsai.nix
     ./dev.nix
     ./dwm.nix
     ./firefox.nix
