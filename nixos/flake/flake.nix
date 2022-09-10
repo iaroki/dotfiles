@@ -7,9 +7,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nur.url = "github:nix-community/NUR";
+    note-sync.url = "github:iaroki/note-sync";
   };
 
-  outputs = { self, nixpkgs, home-manager, nur, ... }@attrs:
+  outputs = { self, nixpkgs, home-manager, nur, note-sync, ... }@attrs:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -23,6 +24,7 @@
       };
       homeConfigurations.${hostname} = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
+        extraSpecialArgs = attrs;
         modules = [
           nur.nixosModules.nur
           ./home.nix
