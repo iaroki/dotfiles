@@ -1,4 +1,4 @@
-{ config, pkgs, attrs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   # Home Manager needs a bit of information about you and the
@@ -18,10 +18,6 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
-
-  home.packages = [
-    attrs.note-sync.packages."x86_64-linux".note-sync
-  ];
 
   imports = [
     ./modules

@@ -1,7 +1,7 @@
-{ pkgs, attrs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   home.packages = [
-    attrs.note-sync.packages."x86_64-linux".note-sync
+    inputs.note-sync.packages."x86_64-linux".note-sync
   ];
 }

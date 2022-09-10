@@ -19,12 +19,12 @@
     {
       nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
         system = "${system}";
-        specialArgs = attrs;
+        specialArgs.inputs = attrs;
         modules = [ ./configuration.nix ];
       };
       homeConfigurations.${hostname} = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        extraSpecialArgs = attrs;
+        extraSpecialArgs.inputs = attrs;
         modules = [
           nur.nixosModules.nur
           ./home.nix
