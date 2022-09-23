@@ -1,5 +1,5 @@
 require('glow').setup({
-  border = "shadow",
+  border = "rounded",
   style = "dark",
   pager = true,
   width = 240,
