@@ -36,6 +36,7 @@ return require('packer').startup(function(use)
   use {'norcalli/nvim-colorizer.lua'}
   use {'renerocksai/telekasten.nvim'}
   use {'ThePrimeagen/harpoon'}
+  use {'ellisonleao/glow.nvim'}
 
   if packer_bootstrap then
     require('packer').sync()
