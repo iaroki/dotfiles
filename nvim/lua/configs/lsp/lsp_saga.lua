@@ -5,7 +5,6 @@ saga.init_lsp_saga({
 border_style = "rounded",
 move_in_saga = { prev = '<C-p>',next = '<C-n>'},
 diagnostic_header = { " ", " ", " ", "ﴞ " },
-show_diagnostic_source = true,
 max_preview_lines = 10,
 code_action_icon = "💡",
 code_action_num_shortcut = true,
@@ -27,5 +26,4 @@ code_action_keys = {
 },
 rename_action_quit = "<C-c>",
 rename_in_select = true,
-definition_preview_icon = "  ",
 })
