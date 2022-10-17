@@ -38,6 +38,9 @@ return require('packer').startup(function(use)
   use {'renerocksai/telekasten.nvim'}
   use {'ThePrimeagen/harpoon'}
   use {'ellisonleao/glow.nvim'}
+  use {'folke/noice.nvim'}
+  use {'MunifTanjim/nui.nvim'}
+  use {'rcarriga/nvim-notify'}
 
   if packer_bootstrap then
     require('packer').sync()
