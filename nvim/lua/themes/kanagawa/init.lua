@@ -1,3 +1,9 @@
+local default_colors = require("kanagawa.colors").setup()
+
+local custom_colors = {
+    sumiInk1 = "#16161D",
+}
+
 require('kanagawa').setup({
     undercurl = true,
     commentStyle = { italic = true },
@@ -12,7 +18,7 @@ require('kanagawa').setup({
     dimInactive = false,
     globalStatus = false,
     terminalColors = true,
-    colors = {},
+    colors = custom_colors,
     overrides = {},
 })
 
