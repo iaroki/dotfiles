@@ -40,7 +40,7 @@ return require('packer').startup(function(use)
   use {'ellisonleao/glow.nvim'}
   use {'folke/noice.nvim'}
   use {'MunifTanjim/nui.nvim'}
-  use {'rcarriga/nvim-notify'}
+  -- use {'rcarriga/nvim-notify'}
 
   if packer_bootstrap then
     require('packer').sync()
