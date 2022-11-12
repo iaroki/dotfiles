@@ -24,6 +24,7 @@ return require('packer').startup(function(use)
   use {'hrsh7th/vim-vsnip'}
   use {'onsails/lspkind-nvim'}
   use {'glepnir/lspsaga.nvim', branch = 'main'}
+  use {'https://git.sr.ht/~whynothugo/lsp_lines.nvim'}
   use {'p00f/nvim-ts-rainbow'}
   use {'phaazon/hop.nvim'}
   use {'numToStr/Comment.nvim'}
