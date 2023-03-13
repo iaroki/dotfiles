@@ -3,23 +3,28 @@
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ~/dev/personal ~/dev/flexmade ~/dev/ozone -mindepth 1 -maxdepth 1 -type d | fzf)
+    selected=$(find ~/dev/personal ~/dev/flexmade ~/dev/horsemapp ~/dev/ozone -mindepth 1 -maxdepth 1 -type d | fzf)
 fi
 
 if [[ -z $selected ]]; then
     exit 0
 fi
 
-selected_name=$(basename "$selected" | tr . _)
+full_path=$(realpath "${selected}" | tr . _)
+parent_path=$(dirname "${full_path}")
+parent_name=$(basename "${parent_path}")
+base_name=$(basename "${full_path}")
+hacked_name="${parent_name}/${base_name}"
+selected_name=${hacked_name}
 tmux_running=$(pgrep tmux)
 
 if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-    tmux new-session -s $selected_name -c $selected
+    tmux new-session -s "$selected_name" -c "$selected"
     exit 0
 fi
 
-if ! tmux has-session -t=$selected_name 2> /dev/null; then
-    tmux new-session -ds $selected_name -c $selected
+if ! tmux has-session -t="$selected_name" 2> /dev/null; then
+    tmux new-session -ds "$selected_name" -c "$selected"
 fi
 
-tmux switch-client -t $selected_name
+tmux switch-client -t "$selected_name"
