@@ -1,5 +1,5 @@
 require('trim').setup({
-    disable = {"markdown"},
+    ft_blocklist = {"markdown"},
 
     -- ignore space of top
     patterns = {

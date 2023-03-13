@@ -52,7 +52,7 @@ local servers = {
                   'cmake',
                   'dockerls',
                   'jsonls',
-                  'sumneko_lua',
+                  'lua_ls',
                   'terraformls',
                   'tflint',
                   'yamlls',
