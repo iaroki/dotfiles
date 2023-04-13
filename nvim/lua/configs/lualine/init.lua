@@ -1,7 +1,15 @@
+local custom_gruvbox = require'lualine.themes.gruvbox'
+custom_gruvbox.normal.c.bg = '#111111'
+custom_gruvbox.insert.c.bg = '#111111'
+custom_gruvbox.visual.c.bg = '#111111'
+custom_gruvbox.replace.c.bg = '#111111'
+custom_gruvbox.command.c.bg = '#111111'
+custom_gruvbox.inactive.c.bg = '#111111'
+
 require('lualine').setup {
   options = {
     icons_enabled = true,
-    theme = 'auto',
+    theme = custom_gruvbox,
     component_separators = { left = '', right = ''},
     section_separators = { left = '', right = ''},
     disabled_filetypes = {},

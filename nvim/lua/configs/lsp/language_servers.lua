@@ -55,7 +55,6 @@ local servers = {
                   'lua_ls',
                   'terraformls',
                   'tflint',
-                  'yamlls',
                   'pyright' }
 for _, lsp in pairs(servers) do
   require('lspconfig')[lsp].setup {
@@ -67,3 +66,14 @@ for _, lsp in pairs(servers) do
     }
   }
 end
+
+-- YAML language server Key ordering fix
+require('lspconfig').yamlls.setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+  settings = {
+    yaml = {
+      keyOrdering = false,
+    },
+  }
+}

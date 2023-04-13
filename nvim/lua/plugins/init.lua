@@ -6,7 +6,7 @@ end
 
 return require('packer').startup(function(use)
   use {'wbthomason/packer.nvim'}
-  use {'gruvbox-community/gruvbox'}
+  use {'ellisonleao/gruvbox.nvim'}
   use {'rebelot/kanagawa.nvim'}
   use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
   use {'nvim-lualine/lualine.nvim'}
@@ -41,7 +41,7 @@ return require('packer').startup(function(use)
   use {'ellisonleao/glow.nvim'}
   use {'folke/noice.nvim'}
   use {'MunifTanjim/nui.nvim'}
-  -- use {'rcarriga/nvim-notify'}
+  use {'rcarriga/nvim-notify'}
 
   if packer_bootstrap then
     require('packer').sync()
