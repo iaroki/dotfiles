@@ -7,11 +7,15 @@ return {
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-cmdline",
-      "saadparwaiz1/cmp_luasnip",
+      "hrsh7th/cmp-vsnip",
+      "hrsh7th/vim-vsnip",
+      "onsails/lspkind.nvim",
     },
-    opts = function()
+    config = function()
       local cmp = require("cmp")
-      return {
+      local lspkind = require('lspkind')
+
+      cmp.setup({
         completion = {
           completeopt = "menu,menuone,noinsert",
         },
@@ -21,7 +25,7 @@ return {
         },
         snippet = {
           expand = function(args)
-            require("luasnip").lsp_expand(args.body)
+            vim.fn["vsnip#anonymous"](args.body)
           end,
         },
         mapping = cmp.mapping.preset.insert({
@@ -39,32 +43,21 @@ return {
         }),
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
-          { name = "luasnip" },
+          { name = "vsnip" },
           { name = "buffer" },
           { name = "path" },
         }),
-        formatting = { },
+        formatting = {
+          format = lspkind.cmp_format({
+            mode = 'symbol_text',
+            maxwidth = 50
+          })
+        },
         experimental = {
           ghost_text = {
             hl_group = "LspCodeLens",
           },
         },
-        cmdline = {
-          ':',
-          {
-            mapping = cmp.mapping.preset.cmdline(),
-            sources = cmp.config.sources({
-              { name = 'path' }
-            }, {
-            {
-              name = 'cmdline',
-              option = {
-                ignore_cmds = { 'Man', '!' }
-              }
-            }
-            }),
-          },
-        }
-      }
-    end,
-  }
+      })
+    end
+}
