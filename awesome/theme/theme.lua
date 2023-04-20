@@ -10,7 +10,7 @@ local my_table = gears.table
 local theme               = {}
 theme.confdir             = os.getenv("HOME") .. "/.config/awesome/theme"
 theme.wallpaper           = os.getenv("HOME") .. "/Downloads/cp.jpg"
-theme.font                = "FiraCode Nerd Font 14"
+theme.font                = "FiraCode Nerd Font 12"
 theme.menu_bg_normal      = "#000000"
 theme.menu_bg_focus       = "#000000"
 theme.bg_normal           = "#000000"
@@ -20,7 +20,7 @@ theme.fg_normal           = "#aaaaaa"
 theme.fg_focus            = "#ff8c00"
 theme.fg_urgent           = "#af1d18"
 theme.fg_minimize         = "#ffffff"
-theme.border_width        = dpi(1)
+theme.border_width        = dpi(0)    -- NOTE: BORDERLESS SETUP
 theme.border_normal       = "#1c2022"
 theme.border_focus        = "#606060"
 theme.border_marked       = "#3ca4d8"
@@ -161,7 +161,7 @@ function theme.at_screen_connect(s)
     s.mywibox = awful.wibar({
       position = "top",
       screen = s,
-      height = dpi(25),
+      height = dpi(20),
       bg = theme.bg_normal .. 50,
       fg = theme.fg_normal })
 

@@ -56,7 +56,10 @@ local function run_once(cmd_arr)
 end
 
 -- run_once({ "urxvtd", "unclutter -root" }) -- comma-separated entries
-run_once({ "sudo", "xkeysnail", "--watch", "~/.config/xkeysnail/config.py" })
+run_once({
+  "picom",
+  "sudo xkeysnail --watch ~/.config/xkeysnail/config.py",
+})
 
 -- }}}
 
@@ -120,21 +123,6 @@ awful.util.taglist_buttons = mytable.join(
     awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
 )
 
-awful.util.tasklist_buttons = mytable.join(
-     awful.button({ }, 1, function(c)
-         if c == client.focus then
-             c.minimized = true
-         else
-             c:emit_signal("request::activate", "tasklist", { raise = true })
-         end
-     end),
-     awful.button({ }, 3, function()
-         awful.menu.client_list({ theme = { width = 250 } })
-     end),
-     awful.button({ }, 4, function() awful.client.focus.byidx(1) end),
-     awful.button({ }, 5, function() awful.client.focus.byidx(-1) end)
-)
-
 beautiful.init(string.format("%s/.config/awesome/theme/theme.lua", os.getenv("HOME")))
 
 -- }}}
@@ -185,7 +173,6 @@ awful.screen.connect_for_each_screen(function(s) beautiful.at_screen_connect(s) 
 -- {{{ Mouse bindings
 
 root.buttons(mytable.join(
-    awful.button({ }, 3, function () awful.util.mymainmenu:toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
 ))
@@ -244,10 +231,6 @@ globalkeys = mytable.join(
         end,
         {description = "focus previous by index", group = "client"}
     ),
-
-    -- Menu
-    awful.key({ modkey,           }, "w", function () awful.util.mymainmenu:show() end,
-              {description = "show main menu", group = "awesome"}),
 
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
