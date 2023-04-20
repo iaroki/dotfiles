@@ -1,15 +1,4 @@
---[[
-
-     Awesome WM configuration template
-     github.com/lcpz
-
---]]
-
 -- {{{ Required libraries
-
--- If LuaRocks is installed, make sure that packages installed through it are
--- found (e.g. lgi). If LuaRocks is not installed, do nothing.
-pcall(require, "luarocks.loader")
 
 local gears         = require("gears")
 local awful         = require("awful")
@@ -18,10 +7,9 @@ local wibox         = require("wibox")
 local beautiful     = require("beautiful")
 local naughty       = require("naughty")
 local lain          = require("lain")
---local menubar       = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
                       require("awful.hotkeys_popup.keys")
-local mytable       = awful.util.table or gears.table -- 4.{0,1} compatibility
+local mytable       = gears.table
 
 -- }}}
 
@@ -69,16 +57,6 @@ end
 
 -- run_once({ "urxvtd", "unclutter -root" }) -- comma-separated entries
 
--- This function implements the XDG autostart specification
---[[
-awful.spawn.with_shell(
-    'if (xrdb -query | grep -q "^awesome\\.started:\\s*true$"); then exit; fi;' ..
-    'xrdb -merge <<< "awesome.started:true";' ..
-    -- list each of your autostart commands, followed by ; inside single quotes, followed by ..
-    'dex --environment Awesome --autostart --search-paths "$XDG_CONFIG_DIRS/autostart:$XDG_CONFIG_HOME/autostart"' -- https://github.com/jceb/dex
-)
---]]
-
 -- }}}
 
 -- {{{ Variable definitions
@@ -91,18 +69,19 @@ local cycle_prev   = true  -- cycle with only the previously focused client or a
 local editor       = os.getenv("EDITOR") or "nvim"
 
 awful.util.terminal = terminal
-awful.util.tagnames = { "web", "term", "code", "doc", "sys" }
+-- awful.util.tagnames = { "web", "term", "code", "doc", "sys" }
+awful.util.tagnames = { "   ", "   ", "   ", "   ", "   " }
 awful.layout.layouts = {
     awful.layout.suit.tile,
+    awful.layout.suit.max,
     awful.layout.suit.floating,
+    awful.layout.suit.fair,
     awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
     awful.layout.suit.tile.top,
-    --awful.layout.suit.fair,
     --awful.layout.suit.fair.horizontal,
     --awful.layout.suit.spiral,
     --awful.layout.suit.spiral.dwindle,
-    --awful.layout.suit.max,
     --awful.layout.suit.max.fullscreen,
     --awful.layout.suit.magnifier,
     --awful.layout.suit.corner.nw,
@@ -258,32 +237,6 @@ globalkeys = mytable.join(
         end,
         {description = "focus previous by index", group = "client"}
     ),
-
-    -- By-direction client focus
-    awful.key({ modkey }, "j",
-        function()
-            awful.client.focus.global_bydirection("down")
-            if client.focus then client.focus:raise() end
-        end,
-        {description = "focus down", group = "client"}),
-    awful.key({ modkey }, "k",
-        function()
-            awful.client.focus.global_bydirection("up")
-            if client.focus then client.focus:raise() end
-        end,
-        {description = "focus up", group = "client"}),
-    awful.key({ modkey }, "h",
-        function()
-            awful.client.focus.global_bydirection("left")
-            if client.focus then client.focus:raise() end
-        end,
-        {description = "focus left", group = "client"}),
-    awful.key({ modkey }, "l",
-        function()
-            awful.client.focus.global_bydirection("right")
-            if client.focus then client.focus:raise() end
-        end,
-        {description = "focus right", group = "client"}),
 
     -- Menu
     awful.key({ modkey,           }, "w", function () awful.util.mymainmenu:show() end,
