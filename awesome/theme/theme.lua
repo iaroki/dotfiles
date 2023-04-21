@@ -50,6 +50,7 @@ local markup = lain.util.markup
 
 local mysep = wibox.widget.textbox(markup("#ff8800", " "))
 local mykb = awful.widget.keyboardlayout()
+local mypomo = require("mypomo")
 
 -- -- Pomodoro
 -- local awmodoro = require("awmodoro")
@@ -173,7 +174,8 @@ function theme.at_screen_connect(s)
             --s.mylayoutbox,
             s.mytaglist,
             s.mypromptbox,
-            -- mypomo,
+            mysep,
+            mypomo,
         },
         {
         --s.mytasklist, -- Middle widget
