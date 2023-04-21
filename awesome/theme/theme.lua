@@ -16,7 +16,7 @@ theme.menu_bg_focus       = "#000000"
 theme.bg_normal           = "#000000"
 theme.bg_focus            = "#000000"
 theme.bg_urgent           = "#000000"
-theme.fg_normal           = "#aaaaaa"
+theme.fg_normal           = "#dddddd"
 theme.fg_focus            = "#ff8c00"
 theme.fg_urgent           = "#af1d18"
 theme.fg_minimize         = "#ffffff"
@@ -81,27 +81,27 @@ local mykb = awful.widget.keyboardlayout()
 
 -- Textclock
 os.setlocale(os.getenv("LANG")) -- to localize the clock
-local mytextclock = wibox.widget.textclock("        " .. markup("#FFFFFF", " %A %d %B ") .. markup("#FF7700", " %H:%M "))
+local mytextclock = wibox.widget.textclock("        " .. markup("#FFFFFF", " <b>%A %d %B</b> ") .. markup("#FF7700", " <b>%H:%M</b> "))
 mytextclock.font = theme.font
 
 -- CPU
 local cpu = lain.widget.cpu({
     settings = function()
-        widget:set_markup(markup.fontfg(theme.font, "#e35566","閭 " .. cpu_now.usage .. "% "))
+        widget:set_markup(markup.fontfg(theme.font, "#fb4934","閭 " .. cpu_now.usage .. "% "))
     end
 })
 
 -- MEM
 local memory = lain.widget.mem({
     settings = function()
-        widget:set_markup(markup.fontfg(theme.font, "#e0da37", "﬙ " .. mem_now.perc .. "% "))
+        widget:set_markup(markup.fontfg(theme.font, "#b8bb26", "﬙ " .. mem_now.perc .. "% "))
     end
 })
 
 -- FS
 theme.fs = lain.widget.fs({
     settings  = function()
-        widget:set_markup(markup.fontfg(theme.font, "#469238", " " .. fs_now["/"].percentage .. "% "))
+        widget:set_markup(markup.fontfg(theme.font, "#83a598", " " .. fs_now["/"].percentage .. "% "))
     end
 })
 
@@ -112,7 +112,7 @@ theme.volume = lain.widget.alsa({
             volume_now.level = "婢" .. volume_now.level .. "M"
         end
 
-        widget:set_markup(markup.fontfg(theme.font, "#7493d2", " " .. volume_now.level .. "% "))
+        widget:set_markup(markup.fontfg(theme.font, "#d3869b", " " .. volume_now.level .. "% "))
     end
 })
 
@@ -125,7 +125,7 @@ local bat = lain.widget.bat({
             perc =  perc .. ""
         end
 
-        widget:set_markup(markup.fontfg(theme.font, theme.fg_normal, "  " .. perc .. " "))
+        widget:set_markup(markup.fontfg(theme.font, "#8ec07c", "  " .. perc .. " "))
     end
 })
 
@@ -162,7 +162,7 @@ function theme.at_screen_connect(s)
       position = "top",
       screen = s,
       height = dpi(20),
-      bg = theme.bg_normal .. 50,
+      bg = theme.bg_normal .. 99,
       fg = theme.fg_normal })
 
     -- Add widgets to the wibox
