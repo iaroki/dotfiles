@@ -81,7 +81,7 @@ local mykb = awful.widget.keyboardlayout()
 
 -- Textclock
 os.setlocale(os.getenv("LANG")) -- to localize the clock
-local mytextclock = wibox.widget.textclock("        " .. markup("#FFFFFF", " <b>%A %d %B</b> ") .. markup("#FF7700", " <b>%H:%M</b> "))
+local mytextclock = wibox.widget.textclock("        " .. markup("#FFFFFF", " %A %d %B ") .. markup("#FF7700", " %H:%M "))
 mytextclock.font = theme.font
 
 -- CPU
