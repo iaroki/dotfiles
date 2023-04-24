@@ -51,34 +51,7 @@ local markup = lain.util.markup
 local mysep = wibox.widget.textbox(markup("#ff8800", " "))
 local mykb = awful.widget.keyboardlayout()
 local mypomo = require("mypomo")
-
--- -- Pomodoro
--- local awmodoro = require("awmodoro")
---
--- --pomodoro wibox
--- pomowibox = awful.wibox({ position = "bottom", screen = 1, height=2})
--- pomowibox.visible = true
--- local pomodoro = awmodoro.new({
--- 	minutes 			= 1,
--- 	do_notify 			= true,
--- 	active_bg_color 	= '#313131',
--- 	paused_bg_color 	= '#7746D7',
--- 	fg_color			= {type = "linear", from = {0,0}, to = {pomowibox.width, 0}, stops = {{0, "#AECF96"},{0.5, "#88A175"},{1, "#FF5656"}}},
--- 	width 				= pomowibox.width,
--- 	height 				= pomowibox.height,
--- -- })
---
--- 	begin_callback = function()
--- 		pomowibox.visible = true
--- 	end,
---
--- 	finish_callback = function()
--- 		pomowibox.visible = true
--- 	end})
--- pomowibox:set_widget(pomodoro)
--- local mypomo = wibox.widget.textbox(pomodoro:info())
-
--- mypomo = require("pomodoro")
+local pomodoro = require("pomogpt")
 
 -- Textclock
 os.setlocale(os.getenv("LANG")) -- to localize the clock
@@ -176,6 +149,8 @@ function theme.at_screen_connect(s)
             s.mypromptbox,
             mysep,
             mypomo,
+            mysep,
+            pomodoro,
         },
         {
         --s.mytasklist, -- Middle widget
