@@ -1,20 +1,21 @@
+local awful = require("awful")
 local gears = require("gears")
 local wibox = require("wibox")
 local naughty = require("naughty")
 
 local text = wibox.widget {
     id = "txt",
-    font = "FiraCode Nerd Font 3",
+    font = "FiraCode Nerd Font 6",
     widget = wibox.widget.textbox
 }
 
 local pomo = {}
 
 -- Set the work duration in seconds (default is 25 minutes)
-pomo.work_duration = 2 * 60
+pomo.work_duration = 25 * 60
 
 -- Set the break duration in seconds (default is 5 minutes)
-pomo.break_duration = 1 * 60
+pomo.break_duration = 5 * 60
 
 -- Initialize the remaining time to the work duration
 pomo.remaining_time = pomo.work_duration
@@ -36,7 +37,7 @@ pomo.timer = gears.timer {
 
 -- mirror the text, because the whole widget will be mirrored after
 local mirrored_text = wibox.container.margin(wibox.container.mirror(text, { horizontal = true }))
-mirrored_text.right = 3 -- pour centrer le texte dans le rond
+mirrored_text.right = 4
 
 -- mirrored text with background
 local mirrored_text_with_background = wibox.container.background(mirrored_text)
@@ -62,65 +63,34 @@ function pomodoroarc:update_text()
   local minutes = math.floor(time_remaining / 60)
   local seconds = time_remaining - minutes * 60
   if status == "Stopped" then
-  pomodoroarc.colors = { "#FFFFFF"}
-  text.text = "S"
+  pomo.color = "#dddddd"
+  pomodoroarc.colors = { pomo.color }
+  mirrored_text.right = 7
+  text.markup = "<span foreground='#ff9999'></span>"
   pomodoroarc.value = tonumber(1)
   else
-    text.text = minutes .. ":" .. seconds
+    mirrored_text.right = 4
+    if minutes < 1 then
+      text.text = string.format("%02d", seconds)
+    else
+      text.text = string.format("%02d", minutes)
+    end
     if pomo.period == "work" then
       pomodoroarc.value = tonumber(time_remaining/pomo.work_duration)
-      if tonumber(minutes) < 5 then -- last 5 min of pomo
-        pomodoroarc.colors = {"#fb4934"}
+      if tonumber(minutes) < 5 then
+        pomo.color = "#fb4934"
+        pomodoroarc.colors = { pomo.color }
       else
-        pomodoroarc.colors = {"#83a598"}
+        pomo.color = "#83a598"
+        pomodoroarc.colors = { pomo.color }
       end
     elseif pomo.period == "break" then
       pomodoroarc.value = tonumber(time_remaining/pomo.break_duration)
-      pomodoroarc.colors = {"#b8bb26"}
+      pomo.color = "#b8bb26"
+      pomodoroarc.colors = { pomo.color }
     end
   end
 end
-
--- local update_graphic = function(widget, stdout, _, _, _)
---     local pomostatus = string.match(stdout, "  (%D?%D?):%D?%D?")
---     if pomostatus == "--" then
---       widget.colors = { "#FFFFFF"}
---       text.text = "25"
---       widget.value = 1
---     else
---       local pomomin = string.match(stdout, "[ P]?[BW](%d?%d?):%d?%d?")
---       local pomosec = string.match(stdout, "[ P]?[BW]%d?%d?:(%d?%d?)")
---       local pomodoro = pomomin * 60 + pomosec
---
---       local status = string.match(stdout, "([ P]?)[BW]%d?%d?:%d?%d?")
---       local workbreak = string.match(stdout, "[ P]?([BW])%d?%d?:%d?%d?")
---       text.text = pomomin
---
---       if status == " " then -- clock ticking
---         if workbreak == "W" then
---           widget.value = tonumber(pomodoro/(25*60))
---           if tonumber(pomomin) < 5 then -- last 5 min of pomo
---             widget.colors = {"#fb4934"}
---           else
---             widget.colors = {"#83a598"}
---           end
---         elseif workbreak == "B" then -- color during pause
---           widget.colors = {"#b8bb26"}
---           widget.value = tonumber(pomodoro/(5*60))
---         end
---       elseif status == "P" then -- paused
---         if workbreak == "W" then
---           widget.colors = {"#ff8800"}
---           widget.value = tonumber(pomodoro/(25*60))
---           text.text = "PW"
---         elseif workbreak == "B" then
---           widget.colors = {"#ff8800"}
---           widget.value = tonumber(pomodoro/(5*60))
---           text.text = "PB"
---         end
---       end
---     end
--- end
 
 -- Switch between work and break periods
 function pomo:switch_period()
@@ -136,12 +106,15 @@ function pomo:switch_period()
     pomo.timer:start()
   end
   pomodoroarc:update_text()
+  pomo:notify(string.format("Started %s for %d minutes", pomo.period, math.floor(pomo.remaining_time/60)))
+  pomo:sound()
 end
 
 -- Start the Pomodoro timer
 function pomo:start()
   pomo.timer:start()
   pomodoroarc:update_text()
+  pomo:notify(string.format("Started %s for %d minutes", pomo.period, math.floor(pomo.remaining_time/60)))
 end
 
 -- Stop the Pomodoro timer
@@ -165,6 +138,25 @@ function pomo:reset()
   pomo.remaining_time = pomo.work_duration
   pomo.period = "work"
   pomodoroarc:update_text()
+  pomo:sound()
+end
+
+function pomo:notify(msg)
+  naughty.notify({
+    title = "Pomodoro",
+    text = msg,
+    position = "top_middle",
+    fg = "#111111",
+    bg = pomo.color,
+    replaces_id = 1,
+    timeout = 5,
+    max_width = 600
+  })
+end
+
+function pomo:sound()
+  local sound_file = awful.util.getdir("config") .."/pomodoro/timer.mp3"
+  awful.spawn("paplay " .. sound_file)
 end
 
 -- Update the text of the Pomodoro widget when the timer is started or stopped
@@ -174,13 +166,10 @@ pomo.timer:connect_signal("stop", function() pomodoroarc:update_text() end)
 pomodoroarc:connect_signal("button::press", function(_,_,_,button)
     if button == 1 then
       pomo:toggle()
-      -- pomodoro:notify(string.format("START: %s for: %d min", pomodoro.period, math.floor(pomodoro.remaining_time / 60)))
     elseif button == 2 then
       pomo:switch_period()
-      -- pomodoro:notify(string.format("SWITCH: %s for: %d min", pomodoro.period, math.floor(pomodoro.remaining_time / 60)))
     elseif button == 3 and pomo.timer.started then
       pomo:reset()
-      -- pomodoro:notify("STOP")
     end
 end)
 

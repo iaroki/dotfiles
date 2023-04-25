@@ -50,8 +50,7 @@ local markup = lain.util.markup
 
 local mysep = wibox.widget.textbox(markup("#ff8800", " "))
 local mykb = awful.widget.keyboardlayout()
-local mypomo = require("mypomo")
-local pomodoro = require("pomogpt")
+local pomodoro = require("pomodoro")
 
 -- Textclock
 os.setlocale(os.getenv("LANG")) -- to localize the clock
@@ -147,8 +146,6 @@ function theme.at_screen_connect(s)
             --s.mylayoutbox,
             s.mytaglist,
             s.mypromptbox,
-            mysep,
-            mypomo,
             mysep,
             pomodoro,
         },
