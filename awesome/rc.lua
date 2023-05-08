@@ -68,8 +68,6 @@ run_once({
 local modkey       = "Mod1"
 local superkey     = "Mod4"
 local terminal     = "alacritty"
-local vi_focus     = false -- vi-like client focus https://github.com/lcpz/awesome-copycats/issues/275
-local cycle_prev   = true  -- cycle with only the previously focused client or all https://github.com/lcpz/awesome-copycats/issues/274
 local editor       = os.getenv("EDITOR") or "nvim"
 
 awful.util.terminal = terminal
@@ -83,32 +81,7 @@ awful.layout.layouts = {
     awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
     awful.layout.suit.tile.top,
-    --awful.layout.suit.fair.horizontal,
-    --awful.layout.suit.spiral,
-    --awful.layout.suit.spiral.dwindle,
-    --awful.layout.suit.max.fullscreen,
-    --awful.layout.suit.magnifier,
-    --awful.layout.suit.corner.nw,
-    --awful.layout.suit.corner.ne,
-    --awful.layout.suit.corner.sw,
-    --awful.layout.suit.corner.se,
-    --lain.layout.cascade,
-    --lain.layout.cascade.tile,
-    --lain.layout.centerwork,
-    --lain.layout.centerwork.horizontal,
-    --lain.layout.termfair,
-    --lain.layout.termfair.center
 }
-
---lain.layout.termfair.nmaster           = 3
---lain.layout.termfair.ncol              = 1
---lain.layout.termfair.center.nmaster    = 3
---lain.layout.termfair.center.ncol       = 1
---lain.layout.cascade.tile.offset_x      = 2
---lain.layout.cascade.tile.offset_y      = 32
---lain.layout.cascade.tile.extra_padding = 5
---lain.layout.cascade.tile.nmaster       = 5
---lain.layout.cascade.tile.ncol          = 2
 
 awful.util.taglist_buttons = mytable.join(
     awful.button({ }, 1, function(t) t:view_only() end),
@@ -191,7 +164,7 @@ globalkeys = mytable.join(
               {description = "take a screenshot", group = "hotkeys"}),
 
     -- X screen locker
-    awful.key({ superkey, "Control" }, "l", function () os.execute(scrlocker) end,
+    awful.key({ superkey, "Control" }, "l", function () os.execute("slock") end,
               {description = "lock screen", group = "hotkeys"}),
 
     -- Show help
@@ -243,18 +216,6 @@ globalkeys = mytable.join(
               {description = "focus the previous screen", group = "screen"}),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
-    awful.key({ superkey,           }, "Tab",
-        function ()
-            if cycle_prev then
-                awful.client.focus.history.previous()
-            else
-                awful.client.focus.byidx(-1)
-            end
-            if client.focus then
-                client.focus:raise()
-            end
-        end,
-        {description = "cycle with previous/go back", group = "client"}),
 
     -- Show/hide wibox
     awful.key({ modkey }, "b", function ()
@@ -312,14 +273,6 @@ globalkeys = mytable.join(
         end
     end, {description = "restore minimized", group = "client"}),
 
-    -- Widgets popups
-    awful.key({ superkey, }, "c", function () if beautiful.cal then beautiful.cal.show(7) end end,
-              {description = "show calendar", group = "widgets"}),
-    awful.key({ superkey, }, "h", function () if beautiful.fs then beautiful.fs.show(7) end end,
-              {description = "show filesystem", group = "widgets"}),
-    awful.key({ superkey, }, "w", function () if beautiful.weather then beautiful.weather.show(7) end end,
-              {description = "show weather", group = "widgets"}),
-
     -- Screen brightness
     awful.key({ }, "XF86MonBrightnessUp", function () os.execute("xbacklight -inc 10") end,
               {description = "+10%", group = "hotkeys"}),
@@ -357,13 +310,6 @@ globalkeys = mytable.join(
             beautiful.volume.update()
         end,
         {description = "volume 0%", group = "hotkeys"}),
-
-    -- Copy primary to clipboard (terminals to gtk)
-    awful.key({ modkey }, "c", function () awful.spawn.with_shell("xsel | xsel -i -b") end,
-              {description = "copy terminal to gtk", group = "hotkeys"}),
-    -- Copy clipboard to primary (gtk to terminals)
-    awful.key({ modkey }, "v", function () awful.spawn.with_shell("xsel -b | xsel") end,
-              {description = "copy gtk to terminal", group = "hotkeys"}),
 
     -- rofi
     awful.key({ modkey }, "r", function ()
@@ -604,28 +550,28 @@ client.connect_signal("request::titlebars", function(c)
 end)
 
 -- Enable sloppy focus, so that focus follows mouse.
-client.connect_signal("mouse::enter", function(c)
-    c:emit_signal("request::activate", "mouse_enter", {raise = vi_focus})
-end)
+-- client.connect_signal("mouse::enter", function(c)
+--     c:emit_signal("request::activate", "mouse_enter", {raise = vi_focus})
+-- end)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 
 -- switch to parent after closing child window
-local function backham()
-    local s = awful.screen.focused()
-    local c = awful.client.focus.history.get(s, 0)
-    if c then
-        client.focus = c
-        c:raise()
-    end
-end
+-- local function backham()
+--     local s = awful.screen.focused()
+--     local c = awful.client.focus.history.get(s, 0)
+--     if c then
+--         client.focus = c
+--         c:raise()
+--     end
+-- end
 
 -- attach to minimized state
-client.connect_signal("property::minimized", backham)
+-- client.connect_signal("property::minimized", backham)
 -- attach to closed state
-client.connect_signal("unmanage", backham)
+-- client.connect_signal("unmanage", backham)
 -- ensure there is always a selected client during tag switching or logins
-tag.connect_signal("property::selected", backham)
+-- tag.connect_signal("property::selected", backham)
 
 -- }}}
