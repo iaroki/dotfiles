@@ -1,0 +1,134 @@
+--------------------------------------------
+   Hyprland Crash Report
+--------------------------------------------
+Calm down, it was a misinput! MISINPUT!
+
+Hyprland received signal 11 (Segmentation fault)
+
+Version: 0.24.0
+
+System info:
+	System name: Linux
+	Node name: nixpad
+	Release: 6.1.25
+	Version: #1-NixOS SMP PREEMPT_DYNAMIC Thu Apr 20 10:35:14 UTC 2023
+
+GPU:
+	00:02.0 VGA compatible controller [0300]: Intel Corporation TigerLake-LP GT2 [Iris Xe Graphics] [8086:9a49] (rev 01) (prog-if 00 [VGA controller])
+
+
+os-release:
+	BUG_REPORT_URL="https://github.com/NixOS/nixpkgs/issues"
+	BUILD_ID="23.05.20230426.d6b863f"
+	DOCUMENTATION_URL="https://nixos.org/learn.html"
+	HOME_URL="https://nixos.org/"
+	ID=nixos
+	LOGO="nix-snowflake"
+	NAME=NixOS
+	PRETTY_NAME="NixOS 23.05 (Stoat)"
+	SUPPORT_URL="https://nixos.org/community.html"
+	VERSION="23.05 (Stoat)"
+	VERSION_CODENAME=stoat
+	VERSION_ID="23.05"
+	
+
+
+Backtrace:
+	#0 | Hyprland(_ZN13CrashReporter18createAndSaveCrashEi+0x846) [0x549826]
+		_ZN13CrashReporter18createAndSaveCrashEi
+		??:?
+	#1 | Hyprland(_Z25handleUnrecoverableSignali+0x3f) [0x5815bf]
+		_Z25handleUnrecoverableSignali
+		??:?
+	#2 | /nix/store/1nyg1fvhpz8bx3vn3r9f18zhra2rpbx9-glibc-2.37-8/lib/libc.so.6(+0x38d60) [0x7fd5c5452d60]
+		??
+		??:0
+	#3 | Hyprland(_ZN11CCompositor16getWorkspaceByIDERKi+0x13) [0x5846f3]
+		_ZN11CCompositor16getWorkspaceByIDERKi
+		??:?
+	#4 | Hyprland(_ZN17CHyprMasterLayout18recalculateMonitorERKi+0x41) [0x4ed6b1]
+		_ZN17CHyprMasterLayout18recalculateMonitorERKi
+		??:?
+	#5 | Hyprland(_ZN13CHyprRenderer13renderMonitorEP8CMonitor+0x6e0) [0x4929d0]
+		_ZN13CHyprRenderer13renderMonitorEP8CMonitor
+		??:?
+	#6 | Hyprland(_ZN15CHyprWLListener4emitEPv+0x3b) [0x4fe02b]
+		_ZN15CHyprWLListener4emitEPv
+		??:?
+	#7 | /nix/store/pf1gmm5bhzqr2qv3by264qri0jbi9a5l-wayland-1.21.0/lib/libwayland-server.so.0(wl_signal_emit_mutable+0x7c) [0x7fd5c610a8fc]
+		??
+		??:0
+	#8 | /nix/store/pf1gmm5bhzqr2qv3by264qri0jbi9a5l-wayland-1.21.0/lib/libwayland-server.so.0(wl_event_loop_dispatch_idle+0x1b) [0x7fd5c610c6fb]
+		??
+		??:0
+	#9 | /nix/store/pf1gmm5bhzqr2qv3by264qri0jbi9a5l-wayland-1.21.0/lib/libwayland-server.so.0(wl_event_loop_dispatch+0xfa) [0x7fd5c610c81a]
+		??
+		??:0
+	#10 | /nix/store/pf1gmm5bhzqr2qv3by264qri0jbi9a5l-wayland-1.21.0/lib/libwayland-server.so.0(wl_display_run+0x25) [0x7fd5c610a335]
+		??
+		??:0
+	#11 | Hyprland(main+0x8ae) [0x4690fe]
+		main
+		??:?
+	#12 | /nix/store/1nyg1fvhpz8bx3vn3r9f18zhra2rpbx9-glibc-2.37-8/lib/libc.so.6(+0x23ace) [0x7fd5c543dace]
+		??
+		??:0
+	#13 | /nix/store/1nyg1fvhpz8bx3vn3r9f18zhra2rpbx9-glibc-2.37-8/lib/libc.so.6(__libc_start_main+0x89) [0x7fd5c543db89]
+		??
+		??:0
+	#14 | Hyprland(_start+0x25) [0x4767d5]
+		_start
+		??:?
+
+
+Log tail:
+[LOG] Set the keyboard layout to us and variant to  for keyboard "Integrated Camera: Integrated C"
+[LOG] ApplyConfigToKeyboard for "sof-hda-dsp-headphone", hasconfig: 0
+[LOG] Attempting to create a keymap for layout us with variant  (rules: , model: , options: )
+[LOG] Set the keyboard layout to us and variant to  for keyboard "sof-hda-dsp Headphone"
+[LOG] ApplyConfigToKeyboard for "intel-hid-events", hasconfig: 0
+[LOG] Attempting to create a keymap for layout us with variant  (rules: , model: , options: )
+[LOG] Set the keyboard layout to us and variant to  for keyboard "Intel HID events"
+[LOG] ApplyConfigToKeyboard for "at-translated-set-2-keyboard", hasconfig: 0
+[LOG] Attempting to create a keymap for layout us with variant  (rules: , model: , options: )
+[LOG] Set the keyboard layout to us and variant to  for keyboard "AT Translated Set 2 keyboard"
+[LOG] ApplyConfigToKeyboard for "thinkpad-extra-buttons", hasconfig: 0
+[LOG] Attempting to create a keymap for layout us with variant  (rules: , model: , options: )
+[LOG] Set the keyboard layout to us and variant to  for keyboard "ThinkPad Extra Buttons"
+[LOG] Applied config to mouse elan0672:00-04f3:3187-mouse, sens 0.00
+[LOG] Applied config to mouse elan0672:00-04f3:3187-touchpad, sens 0.00
+[LOG] Applied config to mouse tpps/2-elan-trackpoint, sens 0.00
+[WARN] No rule found for eDP-1, trying to use the first.
+[LOG] Applying monitor rule for eDP-1
+[LOG] Setting preferred mode for eDP-1
+[LOG] Monitor eDP-1 -> destroyed all render data
+[LOG] Monitor eDP-1 layers arranged: reserved: 0.000000 0.000000 0.000000 0.000000
+[LOG] Monitor eDP-1 data dump: res 1920x1200@60.03Hz, scale 1.50, transform 0, pos 0x0, 10b 0
+[ERR] Cannot mirror self!
+[LOG] Monitor eDP-1 layers arranged: reserved: 0.000000 0.000000 0.000000 0.000000
+[WARN] No rule found for HDMI-A-1, trying to use the first.
+[LOG] Applying monitor rule for HDMI-A-1
+[LOG] Setting preferred mode for HDMI-A-1
+[LOG] Monitor HDMI-A-1 -> destroyed all render data
+[LOG] Monitor HDMI-A-1 layers arranged: reserved: 0.000000 0.000000 0.000000 0.000000
+[LOG] Monitor HDMI-A-1 data dump: res 1920x1080@60.00Hz, scale 1.00, transform 0, pos 1920x0, 10b 0
+[LOG] moveWorkspaceToMonitor: Moving 2 to monitor 0
+[LOG] moveWorkspaceToMonitor: Plugging gap with new 3
+[LOG] moveWorkspaceToMonitor: Plugging gap with existing 3
+[LOG] Changed to workspace 2
+[LOG]  [hookSystem] New hook event registered: activeWindow
+[LOG]  [hookSystem] New hook event registered: workspace
+[LOG]  [hookSystem] New hook event registered: mouseMove
+[LOG] Changed to workspace 3
+[LOG] moveWorkspaceToMonitor: SWITCHINGISACTIVE, active 1 -> 2
+[LOG]  [hookSystem] New hook event registered: moveWorkspace
+[LOG] Destroying workspace ID 1
+[LOG]  [hookSystem] New hook event registered: destroyWorkspace
+[LOG] Destroying workspace ID 3
+[LOG] Framebuffer created, status 36053
+[LOG] Framebuffer created, status 36053
+[LOG] Framebuffer created, status 36053
+[LOG] Framebuffer created, status 36053
+[LOG] Allocated texture for BGTex
+[LOG] Background created for monitor eDP-1
+[LOG] Shaders initialized successfully.
