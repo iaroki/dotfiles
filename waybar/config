@@ -5,7 +5,7 @@
     // "width": 1280, // Waybar width
     "spacing": 4, // Gaps between modules (4px)
     // Choose the order of the modules
-    "modules-left": ["wlr/workspaces"],
+    "modules-left": ["custom/pomo"],
     "modules-center": ["clock"],
     "modules-right": ["idle_inhibitor", "cpu", "memory", "temperature", "backlight", "pulseaudio", "hyprland/language", "battery", "tray"],
     // Modules configuration
@@ -116,16 +116,12 @@
         },
         "on-click": "pavucontrol"
     },
-    "custom/media": {
-        "format": "{icon} {}",
-        "return-type": "json",
-        "max-length": 40,
-        "format-icons": {
-            "spotify": "",
-            "default": "🎜"
-        },
-        "escape": true,
-        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+    "custom/pomo": {
+        "format": "   {}",
+        "exec": "pomo clock",
+        "interval": 2,
+        "exec-on-event": false,
+        "on-click": "pomo start",
+        "on-click-right": "pomo stop"
     }
 }
