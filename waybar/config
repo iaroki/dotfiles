@@ -5,9 +5,9 @@
     // "width": 1280, // Waybar width
     "spacing": 4, // Gaps between modules (4px)
     // Choose the order of the modules
-    "modules-left": ["custom/pomo"],
+    "modules-left": ["idle_inhibitor", "cpu", "memory", "disk", "custom/pomo"],
     "modules-center": ["clock"],
-    "modules-right": ["idle_inhibitor", "cpu", "memory", "temperature", "backlight", "pulseaudio", "hyprland/language", "battery", "tray"],
+    "modules-right": ["temperature", "backlight", "pulseaudio", "battery", "hyprland/language", "tray"],
     // Modules configuration
     "wlr/workspaces": {
         "disable-scroll": true,
@@ -47,7 +47,7 @@
     },
     "tray": {
         // "icon-size": 21,
-        "spacing": 10
+        "spacing": 5
     },
     "clock": {
         // "timezone": "America/New_York",
@@ -62,8 +62,13 @@
     "memory": {
         "format": " {}%"
     },
+      "disk": {
+      "interval": 30,
+      "format": "󰋊 {percentage_used}%",
+      "path": "/"
+    },
     "temperature": {
-        // "thermal-zone": 2,
+        "thermal-zone": 2,
         // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
         "critical-threshold": 80,
         // "format-critical": "{temperatureC}°C {icon}",

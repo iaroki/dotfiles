@@ -87,6 +87,7 @@ button:hover {
 #mode,
 #idle_inhibitor,
 #scratchpad,
+#language,
 #mpd {
     padding: 0 10px;
     color: #ffffff;
@@ -113,25 +114,25 @@ button:hover {
 }
 
 #battery {
-    background-color: #ffffff;
-    color: #000000;
+    color: #ffffff;
+    background-color: rgba(11, 11, 11, 0.0);
 }
 
 #battery.charging, #battery.plugged {
-    color: #ffffff;
-    background-color: #26A65B;
+    color: #26A65B;
+    background-color: rgba(11, 11, 11, 0.0);
 }
 
 @keyframes blink {
     to {
-        background-color: #ffffff;
-        color: #000000;
+        color: #ffffff;
+        background-color: #000000;
     }
 }
 
 #battery.critical:not(.charging) {
-    background-color: #f53c3c;
-    color: #ffffff;
+    color: #f53c3c;
+    background-color: #ffffff;
     animation-name: blink;
     animation-duration: 0.5s;
     animation-timing-function: linear;
@@ -144,28 +145,28 @@ label:focus {
 }
 
 #cpu {
-    background-color: #2ecc71;
-    color: #000000;
+    color: #2ecc71;
+    background-color: rgba(11, 11, 11, 0.0);
 }
 
 #memory {
-    background-color: #9b59b6;
-    color: #000000;
+    color: #9b59b6;
+    background-color: rgba(11, 11, 11, 0.0);
 }
 
 #disk {
-    background-color: #964B00;
-    color: #000000;
+    color: #2980b9;
+    background-color: rgba(11, 11, 11, 0.0);
 }
 
 #backlight {
-    background-color: #90b1b1;
-    color: #000000;
+    color: #90b1b1;
+    background-color: rgba(11, 11, 11, 0.0);
 }
 
 #network {
-    background-color: #2980b9;
-    color: #000000;
+    color: #2980b9;
+    background-color: rgba(11, 11, 11, 0.0);
 }
 
 #network.disconnected {
@@ -173,22 +174,28 @@ label:focus {
 }
 
 #pulseaudio {
-    background-color: #f1c40f;
-    color: #000000;
+    color: #f1c40f;
+    background-color: rgba(11, 11, 11, 0.0);
 }
 
 #pulseaudio.muted {
-    background-color: #90b1b1;
-    color: #2a5c45;
+    color: #90b1b1;
+    background-color: rgba(11, 11, 11, 0.0);
 }
 
 #wireplumber {
-    background-color: #fff0f5;
-    color: #000000;
+    color: #fff0f5;
+    background-color: rgba(11, 11, 11, 0.0);
 }
 
 #wireplumber.muted {
-    background-color: #f53c3c;
+    color: #f53c3c;
+    background-color: rgba(11, 11, 11, 0.0);
+}
+
+#custom-pomo {
+    color: #FFC0CB;
+    background-color: rgba(11, 11, 11, 0.0);
 }
 
 #custom-media {
@@ -206,17 +213,17 @@ label:focus {
 }
 
 #temperature {
-    background-color: #f0932b;
-    color: #000000;
+    color: #CC66CC;
+    background-color: rgba(11, 11, 11, 0.0);
 }
 
 #temperature.critical {
-    background-color: #eb4d4b;
-    color: #000000;
+    color: #eb4d4b;
+    background-color: rgba(11, 11, 11, 0.0);
 }
 
 #tray {
-    background-color: #2980b9;
+    background-color: rgba(11, 11, 11, 0.0);
 }
 
 #tray > .passive {
@@ -229,12 +236,12 @@ label:focus {
 }
 
 #idle_inhibitor {
-    background-color: #2d3436;
+    background-color: rgba(11, 11, 11, 0.0);
 }
 
 #idle_inhibitor.activated {
     background-color: #ecf0f1;
-    color: #2d3436;
+    color: #111111;
 }
 
 #mpd {
@@ -255,12 +262,9 @@ label:focus {
 }
 
 #language {
-    background: #00b093;
-    color: #000000;
-    padding: 0 5px;
-    margin: 0 5px;
+    color: #00b093;
+    background-color: rgba(11, 11, 11, 0.0);
     min-width: 15px;
-    border-bottom: 2px solid rgba(100, 114, 125, 0.0);
 }
 
 #keyboard-state {
