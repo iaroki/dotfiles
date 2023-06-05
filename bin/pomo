@@ -206,7 +206,7 @@ function send_msg {
         osascript -e "tell app \"System Events\" to display dialog \"${1}\"" &> /dev/null
     elif command -v notify-send &> /dev/null; then
         notify-send -a "Pomodoro" "${1}"
-        paplay /home/msytnyk/dev/personal/dotfiles/awesome/pomodoro/timer.mp3
+        mpv /home/msytnyk/dev/personal/dotfiles/awesome/pomodoro/timer.mp3
     else
         echo "${1}"
     fi
