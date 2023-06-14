@@ -8,6 +8,5 @@ result-spacing = 25
 num-results = 5
 font = "FiraCode Nerd Font"
 background-color = #000A
-
-matching-algorithm = fuzzy
+fuzzy-match = true
 require-match = false
