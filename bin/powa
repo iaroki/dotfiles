@@ -1,0 +1,20 @@
+#!/run/current-system/sw/bin/bash
+
+items="$(echo -e "Suspend\nReboot\nPoweroff\nLock\nCancel" | tofi)"
+
+case $items in
+  Suspend)
+    sudo systemctl suspend
+    ;;
+  Reboot)
+    sudo systemctl reboot
+    ;;
+  Poweroff)
+    sudo systemctl poweroff
+    ;;
+  Lock)
+    swaylock --screenshots --effect-blur 10x10 --clock --indicator --effect-vignette 0.5:0.5 --fade-in 1
+    ;;
+  *)
+    ;;
+esac
