@@ -50,3 +50,7 @@ map('n', '<leader>hp', ':lua require("harpoon.ui").nav_prev()<CR>', { noremap = 
 map('n', '<leader>h1', ':lua require("harpoon.ui").nav_file(1)<CR>', { noremap = true, silent = false })
 map('n', '<leader>h2', ':lua require("harpoon.ui").nav_file(2)<CR>', { noremap = true, silent = false })
 map('n', '<leader>h3', ':lua require("harpoon.ui").nav_file(3)<CR>', { noremap = true, silent = false })
+
+-- Git-trees mappings
+map('n', '<leader>gwl', ':lua require("telescope").extensions.git_worktree.git_worktrees()<CR>', { noremap = true, silent = false })
+map('n', '<leader>gwa', ':lua require("telescope").extensions.git_worktree.create_git_worktree()<CR>', { noremap = true, silent = false })

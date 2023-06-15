@@ -9,6 +9,9 @@ return {
         sorting_strategy = "ascending",
         winblend = 0,
       },
+      extensions = {
+        "git_worktree",
+      },
     },
     dependencies = {
       "nvim-lua/plenary.nvim",
