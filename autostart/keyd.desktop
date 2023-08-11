@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Exec=sudo keyd
+Icon=keyd
+Terminal=false
+Categories=System;
+Keywords=shell;command;commandline;
+
+Name=KeyD
+GenericName=KeyD
+Comment=KeyD
