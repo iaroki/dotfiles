@@ -7,7 +7,7 @@ env:
 window:
   dynamic_padding: true
   decorations: none
-  opacity: 1.0
+  opacity: 0.95
   startup_mode: Maximized
   title: Alacritty
   dynamic_title: true
@@ -18,7 +18,7 @@ scrolling:
   multiplier: 3
 
 font:
-  size: 16.0
+  size: 12.0
   normal:
     family: FiraCode Nerd Font
     style: Regular
