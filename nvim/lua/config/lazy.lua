@@ -14,18 +14,8 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
+  {import = "themes.kanagawa"},
   {import = "plugins"},
-  {import = "themes.gruvbox"},
+  -- {import = "themes.gruvbox"},
   -- {import = "themes.tokyonight"},
 })
--- require("lazy").setup({
-  -- require("themes.tokyonight"),
-  -- require("plugins.treesitter"),
-  -- require("plugins.telescope"),
-  -- require("plugins.lualine"),
-  -- require("plugins.bufferline"),
-  -- require("plugins.nvimtree"),
-  -- require("plugins.comment"),
-  -- require("plugins.cmp"),
-  -- require("plugins.lspsaga"),
--- })
