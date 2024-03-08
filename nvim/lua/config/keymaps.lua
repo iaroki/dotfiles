@@ -36,6 +36,9 @@ map('n', '<leader>hw', ':HopWord<CR>', { noremap = true, silent = false })
 -- Gitsigns mappings
 map('n', '<leader>gb', ':Gitsigns toggle_current_line_blame<CR>', { noremap = true, silent = false })
 
+-- Neogit mappings
+map('n', '<leader>ng', ':Neogit<CR>', { noremap = true, silent = false })
+
 -- Telekasten mappings
 map('n', '<leader>z', ':Telekasten panel<CR>', { noremap = true, silent = false })
 map('n', '<leader>zn', ':Telekasten new_note<CR>', { noremap = true, silent = false })

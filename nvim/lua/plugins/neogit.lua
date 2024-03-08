@@ -10,6 +10,7 @@ return {
     disable_context_highlighting = false,
     disable_commit_confirmation = true,
     auto_refresh = true,
+    graph_style = "unicode",
     sort_branches = "-committerdate",
     disable_builtin_notifications = false,
     use_magit_keybindings = false,
@@ -18,6 +19,11 @@ return {
     auto_show_console = true,
     remember_settings = true,
     use_per_project_settings = true,
+    highlight = {
+      italic = true,
+      bold = true,
+      underline = true
+    },
     commit_popup = {
       kind = "split",
     },
