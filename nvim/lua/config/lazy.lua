@@ -14,9 +14,10 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-  {import = "themes.tokyonight"},
+  {import = "themes.catppuccin"},
+  -- {import = "themes.tokyonight"},
   -- {import = "themes.ayu"},
   -- {import = "themes.kanagawa"},
-  {import = "plugins"},
   -- {import = "themes.gruvbox"},
+  {import = "plugins"},
 })
