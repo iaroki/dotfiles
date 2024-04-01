@@ -5,11 +5,7 @@ if [[ $# -eq 1 ]]; then
 else
     selected=$(find \
       ~/dev \
-      ~/dev/personal \
-      ~/dev/flexmade \
-      ~/dev/horsemapp \
-      ~/dev/ozone \
-      -mindepth 1 -maxdepth 1 -type d | fzf)
+      -mindepth 2 -maxdepth 2 -type d | fzf)
 fi
 
 if [[ -z $selected ]]; then
