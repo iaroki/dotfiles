@@ -15,6 +15,11 @@ map('n', '<leader>w', ':b#|bd#<CR>', { noremap = true, silent = false })
 -- Bufferline mappings
 map('n', '<TAB>', ':BufferLineCycleNext<CR>', { noremap = true, silent = true })
 map('n', '<S-TAB>', ':BufferLineCyclePrev<CR>', { noremap = true, silent = true })
+map('n', '<leader>1', ':BufferLineGoToBuffer 1<CR>', { noremap = true, silent = true })
+map('n', '<leader>2', ':BufferLineGoToBuffer 2<CR>', { noremap = true, silent = true })
+map('n', '<leader>3', ':BufferLineGoToBuffer 3<CR>', { noremap = true, silent = true })
+map('n', '<leader>4', ':BufferLineGoToBuffer 4<CR>', { noremap = true, silent = true })
+map('n', '<leader>5', ':BufferLineGoToBuffer 5<CR>', { noremap = true, silent = true })
 
 -- NeoTree mappings
 map('n', '<C-n>', ':NeoTreeFocusToggle<CR>', { noremap = true, silent = true })
