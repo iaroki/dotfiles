@@ -24,14 +24,14 @@ return {
       bold = true,
       underline = true
     },
-    commit_popup = {
-      kind = "split",
+    commit_editor = {
+      kind = "floating",
     },
     preview_buffer = {
       kind = "split",
     },
     popup = {
-      kind = "split",
+      kind = "floating",
     },
     signs = {
       -- { CLOSED, OPENED }
