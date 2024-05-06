@@ -1,0 +1,10 @@
+#!/run/current-system/sw/bin/bash
+
+FZF_BIN="fzf"
+FZF_OPTIONS="--reverse --border=none"
+
+session_list=$(tmux list-sessions -F "#S")
+
+target_session=$(echo "$session_list" | eval "$FZF_BIN $FZF_OPTIONS")
+
+tmux switch-client -t "$target_session"
