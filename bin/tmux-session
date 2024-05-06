@@ -1,7 +1,7 @@
 #!/run/current-system/sw/bin/bash
 
 FZF_BIN="fzf"
-FZF_OPTIONS="--reverse --border=none"
+FZF_OPTIONS="--reverse --border=none" # --preview 'tmux capture-pane -pt {}'"
 
 session_list=$(tmux list-sessions -F "#S")
 
