@@ -3,6 +3,7 @@ local wezterm = require 'wezterm'
 
 -- This will hold the configuration.
 local config = wezterm.config_builder()
+config.default_gui_startup_args = { 'start', '--always-new-process' }
 
 -- Multiplexing
 local mux = wezterm.mux
@@ -30,6 +31,8 @@ config.window_padding = {
   top    = 0,
   bottom = 0,
 }
+
+-- Maximized windows
 
 wezterm.on('gui-attached', function(domain)
   -- maximize all displayed windows on startup
