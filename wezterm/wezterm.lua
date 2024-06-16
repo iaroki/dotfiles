@@ -26,10 +26,21 @@ config.enable_tab_bar = false
 config.window_background_opacity = 0.95
 config.window_decorations = "NONE"
 config.window_padding = {
-  left   = 0,
-  right  = 0,
-  top    = 0,
-  bottom = 0,
+  left   = 5,
+  right  = 5,
+  top    = 5,
+  bottom = 5,
+}
+
+config.window_frame = {
+  border_left_width    = 0,
+  border_right_width   = 0,
+  border_bottom_height = 0,
+  border_top_height    = 0,
+  border_left_color    = '#cba6f7',
+  border_right_color   = '#cba6f7',
+  border_bottom_color  = '#cba6f7',
+  border_top_color     = '#cba6f7',
 }
 
 -- Maximized windows
