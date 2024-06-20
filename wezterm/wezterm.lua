@@ -16,6 +16,10 @@ scheme.brights = {"#414868", "#f7768e", "#9ece6a", "#e0af68", "#7aa2f7", "#f5c2e
 config.color_schemes = {
   ['tokyonight_black'] = scheme,
 }
+config.colors = {
+  selection_fg = 'none',
+  selection_bg = 'rgba(50% 50% 50% 10%)',
+}
 
 config.color_scheme = 'tokyonight_black'
 
