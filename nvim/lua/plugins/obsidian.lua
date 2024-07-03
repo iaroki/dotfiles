@@ -10,6 +10,9 @@ return {
       {
         name = "Notes",
         path = "~/Notes",
+        overrides = {
+          notes_subdir = "Notes",
+        },
       },
     },
   },
