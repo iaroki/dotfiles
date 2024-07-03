@@ -4,6 +4,7 @@ local wezterm = require 'wezterm'
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 config.default_gui_startup_args = { 'start', '--always-new-process' }
+config.warn_about_missing_glyphs = false
 
 -- Multiplexing
 local mux = wezterm.mux
