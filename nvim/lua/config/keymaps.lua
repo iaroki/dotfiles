@@ -22,7 +22,7 @@ map('n', '<leader>4', ':BufferLineGoToBuffer 4<CR>', { noremap = true, silent = 
 map('n', '<leader>5', ':BufferLineGoToBuffer 5<CR>', { noremap = true, silent = true })
 
 -- NeoTree mappings
-map('n', '<C-n>', ':NeoTreeFocusToggle<CR>', { noremap = true, silent = true })
+map('n', '<C-n>', ':Neotree toggle<CR>', { noremap = true, silent = true })
 map('n', '<leader>R', ':NvimTreeRefresh<CR>', { noremap = true, silent = false })
 map('n', '<leader>N', ':NvimTreeFindFile<CR>', { noremap = true, silent = false })
 

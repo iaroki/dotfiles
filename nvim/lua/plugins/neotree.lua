@@ -1,12 +1,12 @@
 return {
   "nvim-neo-tree/neo-tree.nvim",
-    version = "v2.x",
-    dependencies = { 
+    version = "v3.x",
+    dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-tree/nvim-web-devicons",
       "MunifTanjim/nui.nvim",
     },
-    cmd = "NeoTreeFocusToggle",
+    cmd = "Neotree",
     opts = {
       close_if_last_window = true,
       window = {
