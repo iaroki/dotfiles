@@ -101,7 +101,7 @@ riverctl map normal ${MOD} Space toggle-float
 riverctl map normal ${MOD} F toggle-fullscreen
 
 # Monocle setup
-riverctl map normal ${MOD} M send-layout-cmd "monocle"
+riverctl map normal ${MOD} M send-layout-cmd filtile "monocle"
 
 # Super+{Up,Right,Down,Left} to change layout orientation
 riverctl map normal Super Up    send-layout-cmd rivertile "main-location top"
