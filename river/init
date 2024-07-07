@@ -171,4 +171,4 @@ riverctl default-attach-mode after 1
 
 # Filtile
 riverctl default-layout filtile
-rivertile main-location left &
+filtile main-location left &
