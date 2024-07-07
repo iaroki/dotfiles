@@ -8,7 +8,7 @@ MOD="Mod1"  # Alt
 riverctl map normal ${MOD}+Shift Return spawn foot
 
 # Launcher
-riverctl map normal ${MOD} R spawn "tofi-drun | xargs riverctl spawn"
+riverctl map normal ${MOD} R spawn "tofi-run | xargs riverctl spawn"
 
 # Close window
 riverctl map normal ${MOD} Q close
@@ -143,7 +143,7 @@ do
 done
 
 # Set background and border color
-riverctl background-color 0x002b36
+riverctl background-color 0x000000
 riverctl border-color-focused 0x93a1a1
 riverctl border-color-unfocused 0x586e75
 
