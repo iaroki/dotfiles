@@ -5,7 +5,7 @@ MOD="Mod1"  # Alt
 # MOD="Mod4"  # Super
 
 # Terminal emulator
-riverctl map normal ${MOD}+Shift Return spawn foot
+riverctl map normal ${MOD}+Shift Return spawn wezterm
 
 # Launcher
 riverctl map normal ${MOD} R spawn "tofi-run | xargs riverctl spawn"
@@ -144,8 +144,8 @@ done
 
 # Set background and border color
 riverctl background-color 0x000000
-riverctl border-color-focused 0x93a1a1
-riverctl border-color-unfocused 0x586e75
+riverctl border-color-focused 0x333333
+riverctl border-color-unfocused 0x111111
 
 # Set keyboard repeat rate
 riverctl set-repeat 50 300
@@ -158,6 +158,7 @@ riverctl rule-add -app-id "bar" csd
 
 # SSD setup
 riverctl rule-add -app-id "foot" ssd
+riverctl rule-add -app-id "wezterm" ssd
 riverctl rule-add -app-id "Alacritty" ssd
 riverctl rule-add -app-id "firefox" ssd
 
@@ -172,3 +173,10 @@ riverctl default-attach-mode after 1
 # Filtile
 riverctl default-layout filtile
 filtile main-location left &
+
+# Autostart
+dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river
+waybar &
+nm-applet &
+blueman-applet &
+pasystray &
