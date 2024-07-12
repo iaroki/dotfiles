@@ -1,94 +1,58 @@
 {
-    "layer": "top", // Waybar at top layer
-    "position": "top", // Waybar position (top|bottom|left|right)
-    "height": 20, // Waybar height (to be removed for auto height)
-    // "width": 1280, // Waybar width
-    "spacing": 4, // Gaps between modules (4px)
-    // Choose the order of the modules
-    "modules-left": ["idle_inhibitor", "cpu", "memory", "disk", "custom/pomo"],
+    "layer": "top",
+    "position": "top",
+    "height": 30,
+    "modules-left": ["river/tags", "river/layout"],
     "modules-center": ["clock"],
-    "modules-right": ["temperature", "backlight", "pulseaudio", "battery", "hyprland/language", "tray"],
-    // Modules configuration
-    "wlr/workspaces": {
-        "disable-scroll": true,
-        "all-outputs": true,
-        "format": "{name}: {icon}",
-        "format-icons": {
-            "1": "",
-            "2": "",
-            "3": "",
-            "4": "",
-            "5": "",
-            "urgent": "",
-            "focused": "",
-            "default": ""
-        }
-    },
-    "hyprland/language": {
-        "format": "{}",
-        "format-en": "EN",
-        "format-ru": "RU"
-    },
-    "keyboard-state": {
-        "numlock": true,
-        "capslock": true,
-        "format": "{name} {icon}",
-        "format-icons": {
-            "locked": "",
-            "unlocked": ""
-        }
-    },
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": "",
-            "deactivated": ""
-        }
+    "modules-right": ["pulseaudio", "network", "backlight","cpu", "temperature", "memory", "battery", "tray"],
+    "river/tags": {
+      "num-tags": 9,
+      "disable-click": true,
+      "tag-labels": [
+        "", "", "", "", "", "", "", "", ""
+      ]
     },
     "tray": {
         // "icon-size": 21,
-        "spacing": 5
+        "spacing": 10
     },
     "clock": {
-        // "timezone": "America/New_York",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format": "{: %A %d %B  %H:%M}",
-        "format-alt": "{:%Y-%m-%d}"
+        "format": "   {:%A %d %B       %H:%M}"
+
     },
     "cpu": {
-        "format": " {usage}%",
-        "tooltip": false
+      "interval": 10,
+      "format": "{usage}% ",
+      "max-length": 10
     },
     "memory": {
-        "format": " {}%"
-    },
-      "disk": {
-      "interval": 30,
-      "format": "󰋊 {percentage_used}%",
-      "path": "/"
+        "interval": 30,
+        "format": "{}% ",
+        "max-length": 10
     },
     "temperature": {
-        "thermal-zone": 2,
+        // "thermal-zone": 2,
         // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
         "critical-threshold": 80,
         // "format-critical": "{temperatureC}°C {icon}",
-        "format": " {temperatureC}°C",
+        "format": "{temperatureC}°C {icon}",
+        "format-icons": ["", "", ""]
     },
     "backlight": {
         // "device": "acpi_video1",
-        "format": "{icon} {percent}%",
-        "format-icons": ["", "", "", "", "", "", "", "", ""]
+        "format": "{percent}% {icon}",
+        "format-icons": ["", ""]
     },
     "battery": {
         "states": {
-            // "good": 95,
+            "good": 95,
             "warning": 30,
             "critical": 15
         },
-        "format": "{icon}  {capacity}%",
-        "format-charging": "{icon}  {capacity}% 󱐋",
-        "format-plugged": "{icon}  {capacity}% ",
-        "format-alt": "{icon}  {time}",
+        "format": "{capacity}% {icon}",
+        "format-charging": "{capacity}%",
+        "format-plugged": "{capacity}%",
+        "format-alt": "{time} ",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
         "format-icons": ["", "", "", "", ""]
@@ -96,37 +60,19 @@
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
         "format-wifi": "{essid} ({signalStrength}%) ",
-        "format-ethernet": "{ipaddr}/{cidr} ",
-        "tooltip-format": "{ifname} via {gwaddr} ",
+        "format-ethernet": "{ifname}: {ipaddr}/{cidr} ",
         "format-linked": "{ifname} (No IP) ",
-        "format-disconnected": "Disconnected ⚠",
+        "format-disconnected": "Disconnected ",
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
-        "format": "{icon} {volume}% {format_source}",
-        "format-bluetooth": "{icon} {volume}%  {format_source}",
-        "format-bluetooth-muted": "󰝟 {icon} {format_source}",
-        "format-muted": "󰝟 {format_source}",
+        "format": "{volume}%  {format_source}",
+        "format-bluetooth": "{volume}%  {format_source}",
+        "format-bluetooth-muted": " {format_source}",
+        "format-muted": " {format_source}",
         "format-source": "{volume}% ",
         "format-source-muted": "",
-        "format-icons": {
-            "headphone": "",
-            "hands-free": "󰋎",
-            "headset": "󰋋",
-            "phone": "",
-            "portable": "",
-            "car": "",
-            "default": ["", "", ""]
-        },
         "on-click": "pavucontrol"
-    },
-    "custom/pomo": {
-        "format": "   {}",
-        "exec": "pomo clock",
-        "interval": 2,
-        "exec-on-event": false,
-        "on-click": "pomo start",
-        "on-click-right": "pomo stop"
     }
 }
