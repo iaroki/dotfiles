@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+# Background
+swaybg --image /home/msytnyk/Downloads/cpblur.jpg &
+
 # Mod key
 MOD="Mod1"  # Alt
 # MOD="Mod4"  # Super
@@ -157,10 +160,10 @@ riverctl rule-add -app-id 'float*' -title 'foo' float
 riverctl rule-add -app-id "bar" csd
 
 # SSD setup
-riverctl rule-add -app-id "foot" ssd
-riverctl rule-add -app-id "wezterm" ssd
-riverctl rule-add -app-id "Alacritty" ssd
-riverctl rule-add -app-id "firefox" ssd
+# riverctl rule-add -app-id "foot" ssd
+# riverctl rule-add -app-id "wezterm" ssd
+# riverctl rule-add -app-id "Alacritty" ssd
+# riverctl rule-add -app-id "firefox" ssd
 
 # DWM attach aside hack
 riverctl default-attach-mode after 1
