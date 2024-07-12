@@ -172,7 +172,10 @@ riverctl default-attach-mode after 1
 
 # Filtile
 riverctl default-layout filtile
-filtile main-location left &
+filtile main-location left, \
+        view-padding 0, \
+        outer-padding 0, \
+        smart-padding 0 &
 
 # Autostart
 dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river
