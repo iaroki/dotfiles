@@ -25,8 +25,10 @@ config.colors = {
 config.color_scheme = 'tokyonight_black'
 
 -- Appearance tweaks
-config.front_end = "WebGpu"  -- NixOS font rendering workaround https://github.com/wez/wezterm/issues/5990
-config.font = wezterm.font 'FiraCode Nerd Font'
+-- NixOS font rendering workaround https://github.com/wez/wezterm/issues/5990
+config.front_end = "WebGpu"
+config.font = wezterm.font('FiraCode Nerd Font', {weight="Light", stretch="Normal", style="Normal"})
+-- config.font = wezterm.font 'FiraCode Nerd Font'
 config.font_size = 12
 config.enable_tab_bar = false
 config.window_background_opacity = 0.75
