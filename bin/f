@@ -5,7 +5,7 @@ if [[ $# -eq 1 ]]; then
 else
     selected=$(find \
       ~/dev \
-      -mindepth 2 -maxdepth 2 -type d | fzf)
+      -mindepth 2 -maxdepth 2 -type d | fzf --border=none)
 fi
 
 if [[ -z $selected ]]; then
