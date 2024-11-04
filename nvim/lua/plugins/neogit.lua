@@ -26,6 +26,7 @@ return {
     },
     commit_editor = {
       kind = "floating",
+      staged_diff_split_kind = "floating",
     },
     preview_buffer = {
       kind = "split",
