@@ -1,0 +1,25 @@
+# vim: set filetype=ini:
+
+font-family = FiraCode Nerd Font
+font-size = 12
+theme = tokyonight
+background = black
+background-opacity = 0.75
+background-blur-radius = 20
+selection-invert-fg-bg = true
+mouse-hide-while-typing = true
+fullscreen = false
+window-padding-balance = true
+window-decoration = false
+resize-overlay = never
+copy-on-select = false
+gtk-single-instance = false
+
+# maximized hack
+window-height = 999
+window-width = 9999
+
+# keybindings
+keybind=clear
+keybind = ctrl+insert=copy_to_clipboard
+keybind = shift+insert=paste_from_clipboard
