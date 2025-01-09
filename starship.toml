@@ -1,0 +1,87 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Inserts a blank line between shell prompts
+add_newline = true
+
+format = """
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$direnv\
+$env_var\
+$custom\
+$sudo\
+$fill\
+$cmd_duration\
+$aws\
+$kubernetes\
+$time\
+$line_break\
+$jobs\
+$status\
+$os\
+$container\
+$shell\
+$character"""
+
+[directory]
+style = 'bold purple'
+
+[git_branch]
+style = 'bold blue'
+
+[character]
+success_symbol = '[➜](bold green)'
+error_symbol = '[✗](bold red)'
+vimcmd_symbol = '[](bold green)'
+vimcmd_replace_one_symbol = '[](bold purple)'
+vimcmd_replace_symbol = '[](bold purple)'
+vimcmd_visual_symbol = '[](bold purple)'
+
+[fill]
+symbol = ' '
+
+[cmd_duration]
+min_time = 500
+format = '󱫍 [$duration]($style) '
+style = 'dimmed white'
+
+[time]
+disabled = false
+format = '[ $time ]($style) '
+style = 'bold white'
+use_12hr = false
+
+[aws]
+format = '[$symbol($profile )(\($region\) )]($style) '
+style = 'bold yellow'
+symbol = ' '
+[aws.region_aliases]
+ap-southeast-1 = 'singapore'
+eu-central-1 = 'frankfurt'
+us-west-2 = 'oregon'
+
+[kubernetes]
+format = '[$symbol$context]($style) '
+symbol = ' '
+style = 'dimmed blue'
+disabled = false
+detect_env_vars = ['KUBE']
+contexts = [
+  { context_pattern = ".*gs-dev", context_alias = "GS-DEV" },
+  { context_pattern = ".*gs-stage", context_alias = "GS-STAGE-FR" },
+  { context_pattern = ".*gs-stage-sg", context_alias = "GS-STAGE-SG" },
+  { context_pattern = ".*gs-prod-sg", context_alias = "GS-PROD-SG" },
+  { context_pattern = ".*gs-prod-asia", context_alias = "GS-PROD-ASIA" },
+  { context_pattern = ".*gs-prod-newreels", context_alias = "GS-PROD-NEWREELS" },
+  { context_pattern = ".*orbit-dev", context_alias = "ORBIT-DEV" },
+  { context_pattern = ".*orbit-staging", context_alias = "ORBIT-STAGE" },
+  { context_pattern = ".*orbit-prod", context_alias = "ORBIT-PROD" },
+]
+
+[direnv]
+disabled = false
