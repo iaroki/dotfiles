@@ -8,6 +8,7 @@ return {
     disable_signs = false,
     disable_hint = false,
     disable_context_highlighting = false,
+    disable_insert_on_commit = true,
     disable_commit_confirmation = true,
     auto_refresh = true,
     graph_style = "unicode",
@@ -24,16 +25,16 @@ return {
       bold = true,
       underline = true
     },
-    commit_editor = {
-      kind = "floating",
-      staged_diff_split_kind = "floating",
-    },
-    preview_buffer = {
-      kind = "split",
-    },
-    popup = {
-      kind = "floating",
-    },
+    -- commit_editor = {
+    --   kind = "floating",
+    --   staged_diff_split_kind = "floating",
+    -- },
+    -- preview_buffer = {
+    --   kind = "split",
+    -- },
+    -- popup = {
+    --   kind = "floating",
+    -- },
     signs = {
       -- { CLOSED, OPENED }
       section = { ">", "v" },
