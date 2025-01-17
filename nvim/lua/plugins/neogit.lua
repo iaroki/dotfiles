@@ -16,7 +16,7 @@ return {
     disable_builtin_notifications = false,
     use_magit_keybindings = false,
     kind = "tab",
-    console_timeout = 2000,
+    console_timeout = 0,
     auto_show_console = true,
     remember_settings = true,
     use_per_project_settings = true,
