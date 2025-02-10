@@ -62,3 +62,6 @@ map('n', '<leader>h3', ':lua require("harpoon.ui").nav_file(3)<CR>', { noremap =
 -- Git-trees mappings
 map('n', '<leader>gwl', ':lua require("telescope").extensions.git_worktree.git_worktrees()<CR>', { noremap = true, silent = false })
 map('n', '<leader>gwa', ':lua require("telescope").extensions.git_worktree.create_git_worktree()<CR>', { noremap = true, silent = false })
+
+-- Kubectl mappings
+map('n', '<leader>k', ':lua require("kubectl").toggle()<CR>', { noremap = true, silent = false })
