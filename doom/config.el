@@ -91,6 +91,8 @@
 ;; they are implemented.
 
 ;; (setq select-enable-clipboard nil)
+;; (setq x-select-enable-clipboard nil)
+(setq x-select-enable-primary nil)
 
 ;; Toggle Maximized window on startup
 (add-to-list 'default-frame-alist '(undecorated . t))
