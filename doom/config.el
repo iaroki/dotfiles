@@ -23,10 +23,10 @@
 ;;
 ;; (setq doom-font (font-spec :family "FiraCode Nerd Font" :size 30)
 ;; (setq doom-font (font-spec :family "SauceCodePro Nerd Font" :size 30)
-(setq doom-font (font-spec :family "Iosevka Nerd Font" :size 30)
-     doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 30)
-     doom-serif-font (font-spec :family "Source Serif Pro" :size 30)
-     doom-big-font (font-spec :family "SauceCodePro Nerd Font" :size 38)
+(setq doom-font (font-spec :family "Iosevka Nerd Font" :size 34)
+     doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 34)
+     doom-serif-font (font-spec :family "Source Serif Pro" :size 34)
+     doom-big-font (font-spec :family "SauceCodePro Nerd Font" :size 42)
      doom-symbol-font (font-spec :family "FiraCode Nerd Font" :size 14))
 (after! doom-themes
   (setq doom-themes-enable-bold t
@@ -179,8 +179,8 @@
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
 (set-frame-parameter nil 'alpha-background 50)
 (add-to-list 'default-frame-alist '(alpha-background . 50))
-(set-frame-parameter (selected-frame) 'alpha '(85 100))
-(add-to-list 'default-frame-alist '(alpha 85 100))
+(set-frame-parameter (selected-frame) 'alpha '(75 100))
+(add-to-list 'default-frame-alist '(alpha 75 100))
 
 ;; Keymaps
 (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
