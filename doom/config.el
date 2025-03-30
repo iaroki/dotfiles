@@ -21,23 +21,19 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-(setq doom-font (font-spec :family "FiraCode Nerd Font Mono" :size 30)
-     doom-variable-pitch-font (font-spec :family "Vollkorn" :size 14))
+;; (setq doom-font (font-spec :family "FiraCode Nerd Font" :size 30)
+;; (setq doom-font (font-spec :family "SauceCodePro Nerd Font" :size 30)
+(setq doom-font (font-spec :family "Iosevka Nerd Font" :size 30)
+     doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 30)
+     doom-serif-font (font-spec :family "Source Serif Pro" :size 30)
+     doom-big-font (font-spec :family "SauceCodePro Nerd Font" :size 38)
+     doom-symbol-font (font-spec :family "FiraCode Nerd Font" :size 14))
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t))
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
   '(font-lock-keyword-face :slant italic))
-(custom-set-faces
- '(markdown-header-face ((t (org-levelunction-name-face :weight bold :family "variable-pitch"))))
- '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 1.7))))
- '(markdown-header-face-2 ((t (:inherit markdown-header-face :height 1.6))))
- '(markdown-header-face-3 ((t (:inherit markdown-header-face :height 1.5))))
- '(markdown-header-face-4 ((t (:inherit markdown-header-face :height 1.4))))
- '(markdown-header-face-5 ((t (:inherit markdown-header-face :height 1.3))))
- '(markdown-header-face-6 ((t (:inherit markdown-header-face :height 1.2)))))
-
 
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
@@ -72,6 +68,15 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
+
+(custom-set-faces
+ '(markdown-header-face ((t (org-levelunction-name-face :weight bold :family "variable-pitch"))))
+ '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 1.7))))
+ '(markdown-header-face-2 ((t (:inherit markdown-header-face :height 1.6))))
+ '(markdown-header-face-3 ((t (:inherit markdown-header-face :height 1.5))))
+ '(markdown-header-face-4 ((t (:inherit markdown-header-face :height 1.4))))
+ '(markdown-header-face-5 ((t (:inherit markdown-header-face :height 1.3))))
+ '(markdown-header-face-6 ((t (:inherit markdown-header-face :height 1.2)))))
 
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
@@ -123,3 +128,6 @@
 (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
 (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
 (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+
+(add-hook 'before-save-hook
+          'delete-trailing-whitespace)
