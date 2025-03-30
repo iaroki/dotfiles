@@ -64,10 +64,69 @@
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
+(setq scroll-margin 5)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
+
+;; Configure Org
+(after! org
+  (setq
+    ;; Specify where to load org agenda
+    org-agenda-files '("~/org/")
+
+    ;; Default file for notes
+    org-default-notes-file (expand-file-name "notes.org" org-directory)
+
+    ;; Change how some symbols appear
+    org-ellipsis " ▼ "
+    org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")
+    org-superstar-item-bullet-alist '((?- . ?➤) (?+ . ?✦)) ; changes +/- symbols in item lists
+    org-hide-emphasis-markers 1
+
+    ;; Add timestamp to org DONE entries
+    org-log-done 'time
+
+    ;; Upper bound to table conversions, useful for babel results
+    org-table-convert-region-max-lines 20000
+
+    ;; Set up to do keywords
+    org-todo-keywords        ; This overwrites the default Doom org-todo-keywords
+      '((sequence
+         "TODO(t)"           ; A task that is ready to be tackled
+         "PROJ(p)"           ; A project that contains other tasks
+         "WAIT(w)"           ; Something is holding up this task
+         "|"                 ; The pipe necessary to separate "active" states and "inactive" states
+         "DONE(d)"           ; Task has been completed
+         "CANCELLED(c)" ))   ; Task has been cancelled
+
+    ;; Customize tags
+    org-tag-alist
+      '((:startgroup)
+       ; Put mutually exclusive tags here
+       (:endgroup)
+       ("@errand" . ?E)
+       ("@home" . ?H)
+       ("@work" . ?W)
+       ("agenda" . ?a)
+       ("planning" . ?p)
+       ("publish" . ?P)
+       ("batch" . ?b)
+       ("note" . ?n)
+       ("music" .?m)
+       ("game" .?g)
+       ("chore" .?c)
+       ("idea" . ?i))
+
+    ;; Only one space after a tag
+    org-tags-column 0
+
+    ;; Some basic UI flags
+    org-src-fontify-natively t
+    org-src-tab-acts-natively t
+    org-confirm-babel-evaluate nil
+    org-edit-src-content-indentation 0))
 
 (custom-set-faces
  '(markdown-header-face ((t (org-levelunction-name-face :weight bold :family "variable-pitch"))))
