@@ -179,8 +179,8 @@
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
 (set-frame-parameter nil 'alpha-background 50)
 (add-to-list 'default-frame-alist '(alpha-background . 50))
-(set-frame-parameter (selected-frame) 'alpha '(75 100))
-(add-to-list 'default-frame-alist '(alpha 75 100))
+(set-frame-parameter (selected-frame) 'alpha '(85 100))
+(add-to-list 'default-frame-alist '(alpha 85 100))
 
 ;; Keymaps
 (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
