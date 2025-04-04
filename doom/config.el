@@ -137,7 +137,6 @@
  '(markdown-header-face-5 ((t (:inherit markdown-header-face :height 1.3))))
  '(markdown-header-face-6 ((t (:inherit markdown-header-face :height 1.2)))))
 
-
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
 ;;
@@ -187,6 +186,17 @@
 (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
 (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
 (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+
+;; Indent lines
+(setq
+   indent-bars-mode t
+   indent-bars-color '(highlight :face-bg t :blend 0.1)
+   indent-bars-treesit-support t
+   indent-bars-treesit-wrap '((yaml
+                             block_mapping_pair comment))
+   indent-bars-pattern " . . . . . . . ." ; play with the number of dots for your usual font size
+   indent-bars-width-frac 0.1
+   indent-bars-pad-frac 0.1)
 
 (add-hook 'before-save-hook
           'delete-trailing-whitespace)
