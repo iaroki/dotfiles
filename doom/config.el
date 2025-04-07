@@ -44,6 +44,11 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
+;; (setq doom-theme 'doom-one)
+(setq doom-theme 'doom-one-black)
+;; (setq doom-theme 'doom-tokyo-black)
+;; (setq doom-theme 'doom-gruvbox-black)
+;; (setq doom-gruvbox-dark-variant 'hard)
 ;; (setq doom-theme 'doom-tokyo-night)
 ;; (setq doom-theme 'doom-ayu-dark)
 ;; (setq doom-theme 'catppuccin)
@@ -54,12 +59,13 @@
 ;;   '(linum :background "#000000")
 ;;   '(line-number :background "#000000")
 ;;   '(hl-line :background "#111111")
-;;   '(tab-line :background "#000000"))
-(load-theme 'catppuccin t t)
-(catppuccin-set-color 'base "#000000")
-(catppuccin-set-color 'mantle "#000000")
-(catppuccin-set-color 'crust "#000000")
-(catppuccin-reload)
+  ;; '(tab-line :background "#000000"))
+
+;; (load-theme 'catppuccin t t)
+;; (catppuccin-set-color 'base "#000000")
+;; (catppuccin-set-color 'mantle "#000000")
+;; (catppuccin-set-color 'crust "#000000")
+;; (catppuccin-reload)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -176,10 +182,10 @@
 ;; Toggle Maximized window on startup
 (add-to-list 'default-frame-alist '(undecorated . t))
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
-(set-frame-parameter nil 'alpha-background 50)
-(add-to-list 'default-frame-alist '(alpha-background . 50))
-(set-frame-parameter (selected-frame) 'alpha '(85 100))
-(add-to-list 'default-frame-alist '(alpha 85 100))
+;; (set-frame-parameter nil 'alpha-background 50)
+;; (add-to-list 'default-frame-alist '(alpha-background . 50))
+(set-frame-parameter (selected-frame) 'alpha '(90 100))
+(add-to-list 'default-frame-alist '(alpha 90 100))
 
 ;; Keymaps
 (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
@@ -195,8 +201,8 @@
    indent-bars-treesit-wrap '((yaml
                              block_mapping_pair comment))
    indent-bars-pattern " . . . . . . . ." ; play with the number of dots for your usual font size
-   indent-bars-width-frac 0.1
-   indent-bars-pad-frac 0.1)
+   indent-bars-width-frac 0.01
+   indent-bars-pad-frac 0.01)
 
 (add-hook 'before-save-hook
           'delete-trailing-whitespace)
