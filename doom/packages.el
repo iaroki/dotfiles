@@ -48,4 +48,4 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;; (unpin! t)
 
-(package! catppuccin-theme)
+(package! mixed-pitch)

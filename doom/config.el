@@ -24,10 +24,12 @@
 ;; (setq doom-font (font-spec :family "FiraCode Nerd Font" :size 30)
 ;; (setq doom-font (font-spec :family "SauceCodePro Nerd Font" :size 30)
 (setq doom-font (font-spec :family "Iosevka Nerd Font" :size 34)
-     doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 34)
+     ;; doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 34)
+     doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 34)
+     ;; doom-variable-pitch-font (font-spec :family "Vollkorn" :size 34)
      doom-serif-font (font-spec :family "Source Serif Pro" :size 34)
-     doom-big-font (font-spec :family "SauceCodePro Nerd Font" :size 42)
-     doom-symbol-font (font-spec :family "FiraCode Nerd Font" :size 14))
+     doom-big-font (font-spec :family "Iosevka Nerd Font" :size 42)
+     doom-symbol-font (font-spec :family "Iosevka Nerd Font" :size 34))
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t))
@@ -52,13 +54,13 @@
 ;; (setq doom-theme 'doom-tokyo-night)
 ;; (setq doom-theme 'doom-ayu-dark)
 ;; (setq doom-theme 'catppuccin)
-;; (custom-set-faces!
+(custom-set-faces!
 ;;   '(default :background "#000000")
 ;;   '(mode-line :background "#000000")
 ;;   '(fringe :background "#000000")
 ;;   '(linum :background "#000000")
 ;;   '(line-number :background "#000000")
-;;   '(hl-line :background "#111111")
+  '(hl-line :background "#111111"))
   ;; '(tab-line :background "#000000"))
 
 ;; (load-theme 'catppuccin t t)
@@ -132,7 +134,39 @@
     org-src-fontify-natively t
     org-src-tab-acts-natively t
     org-confirm-babel-evaluate nil
-    org-edit-src-content-indentation 0))
+    org-edit-src-content-indentation 0)
+
+  (custom-set-faces!
+    `((org-document-title)
+      :foreground ,(face-attribute 'org-document-title :foreground)
+      :height 1.75 :weight bold)
+    `((org-level-1)
+      :foreground ,(face-attribute 'outline-1 :foreground)
+      :height 1.5 :weight bold)
+    `((org-level-2)
+      :foreground ,(face-attribute 'outline-2 :foreground)
+      :height 1.3 :weight bold)
+    `((org-level-3)
+      :foreground ,(face-attribute 'outline-3 :foreground)
+      :height 1.2 :weight bold)
+    `((org-level-4)
+      :foreground ,(face-attribute 'outline-4 :foreground)
+      :height 1.1 :weight bold)
+    `((org-level-5)
+      :foreground ,(face-attribute 'outline-5 :foreground)
+      :weight bold)))
+
+(use-package! mixed-pitch
+  :hook (org-mode . mixed-pitch-mode)
+  :hook ((org-mode      . mixed-pitch-mode)
+         (org-roam-mode . mixed-pitch-mode))
+  :config
+  ;; Ensure that Org elements that should remain in a fixed-width font do so.
+  (set-face-attribute 'org-code nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch)
+  (setq mixed-pitch-set-height t))
 
 (custom-set-faces
  '(markdown-header-face ((t (org-levelunction-name-face :weight bold :family "variable-pitch"))))
