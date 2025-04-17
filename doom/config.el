@@ -3,7 +3,6 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
-
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
 (setq user-full-name "Maxim Sytntyk"
@@ -25,9 +24,9 @@
 ;; (setq doom-font (font-spec :family "SauceCodePro Nerd Font" :size 30)
 (setq doom-font (font-spec :family "Iosevka Nerd Font" :size 34)
      ;; doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 34)
-     doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 34)
+     doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 36)
      ;; doom-variable-pitch-font (font-spec :family "Vollkorn" :size 34)
-     doom-serif-font (font-spec :family "Source Serif Pro" :size 34)
+     doom-serif-font (font-spec :family "Source Serif Pro" :size 36)
      doom-big-font (font-spec :family "Iosevka Nerd Font" :size 42)
      doom-symbol-font (font-spec :family "Iosevka Nerd Font" :size 34))
 (after! doom-themes
@@ -156,6 +155,10 @@
       :foreground ,(face-attribute 'outline-5 :foreground)
       :weight bold)))
 
+  ;; Org Modern
+  (with-eval-after-load 'org (global-org-modern-mode))
+  (setq org-modern-hide-stars nil)
+
 (use-package! mixed-pitch
   :hook (org-mode . mixed-pitch-mode)
   :hook ((org-mode      . mixed-pitch-mode)
@@ -164,8 +167,8 @@
   ;; Ensure that Org elements that should remain in a fixed-width font do so.
   (set-face-attribute 'org-code nil :inherit 'fixed-pitch)
   (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch)
+  ;; (set-face-attribute 'org-block-begin-line nil :inherit 'fixed-pitch)
+  ;; (set-face-attribute 'org-block-end-line nil :inherit 'fixed-pitch)
   (setq mixed-pitch-set-height t))
 
 (custom-set-faces
@@ -211,15 +214,15 @@
 
 ;; (setq select-enable-clipboard nil)
 ;; (setq x-select-enable-clipboard nil)
-(setq x-select-enable-primary nil)
+;; (setq x-select-enable-primary nil)
 
 ;; Toggle Maximized window on startup
 (add-to-list 'default-frame-alist '(undecorated . t))
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
 ;; (set-frame-parameter nil 'alpha-background 50)
 ;; (add-to-list 'default-frame-alist '(alpha-background . 50))
-(set-frame-parameter (selected-frame) 'alpha '(90 100))
-(add-to-list 'default-frame-alist '(alpha 90 100))
+;; (set-frame-parameter (selected-frame) 'alpha '(90 100))
+;; (add-to-list 'default-frame-alist '(alpha 90 100))
 
 ;; Keymaps
 (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
