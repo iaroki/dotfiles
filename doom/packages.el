@@ -50,3 +50,4 @@
 
 (package! mixed-pitch)
 (package! org-modern)
+(package! colorful-mode)

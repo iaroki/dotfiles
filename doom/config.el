@@ -241,5 +241,14 @@
    indent-bars-width-frac 0.01
    indent-bars-pad-frac 0.01)
 
+(use-package! colorful-mode
+  :custom
+  (colorful-use-prefix t)
+  (colorful-only-strings 'only-prog)
+  (css-fontify-colors nil)
+  :config
+  (global-colorful-mode t)
+  (add-to-list 'global-colorful-modes 'helpful-mode))
+
 (add-hook 'before-save-hook
           'delete-trailing-whitespace)
