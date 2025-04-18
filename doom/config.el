@@ -219,8 +219,8 @@
 ;; Toggle Maximized window on startup
 (add-to-list 'default-frame-alist '(undecorated . t))
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
-;; (set-frame-parameter nil 'alpha-background 50)
-;; (add-to-list 'default-frame-alist '(alpha-background . 50))
+(set-frame-parameter nil 'alpha-background 80)
+(add-to-list 'default-frame-alist '(alpha-background . 80))
 ;; (set-frame-parameter (selected-frame) 'alpha '(90 100))
 ;; (add-to-list 'default-frame-alist '(alpha 90 100))
 
