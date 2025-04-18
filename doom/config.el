@@ -20,15 +20,15 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-;; (setq doom-font (font-spec :family "FiraCode Nerd Font" :size 30)
-;; (setq doom-font (font-spec :family "SauceCodePro Nerd Font" :size 30)
-(setq doom-font (font-spec :family "Iosevka Nerd Font" :size 34)
-     ;; doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 34)
-     doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 36)
-     ;; doom-variable-pitch-font (font-spec :family "Vollkorn" :size 34)
-     doom-serif-font (font-spec :family "Source Serif Pro" :size 36)
-     doom-big-font (font-spec :family "Iosevka Nerd Font" :size 42)
-     doom-symbol-font (font-spec :family "Iosevka Nerd Font" :size 34))
+;; (setq doom-font (font-spec :family "FiraCode Nerd Font" :size 18)
+;; (setq doom-font (font-spec :family "SauceCodePro Nerd Font" :size 18)
+(setq doom-font (font-spec :family "Iosevka Nerd Font" :size 18)
+     ;; doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 18)
+     doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 20)
+     ;; doom-variable-pitch-font (font-spec :family "Vollkorn" :size 18)
+     doom-serif-font (font-spec :family "Source Serif Pro" :size 20)
+     doom-big-font (font-spec :family "Iosevka Nerd Font" :size 18)
+     doom-symbol-font (font-spec :family "Iosevka Nerd Font" :size 18))
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t))
