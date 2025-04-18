@@ -51,3 +51,6 @@
 (package! mixed-pitch)
 (package! org-modern)
 (package! colorful-mode)
+;; org-roam-ui
+(unpin! org-roam)
+(package! org-roam-ui)
