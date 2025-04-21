@@ -22,12 +22,16 @@
 ;;
 ;; (setq doom-font (font-spec :family "FiraCode Nerd Font" :size 18)
 ;; (setq doom-font (font-spec :family "SauceCodePro Nerd Font" :size 18)
-(setq doom-font (font-spec :family "Iosevka Nerd Font" :size 18)
+;; (setq doom-font (font-spec :family "Iosevka Nerd Font" :size 18)
+(setq doom-font (font-spec :family "Aporetic Sans Mono" :size 18)
      ;; doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 18)
-     doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 20)
+     ;; doom-variable-pitch-font (font-spec :family "Source Serif Pro" :size 20)
+     doom-variable-pitch-font (font-spec :family "Aporetic Serif" :size 18)
      ;; doom-variable-pitch-font (font-spec :family "Vollkorn" :size 18)
-     doom-serif-font (font-spec :family "Source Serif Pro" :size 20)
-     doom-big-font (font-spec :family "Iosevka Nerd Font" :size 18)
+     ;; doom-serif-font (font-spec :family "Source Serif Pro" :size 20)
+     doom-serif-font (font-spec :family "Aporetic Serif" :size 18)
+     ;; doom-big-font (font-spec :family "Iosevka Nerd Font" :size 18)
+     doom-big-font (font-spec :family "Aporetic Sans Mono" :size 18)
      doom-symbol-font (font-spec :family "Iosevka Nerd Font" :size 18))
 (after! doom-themes
   (setq doom-themes-enable-bold t
@@ -138,10 +142,10 @@
   (custom-set-faces!
     `((org-document-title)
       :foreground ,(face-attribute 'org-document-title :foreground)
-      :height 1.75 :weight bold)
+      :height 1.5 :weight bold)
     `((org-level-1)
       :foreground ,(face-attribute 'outline-1 :foreground)
-      :height 1.5 :weight bold)
+      :height 1.4 :weight bold)
     `((org-level-2)
       :foreground ,(face-attribute 'outline-2 :foreground)
       :height 1.3 :weight bold)
@@ -219,8 +223,8 @@
 ;; Toggle Maximized window on startup
 (add-to-list 'default-frame-alist '(undecorated . t))
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
-(set-frame-parameter nil 'alpha-background 80)
-(add-to-list 'default-frame-alist '(alpha-background . 80))
+(set-frame-parameter nil 'alpha-background 75)
+(add-to-list 'default-frame-alist '(alpha-background . 75))
 ;; (set-frame-parameter (selected-frame) 'alpha '(90 100))
 ;; (add-to-list 'default-frame-alist '(alpha 90 100))
 
@@ -250,6 +254,9 @@
   (global-colorful-mode t)
   (add-to-list 'global-colorful-modes 'helpful-mode))
 
-(setq-default show-trailing-whitespace t)
+(map! :leader
+      :desc "Kubed Prefix" "k" #'kubed-prefix-map)
+
+;; (setq-default show-trailing-whitespace t)
 (add-hook 'before-save-hook
           'delete-trailing-whitespace)
