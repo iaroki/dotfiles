@@ -58,12 +58,12 @@
 ;; (setq doom-theme 'doom-ayu-dark)
 ;; (setq doom-theme 'catppuccin)
 (custom-set-faces!
+  '(hl-line :background "#111111"))
 ;;   '(default :background "#000000")
 ;;   '(mode-line :background "#000000")
 ;;   '(fringe :background "#000000")
 ;;   '(linum :background "#000000")
 ;;   '(line-number :background "#000000")
-  '(hl-line :background "#111111"))
   ;; '(tab-line :background "#000000"))
 
 ;; (load-theme 'catppuccin t t)
@@ -162,6 +162,7 @@
   ;; Org Modern
   (with-eval-after-load 'org (global-org-modern-mode))
   (setq org-modern-hide-stars nil)
+  (setq org-modern-star 'replace)
 
 (use-package! mixed-pitch
   :hook (org-mode . mixed-pitch-mode)
@@ -223,8 +224,10 @@
 ;; Toggle Maximized window on startup
 (add-to-list 'default-frame-alist '(undecorated . t))
 (add-hook 'window-setup-hook #'toggle-frame-maximized)
+;; Transparency Wayland (PGTK)
 (set-frame-parameter nil 'alpha-background 75)
 (add-to-list 'default-frame-alist '(alpha-background . 75))
+;; Transparency (GTK)
 ;; (set-frame-parameter (selected-frame) 'alpha '(90 100))
 ;; (add-to-list 'default-frame-alist '(alpha 90 100))
 
