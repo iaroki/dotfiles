@@ -1,7 +1,10 @@
 # vim: set filetype=ini:
 
+# main font
+font-family = Aporetic Sans Mono
+# fallback font for icons
 font-family = FiraCode Nerd Font
-font-size = 12
+font-size = 13
 theme = tokyonight
 background = black
 background-opacity = 0.75
