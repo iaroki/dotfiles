@@ -5,6 +5,9 @@ font-family = Aporetic Sans Mono
 # fallback font for icons
 font-family = FiraCode Nerd Font
 font-size = 13
+# Light theme
+# theme = GruvboxLightHard
+# Dark theme
 theme = tokyonight
 background = black
 background-opacity = 0.75
