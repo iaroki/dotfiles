@@ -22,17 +22,18 @@ return {
     palette_overrides = {
       dark0_hard = "#0a0a0a",
     },
-    overrides = {
-      -- SignColumn = {bg = "#0a0a0a"},
-      -- CursorLine = {bg = "#111111"},
-      -- CursorLineNr = {bg = "#0a0a0a"}
-    },
+    -- overrides = {
+    --   -- SignColumn = {bg = "#0a0a0a"},
+    --   -- CursorLine = {bg = "#111111"},
+    --   -- CursorLineNr = {bg = "#0a0a0a"}
+    -- },
     dim_inactive = false,
     transparent_mode = true,
   },
 config = function(_, opts)
   require("gruvbox").setup(opts)
 
+  vim.o.background = "light"
   vim.cmd("colorscheme gruvbox")
   vim.cmd("highlight Normal guibg=NONE ctermbg=NONE")
 end,

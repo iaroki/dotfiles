@@ -6,12 +6,12 @@ font-family = Aporetic Sans Mono
 font-family = FiraCode Nerd Font
 font-size = 13
 # Light theme
-# theme = GruvboxLightHard
+theme = GruvboxLightHard
 # Dark theme
-theme = tokyonight
-background = black
-background-opacity = 0.75
-background-blur-radius = 20
+# theme = tokyonight
+# background = black
+# background-opacity = 0.75
+# background-blur-radius = 20
 selection-invert-fg-bg = true
 mouse-hide-while-typing = true
 fullscreen = false
