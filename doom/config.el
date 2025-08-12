@@ -265,8 +265,9 @@
   (global-colorful-mode t)
   (add-to-list 'global-colorful-modes 'helpful-mode))
 
-(map! :leader
-      :desc "Kubed Prefix" "k" #'kubed-prefix-map)
+(nyan-mode 1)
+(setq nyan-animate-nyancat t)
+(setq nyan-wavy-trail t)
 
 ;; (setq-default show-trailing-whitespace t)
 (add-hook 'before-save-hook
