@@ -51,6 +51,8 @@
 (package! mixed-pitch)
 (package! org-modern)
 (package! colorful-mode)
+(package! org-modern-indent
+  :recipe (:host github :repo "jdtsmith/org-modern-indent"))
 ;; org-roam-ui
 (unpin! org-roam)
 (package! org-roam-ui)

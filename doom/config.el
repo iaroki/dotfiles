@@ -165,6 +165,9 @@
   (setq org-modern-hide-stars nil)
   (setq org-modern-star 'replace)
 
+;; Org Modern Indent
+(add-hook! 'org-mode-hook :append #'org-modern-indent-mode)
+
 (use-package! mixed-pitch
   :hook (org-mode . mixed-pitch-mode)
   :hook ((org-mode      . mixed-pitch-mode)
