@@ -44,32 +44,8 @@
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-one)
 ;; (setq doom-theme 'doom-one-black)
-;; (setq doom-theme 'doom-gruvbox-soft)
-(setq doom-theme 'modus-operandi)
-(setq modus-themes-to-toggle '(modus-operandi modus-vivendi))
-(map! :leader
-      :desc "Toggle Modus light/dark"
-      "t m" #'modus-themes-toggle)
+(setq doom-theme 'doom-gruvbox-soft)
 ;; (setq doom-theme 'doom-gruvbox-black)
-;; (setq doom-theme 'doom-one-light)
-;; (setq doom-theme 'doom-tokyo-black)
-;; (setq doom-theme 'doom-tokyo-night)
-;; (setq doom-theme 'doom-ayu-dark)
-;; (setq doom-theme 'catppuccin)
-;; (custom-set-faces!
-;;   '(hl-line :background "#111111"))
-;;   '(default :background "#000000")
-;;   '(mode-line :background "#000000")
-;;   '(fringe :background "#000000")
-;;   '(linum :background "#000000")
-;;   '(line-number :background "#000000")
-  ;; '(tab-line :background "#000000"))
-
-;; (load-theme 'catppuccin t t)
-;; (catppuccin-set-color 'base "#000000")
-;; (catppuccin-set-color 'mantle "#000000")
-;; (catppuccin-set-color 'crust "#000000")
-;; (catppuccin-reload)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
