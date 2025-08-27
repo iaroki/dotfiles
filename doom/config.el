@@ -262,8 +262,8 @@
   (add-to-list 'global-colorful-modes 'helpful-mode))
 
 (nyan-mode 1)
-(setq nyan-animate-nyancat t)
-(setq nyan-wavy-trail t)
+;; (setq nyan-animate-nyancat t)
+;; (setq nyan-wavy-trail t)
 
 ;; (setq-default show-trailing-whitespace t)
 (add-hook 'before-save-hook
