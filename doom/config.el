@@ -254,8 +254,15 @@
 (use-package! gptel
   :config
   (setq
-  gptel-model 'qwen2.5-coder:latest
-  gptel-backend (gptel-make-ollama "ollama"
+   gptel-default-mode 'org-mode
+   gptel-display-buffer-action 'display-buffer
+   gptel-model 'qwen2.5-coder:latest
+   gptel-backend (gptel-make-ollama "ollama"
                   :host "10.0.0.24:11434"
                   :stream t
-                  :models '(qwen2.5-coder:latest deepseek-r1:14b deepseek-coder-v2:latest llama3.2:latest starcoder2:7b))))
+                  :models '(qwen2.5-coder:latest
+                            deepseek-r1:14b
+                            deepseek-coder-v2:latest
+                            llama3.2:latest starcoder2:7b)))
+  (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
+  (add-hook 'gptel-post-response-functions 'gptel-end-of-response))
