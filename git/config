@@ -1,0 +1,42 @@
+[alias]
+	prettylog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+	root = "rev-parse --show-toplevel"
+
+[color]
+	ui = true
+
+[commit]
+	gpgSign = true
+
+[core]
+	askPass = ""
+
+[credential]
+	helper = "store"
+
+[filter "lfs"]
+	clean = "git-lfs clean -- %f"
+	process = "git-lfs filter-process"
+	required = true
+	smudge = "git-lfs smudge -- %f"
+
+[github]
+	user = "iaroki"
+
+[gpg]
+	format = "openpgp"
+
+[init]
+	defaultBranch = "main"
+
+[push]
+	autoSetupRemote = true
+	default = "upstream"
+
+[tag]
+	gpgSign = true
+
+[user]
+	email = "iaroki@proton.me"
+	name = "Maxim Sytnyk"
+	signingKey = "5C29C98968FD67AF"
