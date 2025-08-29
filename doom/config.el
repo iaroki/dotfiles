@@ -249,3 +249,13 @@
 ;; (setq-default show-trailing-whitespace t)
 (add-hook 'before-save-hook
           'delete-trailing-whitespace)
+
+;; GPTel
+(use-package! gptel
+  :config
+  (setq
+  gptel-model 'qwen2.5-coder:latest
+  gptel-backend (gptel-make-ollama "ollama"
+                  :host "10.0.0.24:11434"
+                  :stream t
+                  :models '(qwen2.5-coder:latest deepseek-r1:14b deepseek-coder-v2:latest llama3.2:latest starcoder2:7b))))
