@@ -221,6 +221,9 @@
 (map! :leader
       :desc "Switch to last workspace"
       "TAB l" #'+workspace/other)
+(map! :leader
+      :desc "Kill current window"
+      "w k" #'evil-window-delete)
 
 ;; Indent lines
 (setq
