@@ -20,16 +20,11 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 16)
-     doom-variable-pitch-font (font-spec :family "Fira Sans" :size 18)
-     doom-serif-font (font-spec :family "Source Serif Pro" :size 18)
-     doom-big-font (font-spec :family "FiraCode Nerd Font" :size 24)
-     doom-symbol-font (font-spec :family "FiraCode Nerd Font" :size 16))
-;; (setq doom-font (font-spec :family "Aporetic Sans Mono" :size 18)
-;;      doom-variable-pitch-font (font-spec :family "Aporetic Serif" :size 18)
-;;      doom-serif-font (font-spec :family "Aporetic Serif" :size 18)
-;;      doom-big-font (font-spec :family "Aporetic Sans Mono" :size 24)
-;;      doom-symbol-font (font-spec :family "Iosevka Nerd Font" :size 18))
+(setq doom-font (font-spec :family "Iosevka SS05" :size 18)
+     doom-variable-pitch-font (font-spec :family "Iosevka Etoile" :size 18)
+     doom-serif-font (font-spec :family "Vollkorn" :size 18)
+     doom-big-font (font-spec :family "Iosevka SS05" :size 24)
+     doom-symbol-font (font-spec :family "Symbols Nerd Font Mono" :size 18))
 (after! doom-themes
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t))
