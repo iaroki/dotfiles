@@ -1,4 +1,9 @@
-import = ["/home/msytnyk/.config/alacritty/gruvbox.toml"]
+[terminal]
+shell = { program = "zsh", args = ["-l"] }
+
+[general]
+import = ["~/.config/alacritty/themes/gruvbox_dark.toml"]
+#import = ["~/.config/alacritty/themes/gruvbox_light.toml"]
 live_config_reload = true
 
 [bell]
@@ -23,22 +28,22 @@ TERM = "xterm-256color"
 
 [font]
 builtin_box_drawing = true
-size = 12.0
+size = 16.0
 
 [font.bold]
-family = "FiraCode Nerd Font"
+family = "Iosevka SS05"
 style = "Bold"
 
 [font.bold_italic]
-family = "FiraCode Nerd Font"
+family = "Iosevka SS05"
 style = "Bold Italic"
 
 [font.italic]
-family = "FiraCode Nerd Font"
+family = "Iosevka SS05"
 style = "Italic"
 
 [font.normal]
-family = "FiraCode Nerd Font"
+family = "Iosevka SS05"
 style = "Regular"
 
 [scrolling]
@@ -54,6 +59,7 @@ decorations = "None"
 decorations_theme_variant = "Dark"
 dynamic_padding = true
 dynamic_title = true
-opacity = 0.95
-# startup_mode = "Maximized"
+opacity = 1
+#opacity = 0.95
+startup_mode = "Maximized"
 title = "Alacritty"
