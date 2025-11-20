@@ -35,24 +35,24 @@ style = 'bold purple'
 style = 'bold blue'
 
 [character]
-success_symbol = '[➜](bold green)'
-error_symbol = '[✗](bold red)'
-vimcmd_symbol = '[](bold green)'
-vimcmd_replace_one_symbol = '[](bold purple)'
-vimcmd_replace_symbol = '[](bold purple)'
-vimcmd_visual_symbol = '[](bold purple)'
+success_symbol = '[→ ](bold green)'
+error_symbol = '[✗ ](bold red)'
+vimcmd_symbol = '[ ](bold green)'
+vimcmd_replace_one_symbol = '[ ](bold purple)'
+vimcmd_replace_symbol = '[ ](bold purple)'
+vimcmd_visual_symbol = '[ ](bold purple)'
 
 [fill]
 symbol = ' '
 
 [cmd_duration]
 min_time = 500
-format = '󱫍 [$duration]($style) '
+format = '󱫍  [$duration]($style) '
 style = 'dimmed white'
 
 [time]
 disabled = false
-format = '[ $time ]($style) '
+format = ' [ $time ]($style) '
 style = 'bold white'
 use_12hr = false
 
