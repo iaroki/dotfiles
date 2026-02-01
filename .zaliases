@@ -14,4 +14,6 @@ alias gt="git tag"
 alias gwl="git worktree list"
 alias gwa="git worktree add"
 alias gwr="git worktree remove"
-
+alias b="bat --style=header,grid --paging=never"
+alias vf="vifm ."
+alias aws_profile="export AWS_PROFILE=\$(aws configure list-profiles | fzf --prompt \"Choose active AWS profile:\")"
