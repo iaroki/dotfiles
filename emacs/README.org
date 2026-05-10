@@ -1,0 +1,42 @@
+* My personal Emacs configuration
+
+Bare bones Emacs with essential tools required for work.
+
+** Init stage
+
+*** Core stuff
+- GC thresholds OK
+- file backups OK
+
+*** Package management
+- straight.el OK
+- elpa/melpa/gnu/nongnu OK
+
+*** Evil mode
+- evil OK
+- SPC as leader key
+- evil-collection OK
+
+*** UI tweaks
+- line numbers (relative) OK
+- theme (modus) OK
+- fonts (iosevka) OK
+
+*** Mode line
+- doom-modeline OK
+- nerd-icons FAIL (git install)
+- nyan-mode FAIL (melpa issues)
+
+** Development stage
+
+- which key OK
+- vertico/consult/marginalia/orderless/embark OK
+- project.el
+- magit
+- treesitter
+- eglot
+- flycheck/flymake OK
+- corfu
+- orgmode OK
+- wgrep OK
+- pass
