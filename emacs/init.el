@@ -1,3 +1,5 @@
+;;; init.el -*- lexical-binding: t; -*-
+
 ;; Package management
 (use-package package
   :ensure nil
@@ -93,26 +95,83 @@
   (setq evil-respect-visual-line-mode t)
   (setq evil-undo-system 'undo-redo)
   (setq evil-shift-width 2)
-  ;; Enable this if you want C-u to scroll up, more like pure Vim
-  ;(setq evil-want-C-u-scroll t)
+  (setq evil-want-C-u-scroll t)       ;; Makes C-u scroll
+  (setq evil-want-C-u-delete t)       ;; Makes C-u delete on insert mode
   :config
-  (evil-mode 1)
-  ;; Use space as leader in normal, visual and operator states
-  (define-key evil-normal-state-map (kbd "SPC") nil) ; clear any existing binding
-  (define-key evil-visual-state-map (kbd "SPC") nil)
-  (define-key evil-operator-state-map (kbd "SPC") nil)
-  (define-prefix-command 'my/leader-map)
-  (define-key evil-normal-state-map (kbd "SPC") 'my/leader-map)
-  (define-key evil-visual-state-map (kbd "SPC") 'my/leader-map)
-  ;; Leader bindings
-  (define-key my/leader-map (kbd ":") 'execute-extended-command)
-  (define-key my/leader-map (kbd "f") 'find-file)
-  (define-key my/leader-map (kbd "b b") 'consult-buffer)
-  (define-key my/leader-map (kbd "b p") 'switch-to-prev-buffer)
-  (define-key my/leader-map (kbd "w") 'save-buffer)
-  (define-key my/leader-map (kbd "g") 'magit-status) ; if you use magit
-;; If you use Magit, start editing in insert state
-  (add-hook 'git-commit-setup-hook 'evil-insert-state))
+  ;; Set the leader key to space for easier access to custom commands. (setq evil-want-leader t)
+  (setq evil-leader/in-all-states t)  ;; Make the leader key available in all states.
+  (setq evil-want-fine-undo t)        ;; Evil uses finer grain undoing steps
+  ;; Define the leader key as Space
+  (evil-set-leader 'normal (kbd "SPC"))
+  (evil-set-leader 'visual (kbd "SPC"))
+  ;; Keybindings for searching and finding files.
+  (evil-define-key 'normal 'global (kbd "<leader> :") 'execute-extended-command)
+  (evil-define-key 'normal 'global (kbd "<leader> s f") 'consult-find)
+  (evil-define-key 'normal 'global (kbd "<leader> s g") 'consult-grep)
+  (evil-define-key 'normal 'global (kbd "<leader> s G") 'consult-git-grep)
+  (evil-define-key 'normal 'global (kbd "<leader> s r") 'consult-ripgrep)
+  (evil-define-key 'normal 'global (kbd "<leader> s h") 'consult-info)
+  (evil-define-key 'normal 'global (kbd "<leader> /") 'consult-line)
+  ;; Flymake navigation
+  (evil-define-key 'normal 'global (kbd "<leader> x x") 'consult-flymake);; Gives you something like `trouble.nvim'
+  (evil-define-key 'normal 'global (kbd "] d") 'flymake-goto-next-error) ;; Go to next Flymake error
+  (evil-define-key 'normal 'global (kbd "[ d") 'flymake-goto-prev-error) ;; Go to previous Flymake error
+  ;; Dired commands for file management
+  (evil-define-key 'normal 'global (kbd "<leader> x d") 'dired)
+  (evil-define-key 'normal 'global (kbd "<leader> x j") 'dired-jump)
+  (evil-define-key 'normal 'global (kbd "<leader> x f") 'find-file)
+  (evil-define-key 'normal 'global (kbd "<leader> f") 'find-file)
+  ;; Magit keybindings for Git integration
+  (evil-define-key 'normal 'global (kbd "<leader> g g") 'magit-status)      ;; Open Magit status
+  (evil-define-key 'normal 'global (kbd "<leader> g l") 'magit-log-current) ;; Show current log
+  (evil-define-key 'normal 'global (kbd "<leader> g d") 'magit-diff-buffer-file) ;; Show diff for the current file
+  ;; Buffer management keybindings
+  (evil-define-key 'normal 'global (kbd "] b") 'switch-to-next-buffer) ;; Switch to next buffer
+  (evil-define-key 'normal 'global (kbd "[ b") 'switch-to-prev-buffer) ;; Switch to previous buffer
+  (evil-define-key 'normal 'global (kbd "<leader> b b") 'consult-buffer) ;; Open consult buffer list
+  (evil-define-key 'normal 'global (kbd "<leader> b i") 'ibuffer) ;; Open Ibuffer
+  (evil-define-key 'normal 'global (kbd "<leader> b d") 'kill-current-buffer) ;; Kill current buffer
+  (evil-define-key 'normal 'global (kbd "<leader> b k") 'kill-current-buffer) ;; Kill current buffer
+  (evil-define-key 'normal 'global (kbd "<leader> b x") 'kill-current-buffer) ;; Kill current buffer
+  (evil-define-key 'normal 'global (kbd "<leader> b s") 'save-buffer) ;; Save buffer
+  (evil-define-key 'normal 'global (kbd "<leader> b l") 'consult-buffer) ;; Consult buffer
+  (evil-define-key 'normal 'global (kbd "<leader>SPC") 'consult-buffer) ;; Consult buffer
+  ;; Project management keybindings
+  (evil-define-key 'normal 'global (kbd "<leader> p b") 'consult-project-buffer) ;; Consult project buffer
+  (evil-define-key 'normal 'global (kbd "<leader> p p") 'project-switch-project) ;; Switch project
+  (evil-define-key 'normal 'global (kbd "<leader> p f") 'project-find-file) ;; Find file in project
+  (evil-define-key 'normal 'global (kbd "<leader> p g") 'project-find-regexp) ;; Find regexp in project
+  (evil-define-key 'normal 'global (kbd "<leader> p k") 'project-kill-buffers) ;; Kill project buffers
+  (evil-define-key 'normal 'global (kbd "<leader> p D") 'project-dired) ;; Dired for project
+  ;; Yank from kill ring
+  (evil-define-key 'normal 'global (kbd "<leader> P") 'consult-yank-from-kill-ring)
+  ;; Embark actions for contextual commands
+  (evil-define-key 'normal 'global (kbd "<leader> .") 'embark-act)
+  ;; Help keybindings
+  (evil-define-key 'normal 'global (kbd "<leader> h m") 'describe-mode) ;; Describe current mode
+  (evil-define-key 'normal 'global (kbd "<leader> h f") 'describe-function) ;; Describe function
+  (evil-define-key 'normal 'global (kbd "<leader> h v") 'describe-variable) ;; Describe variable
+  (evil-define-key 'normal 'global (kbd "<leader> h k") 'describe-key) ;; Describe key
+  ;; Tab navigation
+  (evil-define-key 'normal 'global (kbd "] t") 'tab-next) ;; Go to next tab
+  (evil-define-key 'normal 'global (kbd "[ t") 'tab-previous) ;; Go to previous tab
+  ;; If you use Magit, start editing in insert state
+  (add-hook 'git-commit-setup-hook 'evil-insert-state)
+  ;; Remap K to docs
+  (evil-define-key 'normal 'global (kbd "K") 'eldoc-box-help-at-point)
+  ;; Commenting functionality for single and multiple lines
+  (evil-define-key 'normal 'global (kbd "gcc")
+                   (lambda ()
+                     (interactive)
+                     (if (not (use-region-p))
+                         (comment-or-uncomment-region (line-beginning-position) (line-end-position)))))
+  (evil-define-key 'visual 'global (kbd "gc")
+                   (lambda ()
+                     (interactive)
+                     (if (use-region-p)
+                         (comment-or-uncomment-region (region-beginning) (region-end)))))
+  ;; Enable evil mode
+  (evil-mode 1))
 
 (use-package evil-collection
   :after evil
@@ -216,6 +275,14 @@
   (dired-listing-switches "-lah --group-directories-first")
   (dired-dwim-target t)
   (dired-kill-when-opening-new-dired-buffer t))
+
+(use-package magit
+  :ensure nil
+  :defer t
+  :config
+  (setq magit-display-buffer-function 'switch-to-buffer)
+  (setq magit-commit-show-diff nil)
+  (setopt magit-format-file-function #'magit-format-file-nerd-icons))
 
 (use-package eldoc
   :ensure nil
