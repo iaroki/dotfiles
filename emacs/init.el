@@ -280,6 +280,7 @@
   :ensure nil
   :defer t
   :config
+  (advice-add 'magit-status :after (lambda (&rest _args) (magit-refresh)))
   (setq magit-display-buffer-function 'switch-to-buffer)
   (setq magit-commit-show-diff nil)
   (setopt magit-format-file-function #'magit-format-file-nerd-icons))
@@ -377,6 +378,9 @@
 (use-package corfu
   :ensure t
   :defer t
+  :init
+  (global-corfu-mode)
+  (corfu-popupinfo-mode t)
   :custom
   (corfu-auto nil)                        ;; Only completes when hitting TAB
   ;; (corfu-auto-delay 0)                ;; Delay before popup (enable if corfu-auto is t)
@@ -386,9 +390,8 @@
   (corfu-max-width 50)                   ;; Maximum width of completion popup
   (corfu-min-width 50)                   ;; Minimum width of completion popup
   (corfu-popupinfo-delay 0.5)            ;; Delay before showing documentation popup
-  :init
-  (global-corfu-mode)
-  (corfu-popupinfo-mode t))
+  :config
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
 (use-package nerd-icons-corfu
   :ensure t
@@ -405,6 +408,13 @@
   :hook
   (dired-mode . nerd-icons-dired-mode))
 
+(use-package nerd-icons-completion
+  :ensure t
+  :after (:all nerd-icons marginalia)
+  :config
+  (nerd-icons-completion-mode)
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
+
 (use-package indent-guide
   :defer t
   :ensure t
@@ -418,6 +428,16 @@
   :ensure t
   :hook
   (prog-mode . rainbow-delimiters-mode))
+
+(use-package neotree
+  :ensure t
+  :custom
+  (neo-show-hidden-files t)
+  (neo-theme 'nerd)
+  (neo-vc-integration '(face char))
+  :defer t
+  :config
+  (setq neo-theme 'nerd-icons))
 
 (use-package terraform-mode
   :ensure t
