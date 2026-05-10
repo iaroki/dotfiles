@@ -104,54 +104,67 @@
   ;; Define the leader key as Space
   (evil-set-leader 'normal (kbd "SPC"))
   (evil-set-leader 'visual (kbd "SPC"))
+  ;; Leader prefix maps keep grouped commands structured and easier to label.
+  (define-prefix-command 'my/leader-buffer-map)
+  (define-prefix-command 'my/leader-git-map)
+  (define-prefix-command 'my/leader-help-map)
+  (define-prefix-command 'my/leader-project-map)
+  (define-prefix-command 'my/leader-search-map)
+  (define-prefix-command 'my/leader-actions-map)
+  (evil-define-key 'normal 'global (kbd "<leader> b") my/leader-buffer-map)
+  (evil-define-key 'normal 'global (kbd "<leader> g") my/leader-git-map)
+  (evil-define-key 'normal 'global (kbd "<leader> h") my/leader-help-map)
+  (evil-define-key 'normal 'global (kbd "<leader> p") my/leader-project-map)
+  (evil-define-key 'normal 'global (kbd "<leader> s") my/leader-search-map)
+  (evil-define-key 'normal 'global (kbd "<leader> x") my/leader-actions-map)
   ;; Keybindings for searching and finding files.
   (evil-define-key 'normal 'global (kbd "<leader> :") 'execute-extended-command)
-  (evil-define-key 'normal 'global (kbd "<leader> s f") 'consult-find)
-  (evil-define-key 'normal 'global (kbd "<leader> s g") 'consult-grep)
-  (evil-define-key 'normal 'global (kbd "<leader> s G") 'consult-git-grep)
-  (evil-define-key 'normal 'global (kbd "<leader> s r") 'consult-ripgrep)
-  (evil-define-key 'normal 'global (kbd "<leader> s h") 'consult-info)
+  (define-key my/leader-search-map (kbd "f") #'consult-find)
+  (define-key my/leader-search-map (kbd "g") #'consult-grep)
+  (define-key my/leader-search-map (kbd "G") #'consult-git-grep)
+  (define-key my/leader-search-map (kbd "r") #'consult-ripgrep)
+  (define-key my/leader-search-map (kbd "h") #'consult-info)
   (evil-define-key 'normal 'global (kbd "<leader> /") 'consult-line)
   ;; Flymake navigation
-  (evil-define-key 'normal 'global (kbd "<leader> x x") 'consult-flymake);; Gives you something like `trouble.nvim'
+  (define-key my/leader-actions-map (kbd "x") #'consult-flymake) ;; Gives you something like `trouble.nvim'
   (evil-define-key 'normal 'global (kbd "] d") 'flymake-goto-next-error) ;; Go to next Flymake error
   (evil-define-key 'normal 'global (kbd "[ d") 'flymake-goto-prev-error) ;; Go to previous Flymake error
   ;; Dired commands for file management
-  (evil-define-key 'normal 'global (kbd "<leader> x d") 'dired)
-  (evil-define-key 'normal 'global (kbd "<leader> x j") 'dired-jump)
-  (evil-define-key 'normal 'global (kbd "<leader> x f") 'find-file)
+  (define-key my/leader-actions-map (kbd "d") #'dired)
+  (define-key my/leader-actions-map (kbd "j") #'dired-jump)
+  (define-key my/leader-actions-map (kbd "f") #'find-file)
   (evil-define-key 'normal 'global (kbd "<leader> f") 'find-file)
   ;; Magit keybindings for Git integration
-  (evil-define-key 'normal 'global (kbd "<leader> g g") 'magit-status)      ;; Open Magit status
-  (evil-define-key 'normal 'global (kbd "<leader> g l") 'magit-log-current) ;; Show current log
-  (evil-define-key 'normal 'global (kbd "<leader> g d") 'magit-diff-buffer-file) ;; Show diff for the current file
+  (define-key my/leader-git-map (kbd "g") #'magit-status)      ;; Open Magit status
+  (define-key my/leader-git-map (kbd "l") #'magit-log-current) ;; Show current log
+  (define-key my/leader-git-map (kbd "d") #'magit-diff-buffer-file) ;; Show diff for the current file
   ;; Buffer management keybindings
   (evil-define-key 'normal 'global (kbd "] b") 'switch-to-next-buffer) ;; Switch to next buffer
   (evil-define-key 'normal 'global (kbd "[ b") 'switch-to-prev-buffer) ;; Switch to previous buffer
-  (evil-define-key 'normal 'global (kbd "<leader> b b") 'consult-buffer) ;; Open consult buffer list
-  (evil-define-key 'normal 'global (kbd "<leader> b i") 'ibuffer) ;; Open Ibuffer
-  (evil-define-key 'normal 'global (kbd "<leader> b d") 'kill-current-buffer) ;; Kill current buffer
-  (evil-define-key 'normal 'global (kbd "<leader> b k") 'kill-current-buffer) ;; Kill current buffer
-  (evil-define-key 'normal 'global (kbd "<leader> b x") 'kill-current-buffer) ;; Kill current buffer
-  (evil-define-key 'normal 'global (kbd "<leader> b s") 'save-buffer) ;; Save buffer
-  (evil-define-key 'normal 'global (kbd "<leader> b l") 'consult-buffer) ;; Consult buffer
+  (define-key my/leader-buffer-map (kbd "b") #'consult-buffer) ;; Open consult buffer list
+  (define-key my/leader-buffer-map (kbd "i") #'ibuffer) ;; Open Ibuffer
+  (define-key my/leader-buffer-map (kbd "d") #'kill-current-buffer) ;; Kill current buffer
+  (define-key my/leader-buffer-map (kbd "k") #'kill-current-buffer) ;; Kill current buffer
+  (define-key my/leader-buffer-map (kbd "x") #'kill-current-buffer) ;; Kill current buffer
+  (define-key my/leader-buffer-map (kbd "s") #'save-buffer) ;; Save buffer
+  (define-key my/leader-buffer-map (kbd "l") #'consult-buffer) ;; Consult buffer
   (evil-define-key 'normal 'global (kbd "<leader>SPC") 'consult-buffer) ;; Consult buffer
   ;; Project management keybindings
-  (evil-define-key 'normal 'global (kbd "<leader> p b") 'consult-project-buffer) ;; Consult project buffer
-  (evil-define-key 'normal 'global (kbd "<leader> p p") 'project-switch-project) ;; Switch project
-  (evil-define-key 'normal 'global (kbd "<leader> p f") 'project-find-file) ;; Find file in project
-  (evil-define-key 'normal 'global (kbd "<leader> p g") 'project-find-regexp) ;; Find regexp in project
-  (evil-define-key 'normal 'global (kbd "<leader> p k") 'project-kill-buffers) ;; Kill project buffers
-  (evil-define-key 'normal 'global (kbd "<leader> p D") 'project-dired) ;; Dired for project
+  (define-key my/leader-project-map (kbd "b") #'consult-project-buffer) ;; Consult project buffer
+  (define-key my/leader-project-map (kbd "p") #'project-switch-project) ;; Switch project
+  (define-key my/leader-project-map (kbd "f") #'project-find-file) ;; Find file in project
+  (define-key my/leader-project-map (kbd "g") #'project-find-regexp) ;; Find regexp in project
+  (define-key my/leader-project-map (kbd "k") #'project-kill-buffers) ;; Kill project buffers
+  (define-key my/leader-project-map (kbd "D") #'project-dired) ;; Dired for project
   ;; Yank from kill ring
   (evil-define-key 'normal 'global (kbd "<leader> P") 'consult-yank-from-kill-ring)
   ;; Embark actions for contextual commands
   (evil-define-key 'normal 'global (kbd "<leader> .") 'embark-act)
   ;; Help keybindings
-  (evil-define-key 'normal 'global (kbd "<leader> h m") 'describe-mode) ;; Describe current mode
-  (evil-define-key 'normal 'global (kbd "<leader> h f") 'describe-function) ;; Describe function
-  (evil-define-key 'normal 'global (kbd "<leader> h v") 'describe-variable) ;; Describe variable
-  (evil-define-key 'normal 'global (kbd "<leader> h k") 'describe-key) ;; Describe key
+  (define-key my/leader-help-map (kbd "m") #'describe-mode) ;; Describe current mode
+  (define-key my/leader-help-map (kbd "f") #'describe-function) ;; Describe function
+  (define-key my/leader-help-map (kbd "v") #'describe-variable) ;; Describe variable
+  (define-key my/leader-help-map (kbd "k") #'describe-key) ;; Describe key
   ;; Tab navigation
   (evil-define-key 'normal 'global (kbd "] t") 'tab-next) ;; Go to next tab
   (evil-define-key 'normal 'global (kbd "[ t") 'tab-previous) ;; Go to previous tab
@@ -189,7 +202,15 @@
   :ensure nil
   :defer t
   :hook
-  (after-init . which-key-mode))
+  (after-init . which-key-mode)
+  :config
+  (which-key-add-key-based-replacements
+    "SPC b" '("buffers" . "buffer commands")
+    "SPC g" '("git" . "git commands")
+    "SPC h" '("help" . "help commands")
+    "SPC p" '("project" . "project commands")
+    "SPC s" '("search" . "search commands")
+    "SPC x" '("actions" . "action commands")))
 
 (use-package vertico
   :ensure t
