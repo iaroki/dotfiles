@@ -301,8 +301,10 @@
   :ensure nil
   :defer t
   :config
-  (advice-add 'magit-status :after (lambda (&rest _args) (magit-refresh)))
-  (setq magit-display-buffer-function 'switch-to-buffer)
+  ;; show fullscreen buffer
+  (setq magit-display-buffer-function
+        #'magit-display-buffer-same-window-except-diff-v1)
+  ;; skip diff buffer before commit
   (setq magit-commit-show-diff nil)
   (setopt magit-format-file-function #'magit-format-file-nerd-icons))
 
