@@ -100,6 +100,11 @@
 (setopt modus-themes-to-toggle '(modus-operandi-tinted modus-vivendi))
 (load-theme 'modus-operandi-tinted :no-confirm)
 
+(defun my/kill-other-buffers ()
+  "Kill all buffers except the current one."
+  (interactive)
+  (mapc #'kill-buffer (delq (current-buffer) (buffer-list))))
+
 ;; Keybinding framework — provides my/leader-def with inline :which-key labels
 (use-package general
   :ensure t
@@ -140,9 +145,10 @@
     "bb"  '(consult-buffer        :which-key "switch")
     "bl"  '(mode-line-other-buffer :which-key "last buffer")
     "bi"  '(ibuffer               :which-key "ibuffer")
-    "bd"  '(kill-current-buffer   :which-key "kill")
-    "bk"  '(kill-current-buffer   :which-key "kill")
-    "bs"  '(save-buffer           :which-key "save")
+    "bd"  '(kill-current-buffer    :which-key "kill this")
+    "bk"  '(kill-current-buffer    :which-key "kill this")
+    "bO"  '(my/kill-other-buffers  :which-key "kill others")
+    "bs"  '(save-buffer            :which-key "save")
 
     ;; Git
     "g"   '(:ignore t                   :which-key "git")
@@ -186,6 +192,26 @@
     "tt"  '(modus-themes-toggle     :which-key "toggle light/dark")
     "ts"  '(consult-theme           :which-key "select theme")
 
+    ;; Windows
+    "w"   '(:ignore t                  :which-key "windows")
+    "wd"  '(delete-window              :which-key "delete")
+    "wo"  '(maximize-window             :which-key "maximize")
+    "wO"  '(delete-other-windows       :which-key "delete others")
+    "ws"  '(split-window-below         :which-key "split below")
+    "wv"  '(split-window-right         :which-key "split right")
+    "w="  '(balance-windows            :which-key "balance")
+    "wr"  '(evil-window-rotate-downwards :which-key "rotate")
+    "wh"  '(evil-window-left           :which-key "go left")
+    "wj"  '(evil-window-down           :which-key "go down")
+    "wk"  '(evil-window-up             :which-key "go up")
+    "wl"  '(evil-window-right          :which-key "go right")
+    "wH"  '(evil-window-move-far-left  :which-key "move left")
+    "wJ"  '(evil-window-move-very-bottom :which-key "move down")
+    "wK"  '(evil-window-move-very-top  :which-key "move up")
+    "wL"  '(evil-window-move-far-right :which-key "move right")
+    "wu"  '(winner-undo                :which-key "undo layout")
+    "wU"  '(winner-redo                :which-key "redo layout")
+
     ;; Workspaces — populated in Task 7 when tabspaces is added
     "TAB" '(:ignore t             :which-key "workspaces"))
 
@@ -198,7 +224,11 @@
     "[t" 'tab-previous
     "]d" 'flymake-goto-next-error
     "[d" 'flymake-goto-prev-error
-    "K"  'eldoc-box-help-at-point)
+    "K"  'eldoc-box-help-at-point
+    "C-h" 'evil-window-left
+    "C-j" 'evil-window-down
+    "C-k" 'evil-window-up
+    "C-l" 'evil-window-right)
 
   ;; Comment operators
   (general-define-key

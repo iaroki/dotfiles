@@ -198,7 +198,7 @@ Inside `use-package emacs` `:init`:
 
 ---
 
-## Task 5 — Window navigation `C-h/j/k/l` (`init.el`)
+## ~~Task 5 — Window navigation `C-h/j/k/l` (`init.el`)~~ ✓
 
 Add to the `general-define-key :states 'normal` block from Task 4:
 
