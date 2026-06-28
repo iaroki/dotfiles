@@ -694,3 +694,13 @@
     (if (and buffer-file-name (string-match-p "\\.hcl\\'" buffer-file-name))
         (add-hook 'before-save-hook #'my/terragrunt-format-buffer nil t)
       (add-hook 'before-save-hook #'eglot-format-buffer nil t))))
+
+(use-package markdown-mode
+  :ensure t
+  :defer t
+  :mode ("\\.md\\'" "\\.markdown\\'")
+  :custom
+  (markdown-fontify-code-blocks-natively t)
+  (markdown-command "pandoc")
+  :hook
+  (markdown-mode . visual-line-mode))

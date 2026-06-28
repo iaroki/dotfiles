@@ -563,7 +563,7 @@ hadolint must be installed separately (binary from GitHub releases).
 
 ---
 
-## Task 18 — Markdown (`init.el`)
+## ~~Task 18 — Markdown (`init.el`)~~ ✓
 
 `markdown-mode` is in `custom.el` package list but has no config. Add a proper block:
 
