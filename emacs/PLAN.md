@@ -482,7 +482,7 @@ shfmt must be installed: `go install mvdan.cc/sh/v3/cmd/shfmt@latest`
 
 ---
 
-## Task 15 — Python (`init.el`)
+## ~~Task 15 — Python (`init.el`)~~ ✓
 
 Add `python-ts-mode` to the eglot hook list. No remap needed — Python ts-mode is already in `major-mode-remap-alist`.
 

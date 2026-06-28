@@ -527,7 +527,7 @@
 
 (use-package eglot
   :ensure nil
-  :hook ((c-ts-mode c++-ts-mode go-ts-mode yaml-ts-mode bash-ts-mode) . eglot-ensure)
+  :hook ((c-ts-mode c++-ts-mode go-ts-mode yaml-ts-mode bash-ts-mode python-ts-mode) . eglot-ensure)
   :custom
   (eglot-events-buffer-size 0)
   (eglot-autoshutdown t)
@@ -546,6 +546,10 @@
 (use-package ansible
   :ensure t
   :hook (yaml-ts-mode . ansible-auto-decrypt-encrypt))
+
+(use-package flymake-ruff
+  :ensure t
+  :hook (python-ts-mode . flymake-ruff-load))
 
 (setq treesit-language-source-alist
       '((bash "https://github.com/tree-sitter/tree-sitter-bash")
