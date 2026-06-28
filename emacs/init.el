@@ -282,6 +282,38 @@
   :ensure t
   :init (doom-modeline-mode 1))
 
+(use-package hl-todo
+  :ensure t
+  :hook (after-init . global-hl-todo-mode)
+  :custom
+  (hl-todo-keyword-faces
+   '(("TODO"       . "#ff9944")
+     ("FIXME"      . "#ff4444")
+     ("NOTE"       . "#44aaff")
+     ("HACK"       . "#ff44ff")
+     ("REVIEW"     . "#ffff44")
+     ("DEPRECATED" . "#888888"))))
+
+(use-package pulsar
+  :ensure t
+  :hook (after-init . pulsar-global-mode)
+  :custom
+  (pulsar-pulse t)
+  (pulsar-delay 0.055)
+  (pulsar-iterations 10)
+  (pulsar-face 'pulsar-magenta)
+  :config
+  (dolist (fn '(evil-yank evil-yank-line))
+    (add-to-list 'pulsar-pulse-functions fn)))
+
+(use-package colorful-mode
+  :ensure t
+  :hook (after-init . global-colorful-mode)
+  :custom
+  (colorful-use-prefix t)
+  (colorful-only-strings 'only-prog)
+  (css-fontify-colors nil))
+
 ;; QoL features
 (use-package which-key
   :ensure nil

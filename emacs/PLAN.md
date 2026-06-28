@@ -294,7 +294,7 @@ New package block (place after `magit`):
 
 ---
 
-## Task 9 — TODO highlighting `hl-todo` (`init.el`)
+## ~~Task 9 — TODO highlighting `hl-todo` (`init.el`)~~ ✓
 
 New package block (place with UI packages after `doom-modeline`):
 
@@ -314,7 +314,7 @@ New package block (place with UI packages after `doom-modeline`):
 
 ---
 
-## Task 10 — Nav-flash `pulsar` (`init.el`)
+## ~~Task 10 — Nav-flash `pulsar` (`init.el`)~~ ✓
 
 New package block (place with UI packages):
 
@@ -331,7 +331,7 @@ New package block (place with UI packages):
 
 ---
 
-## Task 11 — Color code highlighting `colorful-mode` (`init.el`)
+## ~~Task 11 — Color code highlighting `colorful-mode` (`init.el`)~~ ✓
 
 New package block (place with UI packages):
 
