@@ -527,7 +527,7 @@
 
 (use-package eglot
   :ensure nil
-  :hook ((c-ts-mode c++-ts-mode go-ts-mode yaml-ts-mode bash-ts-mode python-ts-mode) . eglot-ensure)
+  :hook ((c-ts-mode c++-ts-mode go-ts-mode yaml-ts-mode bash-ts-mode python-ts-mode terraform-ts-mode) . eglot-ensure)
   :custom
   (eglot-events-buffer-size 0)
   (eglot-autoshutdown t)
@@ -590,7 +590,7 @@
         (typescript-mode . typescript-ts-mode)
         (conf-toml-mode . toml-ts-mode)
         (gdscript-mode . gdscript-ts-mode)
-        ))
+        (terraform-mode . terraform-ts-mode)))
 
 
 ;; Or if there is no built in mode
@@ -671,3 +671,23 @@
   :ensure t
   :custom
   (terraform-indent-level 4))
+
+(use-package terraform-ts-mode
+  :ensure nil
+  :mode ("\\.tf\\'" "\\.tfvars\\'"))
+
+(add-to-list 'auto-mode-alist '("\\.hcl\\'" . terraform-ts-mode))
+
+(defun my/terragrunt-format-buffer ()
+  "Format current .hcl buffer with `terragrunt hcl fmt'."
+  (when (and buffer-file-name
+             (string-match-p "\\.hcl\\'" buffer-file-name)
+             (executable-find "terragrunt"))
+    (shell-command (concat "terragrunt hcl fmt " (shell-quote-argument buffer-file-name)))
+    (revert-buffer t t t)))
+
+(add-hook 'terraform-ts-mode-hook
+  (lambda ()
+    (if (and buffer-file-name (string-match-p "\\.hcl\\'" buffer-file-name))
+        (add-hook 'before-save-hook #'my/terragrunt-format-buffer nil t)
+      (add-hook 'before-save-hook #'eglot-format-buffer nil t))))

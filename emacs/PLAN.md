@@ -504,7 +504,7 @@ ruff must be installed: `pip install ruff`
 
 ---
 
-## Task 16 — Terraform / Terragrunt (`.tf` / `.hcl`) (`init.el`)
+## ~~Task 16 — Terraform / Terragrunt (`.tf` / `.hcl`) (`init.el`)~~ ✓
 
 The existing `terraform-mode` block covers `.tf` files but has no LSP and no tree-sitter remap. Fix:
 
