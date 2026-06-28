@@ -592,7 +592,7 @@ For live preview, add `grip-mode` (requires `pip install grip`):
 
 ---
 
-## Task 19 — Just / Make (`init.el`)
+## ~~Task 19 — Just / Make (`init.el`)~~ ✓
 
 **Just** (Justfile):
 ```elisp

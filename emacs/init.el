@@ -704,3 +704,11 @@
   (markdown-command "pandoc")
   :hook
   (markdown-mode . visual-line-mode))
+
+(use-package just-mode
+  :ensure t
+  :defer t)
+
+(use-package makefile-mode
+  :ensure nil
+  :hook (makefile-mode . (lambda () (setq-local indent-tabs-mode t))))
