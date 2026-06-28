@@ -294,6 +294,70 @@ New package block (place after `magit`):
 
 ---
 
+## Task 8b — Modeline tidy-up (`init.el`)
+
+**Goal**: 24px height matching centaur-tabs, evil state first, `<parent>/project/.../file` with highlighted project+filename and truncated middle path, then nyan-mode bar, then existing doom-modeline segments.
+
+**Step 1** — update `use-package doom-modeline` `:custom`:
+
+```elisp
+(doom-modeline-height 24)
+(doom-modeline-bar-width 3)
+(doom-modeline-modal t)
+(doom-modeline-modal-icon nil)          ; show text (INSERT/NORMAL) not icon
+(doom-modeline-project-detection 'project)
+(doom-modeline-buffer-file-name-style 'truncate-with-project)
+(doom-modeline-major-mode-icon t)
+```
+
+`truncate-with-project` produces `project/…/filename` — truncates the middle path, always shows project name and filename.
+
+To get `<parent>/project` as the project label (showing one parent dir), add a custom project name function:
+
+```elisp
+:config
+(defun my/doom-modeline-project-name ()
+  "Show <parent>/project-name in modeline."
+  (when-let* ((root (project-root (project-current)))
+              (name (file-name-nondirectory (directory-file-name root)))
+              (parent (file-name-nondirectory
+                       (directory-file-name (file-name-directory
+                                             (directory-file-name root))))))
+    (concat parent "/" name)))
+(setq doom-modeline-project-name-function #'my/doom-modeline-project-name)
+```
+
+**Step 2** — add `nyan-mode` and wire it into the modeline:
+
+```elisp
+(use-package nyan-mode
+  :ensure t
+  :after doom-modeline
+  :custom
+  (nyan-animate-nyancat t)
+  (nyan-wavy-trail t)
+  :config
+  (nyan-mode 1))
+```
+
+Then define a custom modeline segment and redefine the main modeline to place nyan after the file info:
+
+```elisp
+(doom-modeline-def-segment my/nyan
+  "Nyan cat position indicator."
+  (when (bound-and-true-p nyan-mode)
+    (list " " (nyan-create) " ")))
+
+(doom-modeline-def-modeline 'my/main
+  '(bar modal buffer-info remote-host buffer-position my/nyan selection-info)
+  '(misc-info minor-modes input-method buffer-encoding major-mode process vcs checker))
+
+(add-hook 'doom-modeline-mode-hook
+  (lambda () (doom-modeline-set-modeline 'my/main t)))
+```
+
+---
+
 ## ~~Task 9 — TODO highlighting `hl-todo` (`init.el`)~~ ✓
 
 New package block (place with UI packages after `doom-modeline`):
@@ -367,7 +431,7 @@ LSP server: `go install golang.org/x/tools/gopls@latest`
 
 ---
 
-## Task 13 — YAML — ansible / kubernetes / helm (`init.el`)
+## ~~Task 13 — YAML — ansible / kubernetes / helm (`init.el`)~~ ✓
 
 YAML is already remapped to `yaml-ts-mode` and covered by the eglot hook fix in Task 12.
 
@@ -745,7 +809,126 @@ Requires `pass` installed (`apt install pass` / `brew install pass`) and a GPG k
 
 ---
 
-## Task 25 — Split config into modules
+## Task 25 — Org-mode, org-roam, org-modern, presentation (`init.el`)
+
+**Packages**: `org` (built-in), `org-modern`, `org-roam`, `org-present`, `olivetti`
+
+### org base
+
+```elisp
+(use-package org
+  :ensure nil
+  :defer t
+  :custom
+  (org-directory "~/org")
+  (org-default-notes-file (concat org-directory "/inbox.org"))
+  (org-startup-indented t)
+  (org-startup-folded 'content)
+  (org-hide-emphasis-markers t)
+  (org-pretty-entities t)
+  (org-ellipsis " ▾")
+  (org-src-fontify-natively t)
+  (org-src-tab-acts-natively t)
+  (org-return-follows-link t)
+  (org-capture-templates
+   '(("t" "Task" entry (file+headline "~/org/inbox.org" "Tasks")
+      "* TODO %?\n  %U\n  %a")
+     ("n" "Note" entry (file+headline "~/org/inbox.org" "Notes")
+      "* %?\n  %U"))))
+```
+
+### org-modern (fancy bullets, tables, keywords)
+
+```elisp
+(use-package org-modern
+  :ensure t
+  :hook (org-mode . org-modern-mode)
+  :custom
+  (org-modern-star '("◉" "○" "✸" "✿"))
+  (org-modern-table t)
+  (org-modern-keyword t)
+  (org-modern-block-name t))
+```
+
+### Variable pitch + centered layout for org buffers
+
+```elisp
+(use-package olivetti
+  :ensure t
+  :defer t
+  :custom (olivetti-body-width 0.68))
+
+(defun my/org-visual-setup ()
+  (variable-pitch-mode 1)
+  (olivetti-mode 1)
+  (display-line-numbers-mode -1))
+
+(add-hook 'org-mode-hook #'my/org-visual-setup)
+```
+
+### Presentation with org-present
+
+```elisp
+(use-package org-present
+  :ensure t
+  :defer t
+  :hook
+  (org-present-mode      . (lambda ()
+                              (org-present-big)
+                              (org-display-inline-images)
+                              (org-present-hide-cursor)
+                              (olivetti-mode 1)))
+  (org-present-mode-quit . (lambda ()
+                              (org-present-small)
+                              (org-remove-inline-images)
+                              (org-present-show-cursor)
+                              (olivetti-mode -1))))
+```
+
+### org-roam
+
+```elisp
+(use-package org-roam
+  :ensure t
+  :defer t
+  :custom
+  (org-roam-directory "~/org/roam")
+  (org-roam-completion-everywhere t)
+  :config
+  (org-roam-db-autosync-mode))
+```
+
+### Keybindings — `SPC n` (notes)
+
+Add to `my/leader-def` in the evil `:config`:
+
+```elisp
+;; Notes / Org
+"n"    '(:ignore t                  :which-key "notes")
+"na"   '(org-agenda                 :which-key "agenda")
+"nc"   '(org-capture                :which-key "capture")
+"nl"   '(org-store-link             :which-key "store link")
+"np"   '(org-present                :which-key "present")
+
+;; Org-roam (nested under n r)
+"nr"   '(:ignore t                  :which-key "roam")
+"nrf"  '(org-roam-node-find         :which-key "find node")
+"nri"  '(org-roam-node-insert       :which-key "insert link")
+"nrc"  '(org-roam-capture           :which-key "capture")
+"nrb"  '(org-roam-buffer-toggle     :which-key "backlinks")
+"nrs"  '(org-roam-db-sync           :which-key "sync db")
+"nrg"  '(org-roam-graph             :which-key "graph")
+```
+
+**Notes**:
+- `org-roam-directory` defaults to `~/org/roam` — create it if it doesn't exist
+- `org-roam-db-autosync-mode` keeps the roam SQLite DB in sync automatically
+- Variable pitch in org buffers uses `Fira Sans` (already set in `use-package emacs`) for prose, while code blocks stay monospaced via `fixed-pitch` face
+- `olivetti` centers the buffer with a comfortable reading width — disable per-buffer with `M-x olivetti-mode`
+
+---
+
+## Task 26 — Split config into modules
 
 Create `lisp/` subdirectory under the emacs config dir. Move `use-package` blocks into themed files, each ending with `(provide 'my-<name>)`. `init.el` becomes a loader only.
 

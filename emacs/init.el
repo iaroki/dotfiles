@@ -529,11 +529,21 @@
   :custom
   (eglot-events-buffer-size 0)
   (eglot-autoshutdown t)
-  (eglot-report-progress nil))
+  (eglot-report-progress nil)
+  :config
+  (setq-default eglot-workspace-configuration
+    '(:yaml (:validate t
+             :hover t
+             :completion t
+             :schemas (:additionalProperties t)))))
 
 (add-hook 'go-ts-mode-hook
   (lambda ()
     (add-hook 'before-save-hook #'eglot-format-buffer nil t)))
+
+(use-package ansible
+  :ensure t
+  :hook (yaml-ts-mode . ansible-auto-decrypt-encrypt))
 
 (setq treesit-language-source-alist
       '((bash "https://github.com/tree-sitter/tree-sitter-bash")
