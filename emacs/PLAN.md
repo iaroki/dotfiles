@@ -63,7 +63,7 @@ Add to `:hook`:
 
 ---
 
-## Task 3 — `electric-pair-mode` (`init.el`)
+## ~~Task 3 — `electric-pair-mode` (`init.el`)~~ ✓
 
 Inside `use-package emacs` `:init`:
 

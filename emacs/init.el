@@ -76,6 +76,7 @@
   (set-display-table-slot standard-display-table 'vertical-border (make-glyph-code ?│))
   :init
   (setq-default line-spacing 0)
+  (electric-pair-mode 1)
   (global-hl-line-mode -1)
   (global-auto-revert-mode 1)
   (recentf-mode 1)
