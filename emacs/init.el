@@ -317,7 +317,9 @@
 ;; QoL features
 (use-package which-key
   :ensure nil
-  :hook (after-init . which-key-mode))
+  :hook
+  (after-init . which-key-mode)
+  (which-key-init-buffer . centaur-tabs-local-mode))
 
 (use-package vertico
   :ensure t
@@ -460,7 +462,7 @@
   (centaur-tabs-set-bar 'under)
   (x-underline-at-descent-line t)
   (centaur-tabs-show-new-tab-button nil)
-  (centaur-tabs-excluded-prefixes '("*scratch" "*Messages" "*Warnings" "*Backtrace" "magit-" "COMMIT_EDITMSG"))
+  (centaur-tabs-excluded-prefixes '("*scratch" "*Messages" "*Warnings" "*Backtrace" "magit-" "COMMIT_EDITMSG" "*which-key*"))
   :config
   (defun my/centaur-tabs-buffer-groups ()
     (list (or (when-let* ((proj (project-current)))
@@ -525,7 +527,7 @@
 
 (use-package eglot
   :ensure nil
-  :hook ((c-ts-mode c++-ts-mode go-ts-mode yaml-ts-mode) . eglot-ensure)
+  :hook ((c-ts-mode c++-ts-mode go-ts-mode yaml-ts-mode bash-ts-mode) . eglot-ensure)
   :custom
   (eglot-events-buffer-size 0)
   (eglot-autoshutdown t)

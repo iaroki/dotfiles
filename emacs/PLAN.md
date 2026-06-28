@@ -460,7 +460,7 @@ For Ansible files specifically, add `ansible-mode` to detect playbook/role struc
 
 ---
 
-## Task 14 — Shell scripts (`init.el`)
+## ~~Task 14 — Shell scripts (`init.el`)~~ ✓
 
 Shell files are remapped to `bash-ts-mode` via `major-mode-remap-alist`. Add `bash-ts-mode` to eglot hooks (covered in Task 12 fix — extend the hook list):
 
