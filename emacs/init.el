@@ -39,10 +39,12 @@
   (tab-always-indent 'complete)
   (tab-width 2)
   (treesit-font-lock-level 4)
-  (truncate-lines t) 
+  (truncate-lines t)
   (use-dialog-box nil)
   (use-short-answers t)
-  (warning-minimum-level :emergency)  
+  (warning-minimum-level :emergency)
+  (read-process-output-max (* 1024 1024))
+  (package-quickstart t)
   :hook
   (prog-mode . display-line-numbers-mode)
   :config
@@ -71,6 +73,7 @@
   ;; Makes Emacs vertical divisor the symbol │ instead of |.
   (set-display-table-slot standard-display-table 'vertical-border (make-glyph-code ?│))
   :init
+  (setq-default line-spacing 0)
   (global-hl-line-mode -1)
   (global-auto-revert-mode 1)
   (recentf-mode 1)
@@ -81,6 +84,14 @@
   (file-name-shadow-mode 1)
   ;; Set the default coding system for files to UTF-8.
   (modify-coding-system-alist 'file "" 'utf-8))
+
+;; Dynamic GC: high threshold while active, collect during idle
+(use-package gcmh
+  :ensure t
+  :hook (after-init . gcmh-mode)
+  :custom
+  (gcmh-idle-delay 5)
+  (gcmh-high-cons-threshold (* 64 1024 1024)))
 
 ;; Themes
 (load-theme 'modus-operandi-tinted)
@@ -444,7 +455,8 @@
   :hook
   (prog-mode . indent-guide-mode)  ;; Activate indent-guide in programming modes.
   :config
-  (setq indent-guide-char "│"))
+  (setq indent-guide-char ""))
+  ;; (setq indent-guide-char "│"))
 
 (use-package rainbow-delimiters
   :defer t
