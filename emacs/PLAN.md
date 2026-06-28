@@ -275,7 +275,7 @@ Also update `"pp"` in the project group to `tabspaces-open-or-create-project-and
 
 ---
 
-## Task 8 — VC gutter `diff-hl` (`init.el`)
+## ~~Task 8 — VC gutter `diff-hl` (`init.el`)~~ ✓
 
 New package block (place after `magit`):
 

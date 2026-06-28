@@ -454,6 +454,17 @@
       (direction . right)
       (window-width . 0.5))))
 
+(use-package diff-hl
+  :ensure t
+  :hook
+  (after-init          . global-diff-hl-mode)
+  (magit-pre-refresh   . diff-hl-magit-pre-refresh)
+  (magit-post-refresh  . diff-hl-magit-post-refresh)
+  :config
+  (diff-hl-flydiff-mode 1)
+  (unless (display-graphic-p)
+    (diff-hl-margin-mode 1)))
+
 (use-package eldoc
   :ensure nil
   :config
