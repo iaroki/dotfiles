@@ -4,6 +4,12 @@
 
 `init.el` has the right foundation (evil, consult stack, project.el, eglot, tree-sitter, magit). Tasks below are ordered by priority and can be applied one at a time. Each task is self-contained.
 
+## Guiding principles
+
+- **Tree-sitter everywhere**: every language that has a tree-sitter grammar should use the `*-ts-mode` variant. Add grammars to `treesit-language-source-alist` and remaps to `major-mode-remap-alist`. Never add a legacy mode config when a ts-mode exists.
+- **Eglot for LSP**: eglot is the only LSP client — no lsp-mode, no lsp-bridge. If a language has an LSP server available, wire it up via eglot. Prefer eglot's built-in server detection (it reads `eglot-server-programs`) over manual configuration where possible.
+- **No external formatters unless eglot can't**: use `eglot-format-buffer` on save. Only fall back to a standalone formatter hook (e.g. gofmt, shfmt) if the LSP server does not provide formatting for that language.
+
 ---
 
 ## Task 1 — GC & startup performance (`early-init.el` + `init.el`)
@@ -341,7 +347,207 @@ New package block (place with UI packages):
 
 ---
 
-## Task 12 — Split config into modules
+## Task 12 — Go (`init.el`)
+
+**Bug fix**: eglot is currently hooked on `go-mode`, but `major-mode-remap-alist` remaps it to `go-ts-mode` — so the `go-mode-hook` never fires and eglot never starts. This affects all remapped modes. Fix the eglot `:hook` to use ts-mode variants:
+
+```elisp
+:hook ((c-ts-mode c++-ts-mode go-ts-mode yaml-ts-mode) . eglot-ensure)
+```
+
+Add gofmt on save:
+
+```elisp
+(add-hook 'go-ts-mode-hook
+  (lambda ()
+    (add-hook 'before-save-hook #'eglot-format-buffer nil t)))
+```
+
+LSP server: `go install golang.org/x/tools/gopls@latest`
+
+---
+
+## Task 13 — YAML — ansible / kubernetes / helm (`init.el`)
+
+YAML is already remapped to `yaml-ts-mode` and covered by the eglot hook fix in Task 12.
+
+Add schema-aware configuration for `yaml-language-server`. Place in `use-package eglot` `:config`:
+
+```elisp
+(setq-default eglot-workspace-configuration
+  '(:yaml (:validate t
+           :hover t
+           :completion t
+           :schemas {"https://json.schemastore.org/ansible-playbook.json"
+                     "/playbooks/*.yml"
+                     "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.29.0-standalone-strict/all.json"
+                     "/*.yaml"})))
+```
+
+LSP server: `npm install -g yaml-language-server`
+
+For Ansible files specifically, add `ansible-mode` to detect playbook/role structure:
+
+```elisp
+(use-package ansible
+  :ensure t
+  :hook (yaml-ts-mode . ansible-auto-decrypt-encrypt))
+```
+
+---
+
+## Task 14 — Shell scripts (`init.el`)
+
+Shell files are remapped to `bash-ts-mode` via `major-mode-remap-alist`. Add `bash-ts-mode` to eglot hooks (covered in Task 12 fix — extend the hook list):
+
+```elisp
+:hook ((c-ts-mode c++-ts-mode go-ts-mode yaml-ts-mode bash-ts-mode) . eglot-ensure)
+```
+
+LSP server: `npm install -g bash-language-server`
+
+Add shfmt formatting on save:
+
+```elisp
+(add-hook 'bash-ts-mode-hook
+  (lambda ()
+    (add-hook 'before-save-hook #'eglot-format-buffer nil t)))
+```
+
+shfmt must be installed: `go install mvdan.cc/sh/v3/cmd/shfmt@latest`
+
+---
+
+## Task 15 — Python (`init.el`)
+
+Add `python-ts-mode` to the eglot hook list. No remap needed — Python ts-mode is already in `major-mode-remap-alist`.
+
+```elisp
+:hook ((... python-ts-mode) . eglot-ensure)
+```
+
+LSP server (pyright): `pip install pyright` or `npm install -g pyright`
+
+Add ruff for fast linting via flymake (optional, alongside eglot):
+
+```elisp
+(use-package flymake-ruff
+  :ensure t
+  :hook (python-ts-mode . flymake-ruff-load))
+```
+
+ruff must be installed: `pip install ruff`
+
+---
+
+## Task 16 — Terraform / Terragrunt (`.tf` / `.hcl`) (`init.el`)
+
+The existing `terraform-mode` block covers `.tf` files but has no LSP and no tree-sitter remap. Fix:
+
+Add to `major-mode-remap-alist`:
+```elisp
+(terraform-mode . terraform-ts-mode)
+```
+
+Add `.hcl` association for Terragrunt (uses the same grammar):
+```elisp
+(use-package terraform-ts-mode
+  :ensure nil
+  :mode ("\\.tf\\'" "\\.hcl\\'"))
+```
+
+Add `terraform-ts-mode` to eglot hooks:
+```elisp
+:hook ((... terraform-ts-mode) . eglot-ensure)
+```
+
+Update the existing `use-package terraform-mode` to remove the now-redundant `:mode` if `terraform-ts-mode` covers it. Keep `:custom (terraform-indent-level 4)` — terraform-ts-mode inherits it.
+
+LSP server: install `terraform-ls` from [HashiCorp releases](https://github.com/hashicorp/terraform-ls/releases).
+
+---
+
+## Task 17 — Dockerfile (`init.el`)
+
+`dockerfile-ts-mode` is built into Emacs 29+. Add the grammar and remap:
+
+Add to `treesit-language-source-alist`:
+```elisp
+(dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")
+```
+
+Add to `major-mode-remap-alist`:
+```elisp
+(dockerfile-mode . dockerfile-ts-mode)
+```
+
+Install `dockerfile-mode` to get the original mode that the remap triggers from:
+```elisp
+(use-package dockerfile-mode
+  :ensure t
+  :defer t)
+```
+
+No LSP needed. Hadolint linting via flymake (optional):
+```elisp
+(use-package flymake-hadolint
+  :ensure t
+  :hook (dockerfile-ts-mode . flymake-hadolint-setup))
+```
+
+hadolint must be installed separately (binary from GitHub releases).
+
+---
+
+## Task 18 — Markdown (`init.el`)
+
+`markdown-mode` is in `custom.el` package list but has no config. Add a proper block:
+
+```elisp
+(use-package markdown-mode
+  :ensure t
+  :defer t
+  :mode ("\\.md\\'" "\\.markdown\\'")
+  :custom
+  (markdown-fontify-code-blocks-natively t)
+  (markdown-command "pandoc")
+  :hook
+  (markdown-mode . visual-line-mode))
+```
+
+`pandoc` must be installed for `markdown-command` to work (`apt install pandoc` / `brew install pandoc`). Without it, set `markdown-command` to `"markdown"` or `"multimarkdown"`.
+
+For live preview, add `grip-mode` (requires `pip install grip`):
+```elisp
+(use-package grip-mode
+  :ensure t
+  :defer t
+  :bind (:map markdown-mode-command-map
+              ("g" . grip-mode)))
+```
+
+---
+
+## Task 19 — Just / Make (`init.el`)
+
+**Just** (Justfile):
+```elisp
+(use-package just-mode
+  :ensure t
+  :defer t)
+```
+
+**Make** (built-in `makefile-mode`): Makefiles require hard tabs — `indent-tabs-mode` must be `t`. The global `(indent-tabs-mode nil)` in `use-package emacs` overrides this. Override it back per-mode:
+
+```elisp
+(use-package makefile-mode
+  :ensure nil
+  :hook (makefile-mode . (lambda () (setq-local indent-tabs-mode t))))
+```
+
+---
+
+## Task 20 — Split config into modules
 
 Create `lisp/` subdirectory under the emacs config dir. Move `use-package` blocks into themed files, each ending with `(provide 'my-<name>)`. `init.el` becomes a loader only.
 
@@ -362,6 +568,7 @@ emacs/
     my-git.el        ; magit, diff-hl
     my-lsp.el        ; eglot, tree-sitter grammars, major-mode-remap-alist,
                      ;   ts-mode packages, flymake, eldoc, eldoc-box
+    my-langs.el      ; per-language mode config (Tasks 12–19)
     my-projects.el   ; project.el keybinds, tabspaces, dired, neotree
     my-org.el        ; org (optional, require only if needed)
 ```
@@ -381,6 +588,7 @@ emacs/
 (require 'my-completion)
 (require 'my-git)
 (require 'my-lsp)
+(require 'my-langs)
 (require 'my-projects)
 ;; (require 'my-org)
 ```
@@ -404,4 +612,12 @@ To disable a feature entirely: comment out the `require` line.
 | 9  | `TODO` in comment → highlighted orange |
 | 10 | `G` to bottom → current line briefly flashes |
 | 11 | `#ff0000` in a prog buffer → prefixed with coloured swatch |
-| 12 | `M-x load-file init.el` — all modules load cleanly |
+| 12 | Open a `.go` file → eglot starts, gopls connects; save → gofmt applied |
+| 13 | Open a `.yaml` file → eglot starts with yaml-language-server |
+| 14 | Open a `.sh` file → eglot starts with bash-language-server |
+| 15 | Open a `.py` file → eglot starts with pyright |
+| 16 | Open a `.tf` or `.hcl` file → terraform-ts-mode, eglot starts with terraform-ls |
+| 17 | Open a `Dockerfile` → dockerfile-ts-mode activates |
+| 18 | Open a `.md` file → markdown-mode, code blocks syntax-highlighted |
+| 19 | Open a `Justfile` → just-mode; open a `Makefile` → tabs used for indent |
+| 20 | `M-x load-file init.el` — all modules load cleanly |
