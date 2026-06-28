@@ -362,7 +362,12 @@
         #'magit-display-buffer-same-window-except-diff-v1)
   ;; skip diff buffer before commit
   (setq magit-commit-show-diff nil)
-  (setopt magit-format-file-function #'magit-format-file-nerd-icons))
+  (setopt magit-format-file-function #'magit-format-file-nerd-icons)
+  (add-to-list 'display-buffer-alist
+    '("\\`magit-revision:"
+      (display-buffer-in-direction)
+      (direction . right)
+      (window-width . 0.5))))
 
 (use-package eldoc
   :ensure nil
