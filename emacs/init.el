@@ -77,6 +77,18 @@
   :init
   (setq-default line-spacing 0)
   (electric-pair-mode 1)
+  (add-hook 'emacs-startup-hook
+    (lambda ()
+      (when (< (length command-line-args) 2)
+        (when-let (buf (get-buffer "*scratch*")) (kill-buffer buf))
+        (condition-case nil
+            (call-interactively #'tabspaces-open-or-create-project-and-workspace)
+          (error (switch-to-buffer (get-buffer-create "*Messages*"))))
+        (when-let (buf (get-buffer "*scratch*")) (kill-buffer buf))
+        (run-with-idle-timer 0.5 nil
+          (lambda ()
+            (when-let (buf (get-buffer "*scratch*"))
+              (kill-buffer buf)))))))
   (global-hl-line-mode -1)
   (global-auto-revert-mode 1)
   (recentf-mode 1)
@@ -99,6 +111,12 @@
 ;; Themes
 (setopt modus-themes-to-toggle '(modus-operandi-tinted modus-vivendi))
 (load-theme 'modus-operandi-tinted :no-confirm)
+
+(defun my/consult-workspace-buffers ()
+  "Show only buffers in the current workspace."
+  (interactive)
+  (let ((consult-buffer-sources '(consult--source-workspace)))
+    (consult-buffer)))
 
 (defun my/kill-other-buffers ()
   "Kill all buffers except the current one."
@@ -132,7 +150,7 @@
   ;; Leader bindings via general.el
   (my/leader-def
     ;; Top-level
-    "SPC" '(consult-buffer              :which-key "switch buffer")
+    "SPC" '(my/consult-workspace-buffers :which-key "switch buffer")
     "/"   '(consult-line                :which-key "search buffer")
     ":"   '(execute-extended-command    :which-key "M-x")
     "."   '(embark-act                  :which-key "embark act")
@@ -141,14 +159,15 @@
     "u"   '(vundo                       :which-key "undo tree")
 
     ;; Buffers
-    "b"   '(:ignore t             :which-key "buffers")
-    "bb"  '(consult-buffer        :which-key "switch")
-    "bl"  '(mode-line-other-buffer :which-key "last buffer")
-    "bi"  '(ibuffer               :which-key "ibuffer")
-    "bd"  '(kill-current-buffer    :which-key "kill this")
-    "bk"  '(kill-current-buffer    :which-key "kill this")
-    "bO"  '(my/kill-other-buffers  :which-key "kill others")
-    "bs"  '(save-buffer            :which-key "save")
+    "b"   '(:ignore t                   :which-key "buffers")
+    "bb"  '(my/consult-workspace-buffers :which-key "switch (workspace)")
+    "ba"  '(consult-buffer              :which-key "switch (all)")
+    "bl"  '(mode-line-other-buffer      :which-key "last buffer")
+    "bi"  '(ibuffer                     :which-key "ibuffer")
+    "bd"  '(kill-current-buffer         :which-key "kill this")
+    "bk"  '(kill-current-buffer         :which-key "kill this")
+    "bO"  '(my/kill-other-buffers       :which-key "kill others")
+    "bs"  '(save-buffer                 :which-key "save")
 
     ;; Git
     "g"   '(:ignore t                   :which-key "git")
@@ -166,7 +185,7 @@
     ;; Project
     "p"   '(:ignore t                   :which-key "project")
     "pb"  '(consult-project-buffer      :which-key "buffers")
-    "pp"  '(project-switch-project      :which-key "switch project")
+    "pp"  '(tabspaces-open-or-create-project-and-workspace :which-key "switch project")
     "pf"  '(project-find-file           :which-key "find file")
     "pg"  '(project-find-regexp         :which-key "grep")
     "pk"  '(project-kill-buffers        :which-key "kill buffers")
@@ -212,16 +231,21 @@
     "wu"  '(winner-undo                :which-key "undo layout")
     "wU"  '(winner-redo                :which-key "redo layout")
 
-    ;; Workspaces — populated in Task 7 when tabspaces is added
-    "TAB" '(:ignore t             :which-key "workspaces"))
+    ;; Workspaces
+    "TAB"   '(:ignore t                                          :which-key "workspaces")
+    "TAB TAB" '(tabspaces-switch-or-create-workspace             :which-key "switch")
+    "TAB l" '(tab-bar-switch-to-recent-tab                       :which-key "last")
+    "TAB d" '(tabspaces-kill-buffers-close-workspace             :which-key "kill")
+    "TAB k" '(tabspaces-kill-buffers-close-workspace             :which-key "kill")
+    "TAB O" `(,(lambda () (interactive) (my/tabspaces-kill-other-workspaces)) :which-key "kill others"))
 
   ;; Non-leader normal-state bindings
   (general-define-key
     :states 'normal
     "]b" 'switch-to-next-buffer
     "[b" 'switch-to-prev-buffer
-    "]t" 'tab-next
-    "[t" 'tab-previous
+    "]t" 'centaur-tabs-forward
+    "[t" 'centaur-tabs-backward
     "]d" 'flymake-goto-next-error
     "[d" 'flymake-goto-prev-error
     "K"  'eldoc-box-help-at-point
@@ -352,6 +376,67 @@
   (dired-listing-switches "-lah --group-directories-first")
   (dired-dwim-target t)
   (dired-kill-when-opening-new-dired-buffer t))
+
+(defun my/tabspaces-kill-other-workspaces ()
+  "Kill all workspaces and their buffers except the current one."
+  (interactive)
+  (let ((current (tab-bar--current-tab)))
+    (dolist (tab (tab-bar-tabs))
+      (unless (eq tab current)
+        (let ((tab-name (alist-get 'name tab)))
+          (tab-bar-select-tab-by-name tab-name)
+          (tabspaces-kill-buffers-close-workspace))))))
+
+(use-package tabspaces
+  :ensure t
+  :hook (after-init . tabspaces-mode)
+  :custom
+  (tabspaces-use-filtered-buffers-as-default t)
+  (tabspaces-default-tab "Home")
+  (tabspaces-remove-to-default t)
+  (tabspaces-include-buffers '())
+  (tabspaces-session nil)
+  (tab-bar-new-tab-choice nil)
+  (tab-bar-show nil)
+  :config
+  (with-eval-after-load 'consult
+    (consult-customize consult--source-buffer :hidden t :default nil)
+    (defvar consult--source-workspace
+      (list :name "Workspace buffers"
+            :narrow ?w
+            :history 'buffer-name-history
+            :category 'buffer
+            :state #'consult--buffer-state
+            :default t
+            :items (lambda () (consult--buffer-query
+                               :predicate #'tabspaces--local-buffer-p
+                               :sort 'visibility
+                               :as #'buffer-name)))
+      "Workspace buffer source for consult.")
+    (add-to-list 'consult-buffer-sources 'consult--source-workspace)))
+
+(use-package centaur-tabs
+  :ensure t
+  :hook (after-init . centaur-tabs-mode)
+  :custom
+  (centaur-tabs-style "bar")
+  (centaur-tabs-height 24)
+  (centaur-tabs-set-icons t)
+  (centaur-tabs-set-modified-marker t)
+  (centaur-tabs-modified-marker "●")
+  (centaur-tabs-close-button "×")
+  (centaur-tabs-set-bar 'under)
+  (x-underline-at-descent-line t)
+  (centaur-tabs-show-new-tab-button nil)
+  (centaur-tabs-excluded-prefixes '("*scratch" "*Messages" "*Warnings" "*Backtrace" "magit-"))
+  :config
+  (defun my/centaur-tabs-buffer-groups ()
+    (list (or (when-let* ((proj (project-current)))
+                (file-name-nondirectory
+                 (directory-file-name (project-root proj))))
+              "Other")))
+  (setq centaur-tabs-buffer-groups-function #'my/centaur-tabs-buffer-groups)
+  (centaur-tabs-group-buffer-groups))
 
 (use-package magit
   :ensure t

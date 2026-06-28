@@ -227,7 +227,7 @@ The `"u" '(vundo :which-key "undo tree")` binding is already included in the `my
 
 ---
 
-## Task 7 — Project = Workspace (`tabspaces`) (`init.el`)
+## ~~Task 7 — Project = Workspace (`tabspaces`) (`init.el`)~~ ✓
 
 New package block (place after `magit`):
 
@@ -547,7 +547,205 @@ For live preview, add `grip-mode` (requires `pip install grip`):
 
 ---
 
-## Task 20 — Split config into modules
+## Task 20 — Dirvish (dired replacement) (`init.el`)
+
+`dirvish` is a modern dired UI built on top of dired — adds file preview, subtree expansion, better icons, and a more usable layout. Drop-in replacement; all dired bindings still work.
+
+Remove or gut the existing `use-package dired` block and replace with:
+
+```elisp
+(use-package dirvish
+  :ensure t
+  :hook (after-init . dirvish-override-dired-mode)
+  :custom
+  (dirvish-quick-access-entries
+   '(("h" "~/"        "Home")
+     ("d" "~/Downloads" "Downloads")))
+  (dirvish-attributes '(nerd-icons file-size collapse))
+  (dirvish-preview-window-width 0.4)
+  (delete-by-moving-to-trash t)
+  (dired-listing-switches "-lah --group-directories-first")
+  (dired-dwim-target t)
+  (dired-kill-when-opening-new-dired-buffer t)
+  :config
+  (dirvish-peek-mode))
+```
+
+Add evil-friendly keybinds inside the dirvish block (uses `dirvish-define-key` or standard `evil-collection` which already covers dirvish via dired):
+
+```elisp
+:bind (:map dirvish-mode-map
+       ("h" . dired-up-directory)
+       ("l" . dired-find-file)
+       ("q" . dirvish-quit))
+```
+
+Update the `SPC x j` binding to use `dirvish-side` for a side panel instead of `dired-jump`:
+
+```elisp
+"xj" '(dirvish-side :which-key "file tree")
+```
+
+---
+
+## Task 21 — Treemacs file tree sidebar (`init.el`)
+
+`treemacs` provides a persistent project-aware file tree panel on the left side. Integrates with project.el and supports nerd-icons.
+
+```elisp
+(use-package treemacs
+  :ensure t
+  :defer t
+  :custom
+  (treemacs-width 30)
+  (treemacs-display-in-side-window t)
+  (treemacs-follow-after-init t)
+  (treemacs-is-never-other-window t)
+  :config
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t)
+  (treemacs-fringe-indicator-mode 'always)
+  (pcase (cons (not (null (executable-find "git")))
+               (not (null (executable-find "python3"))))
+    (`(t . t) (treemacs-git-mode 'deferred))
+    (`(t . _) (treemacs-git-mode 'simple))))
+
+(use-package treemacs-evil
+  :ensure t
+  :after (treemacs evil))
+
+(use-package treemacs-nerd-icons
+  :ensure t
+  :after treemacs
+  :config (treemacs-load-theme "nerd-icons"))
+
+(use-package treemacs-projectile
+  :ensure t
+  :after (treemacs))
+```
+
+Add keybindings in `my/leader-def`:
+
+```elisp
+"e"   '(:ignore t           :which-key "explorer")
+"ee"  '(treemacs            :which-key "toggle")
+"ef"  '(treemacs-find-file  :which-key "find file")
+```
+
+Note: treemacs has its own project tracking independent of project.el. `treemacs-projectile` bridges this.
+
+---
+
+## Task 22 — Eshell keybindings (`init.el`)
+
+Wire eshell into the leader map under `SPC o` (open/tools) with a popup-style helper that toggles the eshell window:
+
+```elisp
+(defun my/eshell-toggle ()
+  "Toggle an eshell window at the bottom of the frame."
+  (interactive)
+  (if-let (win (get-buffer-window "*eshell*"))
+      (delete-window win)
+    (let ((buf (get-buffer-create "*eshell*")))
+      (display-buffer-in-side-window buf
+        '((side . bottom) (window-height . 0.3)))
+      (select-window (get-buffer-window buf))
+      (unless (eq major-mode 'eshell-mode)
+        (eshell)))))
+```
+
+Add to `my/leader-def`:
+
+```elisp
+"o"   '(:ignore t            :which-key "open")
+"oe"  '(my/eshell-toggle     :which-key "eshell")
+"oE"  '(eshell               :which-key "eshell (new)")
+```
+
+Add evil-friendly eshell settings:
+
+```elisp
+(use-package eshell
+  :ensure nil
+  :custom
+  (eshell-scroll-to-bottom-on-input t)
+  (eshell-destroy-buffer-when-process-dies t)
+  :hook
+  (eshell-mode . (lambda ()
+                   (evil-insert-state)
+                   (define-key eshell-mode-map (kbd "C-l")
+                     (lambda () (interactive) (eshell/clear-scrollback))))))
+```
+
+---
+
+## Task 23 — Ghostty terminal integration (`init.el`)
+
+`ghostty.el` integrates Emacs with the Ghostty terminal emulator — primarily used to open files in Emacs from Ghostty and to send commands from Emacs to a Ghostty pane.
+
+Install from MELPA or source:
+
+```elisp
+(use-package ghostty
+  :ensure t
+  :defer t)
+```
+
+Add to the `o` (open) leader group:
+
+```elisp
+"ot"  '(ghostty               :which-key "ghostty")
+"oT"  '(ghostty-send-region   :which-key "send region to ghostty")
+```
+
+If `ghostty.el` is not on MELPA yet, install via `use-package` with a `:vc` source (Emacs 30+) or clone manually into `lisp/`:
+
+```elisp
+(use-package ghostty
+  :ensure nil
+  :load-path "lisp/ghostty"
+  :defer t)
+```
+
+---
+
+## Task 24 — `pass` and `pass-otp` integration (`init.el`)
+
+`password-store.el` provides a completing-read interface to `pass` (the standard Unix password manager). `password-store-otp` adds TOTP/OTP support.
+
+```elisp
+(use-package password-store
+  :ensure t
+  :defer t
+  :custom
+  (password-store-password-length 20))
+
+(use-package password-store-otp
+  :ensure t
+  :defer t)
+
+(use-package pass
+  :ensure t
+  :defer t)
+```
+
+Add to `my/leader-def` under a new `P` (private/passwords) group:
+
+```elisp
+"P"   '(:ignore t                          :which-key "pass")
+"Pp"  '(password-store-copy               :which-key "copy password")
+"Pi"  '(password-store-insert             :which-key "insert")
+"Pg"  '(password-store-generate           :which-key "generate")
+"Pe"  '(password-store-edit               :which-key "edit")
+"Po"  '(password-store-otp-token-copy     :which-key "copy OTP")
+"Pu"  '(password-store-url                :which-key "open URL")
+```
+
+Requires `pass` installed (`apt install pass` / `brew install pass`) and a GPG key set up. OTP requires `pass-otp` extension.
+
+---
+
+## Task 25 — Split config into modules
 
 Create `lisp/` subdirectory under the emacs config dir. Move `use-package` blocks into themed files, each ending with `(provide 'my-<name>)`. `init.el` becomes a loader only.
 
