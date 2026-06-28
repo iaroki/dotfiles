@@ -574,6 +574,7 @@
         (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
         (vue "https://github.com/ikatyang/tree-sitter-vue")
         (terraform "https://github.com/tree-sitter-grammars/tree-sitter-hcl.git")
+        (dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")
         (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
 
 (setq major-mode-remap-alist
@@ -590,11 +591,13 @@
         (typescript-mode . typescript-ts-mode)
         (conf-toml-mode . toml-ts-mode)
         (gdscript-mode . gdscript-ts-mode)
-        (terraform-mode . terraform-ts-mode)))
+        (terraform-mode . terraform-ts-mode)
+        (dockerfile-mode . dockerfile-ts-mode)))
 
 
 ;; Or if there is no built in mode
 (use-package cmake-ts-mode :ensure nil :mode ("CMakeLists\\.txt\\'" "\\.cmake\\'"))
+(use-package dockerfile-mode :ensure t :defer t)
 (use-package go-mod-ts-mode :ensure nil :mode "\\.mod\\'")
 (use-package lua-ts-mode :ensure nil :mode "\\.lua\\'")
 (use-package rust-ts-mode :ensure nil :mode "\\.rs\\'")

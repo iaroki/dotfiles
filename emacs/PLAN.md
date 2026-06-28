@@ -531,7 +531,7 @@ LSP server: install `terraform-ls` from [HashiCorp releases](https://github.com/
 
 ---
 
-## Task 17 — Dockerfile (`init.el`)
+## ~~Task 17 — Dockerfile (`init.el`)~~ ✓
 
 `dockerfile-ts-mode` is built into Emacs 29+. Add the grammar and remap:
 
