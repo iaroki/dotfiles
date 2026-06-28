@@ -45,8 +45,10 @@
   (warning-minimum-level :emergency)
   (read-process-output-max (* 1024 1024))
   (package-quickstart t)
+  (scroll-margin 5)
   :hook
   (prog-mode . display-line-numbers-mode)
+  (before-save . delete-trailing-whitespace)
   :config
   ;; Fonts
   ;; Set your favourite font family and height here.  The :height is

@@ -12,7 +12,7 @@
 
 ---
 
-## Task 1 — GC & startup performance (`early-init.el` + `init.el`)
+## ~~Task 1 — GC & startup performance (`early-init.el` + `init.el`)~~ ✓
 
 **`early-init.el`** — raise GC to max during startup, suppress file-name-handler overhead:
 
@@ -47,7 +47,7 @@ Add new package block after `use-package emacs`:
 
 ---
 
-## Task 2 — Scroll margin & trailing whitespace (`init.el`)
+## ~~Task 2 — Scroll margin & trailing whitespace (`init.el`)~~ ✓
 
 Inside `use-package emacs`:
 
