@@ -611,7 +611,7 @@ For live preview, add `grip-mode` (requires `pip install grip`):
 
 ---
 
-## Task 20 — Dirvish (dired replacement) (`init.el`)
+## ~~Task 20 — Dirvish (dired replacement) (`init.el`)~~ ✓
 
 `dirvish` is a modern dired UI built on top of dired — adds file preview, subtree expansion, better icons, and a more usable layout. Drop-in replacement; all dired bindings still work.
 

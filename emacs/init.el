@@ -154,7 +154,7 @@
     "/"   '(consult-line                :which-key "search buffer")
     ":"   '(execute-extended-command    :which-key "M-x")
     "."   '(embark-act                  :which-key "embark act")
-    "f"   '(find-file                   :which-key "find file")
+    "f"   '(dirvish                     :which-key "files")
     "P"   '(consult-yank-from-kill-ring :which-key "yank ring")
     "u"   '(vundo                       :which-key "undo tree")
 
@@ -186,7 +186,7 @@
     "p"   '(:ignore t                   :which-key "project")
     "pb"  '(consult-project-buffer      :which-key "buffers")
     "pp"  '(tabspaces-open-or-create-project-and-workspace :which-key "switch project")
-    "pf"  '(project-find-file           :which-key "find file")
+    "pf"  '(my/dirvish-project          :which-key "files")
     "pg"  '(project-find-regexp         :which-key "grep")
     "pk"  '(project-kill-buffers        :which-key "kill buffers")
     "pD"  '(project-dired               :which-key "dired")
@@ -202,8 +202,8 @@
     ;; Actions
     "x"   '(:ignore t             :which-key "actions")
     "xx"  '(consult-flymake       :which-key "errors")
-    "xd"  '(dired                 :which-key "dired")
-    "xj"  '(dired-jump            :which-key "dired jump")
+    "xd"  '(dirvish               :which-key "dirvish")
+    "xj"  '(dirvish-side          :which-key "side panel")
     "xf"  '(find-file             :which-key "find file")
 
     ;; Theme
@@ -404,12 +404,95 @@
   :custom
   (project-switch-commands 'project-find-file))
 
-(use-package dired
-  :ensure nil
+(use-package dirvish
+  :ensure t
+  :hook
+  (after-init . dirvish-override-dired-mode)
+  (dired-mode . centaur-tabs-local-mode)
   :custom
-  (dired-listing-switches "-lah --group-directories-first")
+  (dirvish-default-layout '(0 0 0.5))
+  ;; Rich per-file annotations: type icon, git state in the gutter, collapsed
+  ;; single-child dirs, subtree arrows, last commit message, right-aligned
+  ;; time/size, and a current-row highlight (global hl-line is disabled).
+  (dirvish-attributes '(hl-line nerd-icons collapse subtree-state vc-state
+                        git-msg file-time file-size))
+  ;; Lighter set for the narrow side panel.
+  (dirvish-side-attributes '(nerd-icons vc-state collapse))
+  ;; Fancier mode line and header line.
+  (dirvish-mode-line-format '(:left (sort symlink) :right (omit yank index)))
+  (dirvish-header-line-format '(:left (path) :right (free-space)))
+  (dirvish-preview-window-width 0.4)
+  (delete-by-moving-to-trash t)
+  (dired-listing-switches "-lAh --group-directories-first")
   (dired-dwim-target t)
-  (dired-kill-when-opening-new-dired-buffer t))
+  (dired-kill-when-opening-new-dired-buffer t)
+  :config
+  ;; This dirvish build (GNU/NonGNU ELPA, release-versioned) ships its
+  ;; extensions under an `extensions/' subdir that package.el does NOT add to
+  ;; `load-path'.  Without this, `dirvish-peek-mode'/`dirvish-side' and the
+  ;; vc/icons/subtree/yank extensions are void; the void `(dirvish-peek-mode)'
+  ;; below would then error and abort the rest of this :config block (which is
+  ;; why the evil h/l/q bindings never took effect).
+  (add-to-list 'load-path
+               (expand-file-name "extensions"
+                                 (file-name-directory (locate-library "dirvish"))))
+  (require 'dirvish-peek)
+  (require 'dirvish-side)
+  (require 'dirvish-subtree)
+  (dirvish-peek-mode)
+  ;; Preview directories with `eza' (colored, icon-rich listing) instead of
+  ;; dirvish's default plain dired text dump, which renders poorly.
+  (when (executable-find "eza")
+    (dirvish-define-preview eza (file)
+      "Preview a directory with `eza'."
+      (when (file-directory-p file)
+        `(shell . ("eza" "-al" "--color=always" "--icons=always"
+                   "--group-directories-first" ,file))))
+    (add-to-list 'dirvish-preview-dispatchers 'eza))
+  ;; Dirvish installs `dirvish-mode-map' as the buffer-local map (it merely
+  ;; inherits `dired-mode-map' as a parent).  Both evil's overriding-map status
+  ;; and its auxiliary keymaps key off the exact keymap object and do NOT follow
+  ;; `set-keymap-parent' inheritance, so bindings placed on `dired-mode-map'
+  ;; never apply in dirvish buffers — we must target `dirvish-mode-map' itself.
+  ;; Register it as overriding so it beats evil-normal-state-map's h/l/q.
+  (evil-make-overriding-map dirvish-mode-map 'normal)
+  (evil-define-key* 'normal dirvish-mode-map
+    (kbd "h")   #'dired-up-directory
+    (kbd "l")   #'dired-find-file
+    (kbd "q")   #'dirvish-quit
+    (kbd "TAB") #'dirvish-subtree-toggle)
+  ;; Dirvish calls `use-local-map' in `dirvish--setup-dired' AFTER evil has
+  ;; already normalized this buffer's keymaps for `dired-mode-map', so evil
+  ;; never promotes `dirvish-mode-map' into `evil-mode-map-alist' and
+  ;; `evil-normal-state-map' keeps winning over h/l/q.  `dirvish-setup-hook'
+  ;; is unreliable here because it runs from an async process sentinel
+  ;; (`dirvish--dir-data-async'); instead re-normalize synchronously right
+  ;; after dirvish installs its local map.
+  (advice-add 'dirvish--setup-dired :after #'evil-normalize-keymaps)
+  ;; Suppress centaur-tabs in dirvish preview windows.  Added globally,
+  ;; `window-buffer-change-functions' calls its functions with the FRAME (not a
+  ;; window), so we iterate the frame's windows: in any frame that contains a
+  ;; dired/dirvish window, hide the tab bar in every non-dired window (i.e. the
+  ;; preview pane, whatever buffer — eza listing, file content, image, …).
+  (defun my/dirvish-hide-preview-tabs (frame-or-window)
+    (let ((windows (cond ((framep frame-or-window) (window-list frame-or-window))
+                         ((window-live-p frame-or-window) (list frame-or-window)))))
+      (when (cl-some (lambda (w)
+                       (with-current-buffer (window-buffer w)
+                         (derived-mode-p 'dired-mode)))
+                     windows)
+        (dolist (w windows)
+          (unless (window-minibuffer-p w)
+            (with-current-buffer (window-buffer w)
+              (when (and (not (derived-mode-p 'dired-mode))
+                         (not (bound-and-true-p centaur-tabs-local-mode)))
+                (centaur-tabs-local-mode 1))))))))
+  (add-hook 'window-buffer-change-functions #'my/dirvish-hide-preview-tabs))
+
+(defun my/dirvish-project ()
+  "Open dirvish at the current buffer's directory."
+  (interactive)
+  (dirvish default-directory))
 
 (defun my/tabspaces-kill-other-workspaces ()
   "Kill all workspaces and their buffers except the current one."
@@ -632,11 +715,10 @@
   :ensure t
   :defer t)
 
-(use-package nerd-icons-dired
-  :ensure t
-  :defer t
-  :hook
-  (dired-mode . nerd-icons-dired-mode))
+;; NOTE: `nerd-icons-dired' is intentionally NOT used.  With
+;; `dirvish-override-dired-mode' every dired buffer is a dirvish buffer, and
+;; dirvish's own `nerd-icons' attribute already draws the icons; enabling
+;; `nerd-icons-dired-mode' on top of it renders a second, duplicated icon.
 
 (use-package nerd-icons-completion
   :ensure t
@@ -709,6 +791,6 @@
   :ensure t
   :defer t)
 
-(use-package makefile-mode
+(use-package make-mode
   :ensure nil
   :hook (makefile-mode . (lambda () (setq-local indent-tabs-mode t))))
