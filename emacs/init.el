@@ -428,7 +428,7 @@
   (centaur-tabs-set-bar 'under)
   (x-underline-at-descent-line t)
   (centaur-tabs-show-new-tab-button nil)
-  (centaur-tabs-excluded-prefixes '("*scratch" "*Messages" "*Warnings" "*Backtrace" "magit-"))
+  (centaur-tabs-excluded-prefixes '("*scratch" "*Messages" "*Warnings" "*Backtrace" "magit-" "COMMIT_EDITMSG"))
   :config
   (defun my/centaur-tabs-buffer-groups ()
     (list (or (when-let* ((proj (project-current)))
