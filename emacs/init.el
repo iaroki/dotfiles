@@ -144,6 +144,7 @@
   (setq evil-shift-width 2)
   (setq evil-want-C-u-scroll t)       ;; Makes C-u scroll
   (setq evil-want-C-u-delete t)       ;; Makes C-u delete on insert mode
+  (setq evil-mode-line-format nil)    ;; Let doom-modeline handle evil state display
   :config
   (setq evil-want-fine-undo t)
   (evil-mode 1)
@@ -237,7 +238,12 @@
     "TAB l" '(tab-bar-switch-to-recent-tab                       :which-key "last")
     "TAB d" '(tabspaces-kill-buffers-close-workspace             :which-key "kill")
     "TAB k" '(tabspaces-kill-buffers-close-workspace             :which-key "kill")
-    "TAB O" `(,(lambda () (interactive) (my/tabspaces-kill-other-workspaces)) :which-key "kill others"))
+    "TAB O" `(,(lambda () (interactive) (my/tabspaces-kill-other-workspaces)) :which-key "kill others")
+
+    ;; Explorer
+    "e"   '(:ignore t           :which-key "explorer")
+    "ee"  '(neotree-toggle      :which-key "toggle")
+    "ef"  '(neotree-find        :which-key "find file"))
 
   ;; Non-leader normal-state bindings
   (general-define-key
@@ -280,7 +286,22 @@
 ;; Modeline
 (use-package doom-modeline
   :ensure t
-  :init (doom-modeline-mode 1))
+  :init (doom-modeline-mode 1)
+  :custom
+  (doom-modeline-height 24)
+  (doom-modeline-bar-width 3)
+  (doom-modeline-modal t)
+  (doom-modeline-modal-icon t)
+  (doom-modeline-major-mode-icon t)
+  (doom-modeline-workspace-name nil)
+  (doom-modeline-buffer-file-name-style 'file-name))
+
+(use-package nyan-mode
+  :ensure t
+  :hook (after-init . nyan-mode)
+  :custom
+  (nyan-animate-nyancat nil)
+  (nyan-wavy-trail nil))
 
 (use-package hl-todo
   :ensure t
@@ -410,12 +431,11 @@
   (after-init . dirvish-override-dired-mode)
   (dired-mode . centaur-tabs-local-mode)
   :custom
-  (dirvish-default-layout '(0 0 0.5))
+  (dirvish-default-layout '(0 0 0.7))
   ;; Rich per-file annotations: type icon, git state in the gutter, collapsed
   ;; single-child dirs, subtree arrows, last commit message, right-aligned
   ;; time/size, and a current-row highlight (global hl-line is disabled).
-  (dirvish-attributes '(hl-line nerd-icons collapse subtree-state vc-state
-                        git-msg file-time file-size))
+  (dirvish-attributes '(hl-line nerd-icons subtree-stage vc-state file-size))
   ;; Lighter set for the narrow side panel.
   (dirvish-side-attributes '(nerd-icons vc-state collapse))
   ;; Fancier mode line and header line.
@@ -446,7 +466,7 @@
     (dirvish-define-preview eza (file)
       "Preview a directory with `eza'."
       (when (file-directory-p file)
-        `(shell . ("eza" "-al" "--color=always" "--icons=always"
+        `(shell . ("eza" "-a" "--color=always" "--icons=always"
                    "--group-directories-first" ,file))))
     (add-to-list 'dirvish-preview-dispatchers 'eza))
   ;; Dirvish installs `dirvish-mode-map' as the buffer-local map (it merely
@@ -744,13 +764,23 @@
 
 (use-package neotree
   :ensure t
-  :custom
-  (neo-show-hidden-files t)
-  (neo-theme 'nerd)
-  (neo-vc-integration '(face char))
   :defer t
+  :custom
+  (neo-window-width 30)
+  (neo-smart-open t)
+  (neo-theme (if (display-graphic-p) 'nerd-icons 'arrow))
+  (neo-window-fixed-size nil)
   :config
-  (setq neo-theme 'nerd-icons))
+  (evil-define-key 'normal neotree-mode-map
+    (kbd "q")   #'neotree-hide
+    (kbd "RET") #'neotree-enter
+    (kbd "o")   #'neotree-enter
+    (kbd "i")   #'neotree-enter-horizontal-split
+    (kbd "s")   #'neotree-enter-vertical-split
+    (kbd "r")   #'neotree-refresh
+    (kbd "H")   #'neotree-hidden-file-toggle
+    (kbd "n")   #'neotree-next-node
+    (kbd "p")   #'neotree-previous-node))
 
 (use-package terraform-mode
   :ensure t

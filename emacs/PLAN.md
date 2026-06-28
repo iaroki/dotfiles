@@ -294,7 +294,7 @@ New package block (place after `magit`):
 
 ---
 
-## Task 8b — Modeline tidy-up (`init.el`)
+## ~~Task 8b — Modeline tidy-up (`init.el`)~~ ✓
 
 **Goal**: 24px height matching centaur-tabs, evil state first, `<parent>/project/.../file` with highlighted project+filename and truncated middle path, then nyan-mode bar, then existing doom-modeline segments.
 
@@ -652,7 +652,7 @@ Update the `SPC x j` binding to use `dirvish-side` for a side panel instead of `
 
 ---
 
-## Task 21 — Treemacs file tree sidebar (`init.el`)
+## ~~Task 21 — Treemacs file tree sidebar (`init.el`)~~ ✓
 
 `treemacs` provides a persistent project-aware file tree panel on the left side. Integrates with project.el and supports nerd-icons.
 
