@@ -525,16 +525,15 @@
 
 (use-package eglot
   :ensure nil
-  :hook ((c-mode c++-mode ;; Autostart lsp servers for a given mode
-                 go-mode
-                 yaml-mode)
-         . eglot-ensure)
+  :hook ((c-ts-mode c++-ts-mode go-ts-mode yaml-ts-mode) . eglot-ensure)
   :custom
-  ;; Good default
-  (eglot-events-buffer-size 0) ;; No event buffers (LSP server logs)
-  (eglot-autoshutdown t);; Shutdown unused servers.
-  (eglot-report-progress nil) ;; Disable LSP server logs (Don't show lsp messages at the bottom, java)
-  )
+  (eglot-events-buffer-size 0)
+  (eglot-autoshutdown t)
+  (eglot-report-progress nil))
+
+(add-hook 'go-ts-mode-hook
+  (lambda ()
+    (add-hook 'before-save-hook #'eglot-format-buffer nil t)))
 
 (setq treesit-language-source-alist
       '((bash "https://github.com/tree-sitter/tree-sitter-bash")

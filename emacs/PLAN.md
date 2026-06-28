@@ -347,7 +347,7 @@ New package block (place with UI packages):
 
 ---
 
-## Task 12 — Go (`init.el`)
+## ~~Task 12 — Go (`init.el`)~~ ✓
 
 **Bug fix**: eglot is currently hooked on `go-mode`, but `major-mode-remap-alist` remaps it to `go-ts-mode` — so the `go-mode-hook` never fires and eglot never starts. This affects all remapped modes. Fix the eglot `:hook` to use ts-mode variants:
 
