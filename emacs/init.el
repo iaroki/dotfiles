@@ -249,6 +249,10 @@
   :config
   (evil-collection-init))
 
+(use-package vundo
+  :ensure t
+  :defer t)
+
 ;; Modeline
 (use-package doom-modeline
   :ensure t

@@ -213,7 +213,7 @@ Add to the `general-define-key :states 'normal` block from Task 4:
 
 ---
 
-## Task 6 — `vundo` visual undo tree (`init.el`)
+## ~~Task 6 — `vundo` visual undo tree (`init.el`)~~ ✓
 
 New package block (place after `evil-collection`):
 
