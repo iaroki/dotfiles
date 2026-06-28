@@ -298,7 +298,7 @@
   (dired-kill-when-opening-new-dired-buffer t))
 
 (use-package magit
-  :ensure nil
+  :ensure t
   :defer t
   :config
   ;; show fullscreen buffer
