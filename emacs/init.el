@@ -97,8 +97,18 @@
   (gcmh-high-cons-threshold (* 64 1024 1024)))
 
 ;; Themes
-(load-theme 'modus-operandi-tinted)
-;; (load-theme 'modus-vivendi)
+(setopt modus-themes-to-toggle '(modus-operandi-tinted modus-vivendi))
+(load-theme 'modus-operandi-tinted :no-confirm)
+
+;; Keybinding framework — provides my/leader-def with inline :which-key labels
+(use-package general
+  :ensure t
+  :config
+  (general-evil-setup t)
+  (general-create-definer my/leader-def
+    :states '(normal visual)
+    :keymaps 'override
+    :prefix "SPC"))
 
 ;; Evil mode
 (use-package evil
@@ -112,93 +122,96 @@
   (setq evil-want-C-u-scroll t)       ;; Makes C-u scroll
   (setq evil-want-C-u-delete t)       ;; Makes C-u delete on insert mode
   :config
-  ;; Set the leader key to space for easier access to custom commands. (setq evil-want-leader t)
-  (setq evil-leader/in-all-states t)  ;; Make the leader key available in all states.
-  (setq evil-want-fine-undo t)        ;; Evil uses finer grain undoing steps
-  ;; Define the leader key as Space
-  (evil-set-leader 'normal (kbd "SPC"))
-  (evil-set-leader 'visual (kbd "SPC"))
-  ;; Leader prefix maps keep grouped commands structured and easier to label.
-  (define-prefix-command 'my/leader-buffer-map)
-  (define-prefix-command 'my/leader-git-map)
-  (define-prefix-command 'my/leader-help-map)
-  (define-prefix-command 'my/leader-project-map)
-  (define-prefix-command 'my/leader-search-map)
-  (define-prefix-command 'my/leader-actions-map)
-  (evil-define-key 'normal 'global (kbd "<leader> b") my/leader-buffer-map)
-  (evil-define-key 'normal 'global (kbd "<leader> g") my/leader-git-map)
-  (evil-define-key 'normal 'global (kbd "<leader> h") my/leader-help-map)
-  (evil-define-key 'normal 'global (kbd "<leader> p") my/leader-project-map)
-  (evil-define-key 'normal 'global (kbd "<leader> s") my/leader-search-map)
-  (evil-define-key 'normal 'global (kbd "<leader> x") my/leader-actions-map)
-  ;; Keybindings for searching and finding files.
-  (evil-define-key 'normal 'global (kbd "<leader> :") 'execute-extended-command)
-  (define-key my/leader-search-map (kbd "f") #'consult-find)
-  (define-key my/leader-search-map (kbd "g") #'consult-grep)
-  (define-key my/leader-search-map (kbd "G") #'consult-git-grep)
-  (define-key my/leader-search-map (kbd "r") #'consult-ripgrep)
-  (define-key my/leader-search-map (kbd "h") #'consult-info)
-  (evil-define-key 'normal 'global (kbd "<leader> /") 'consult-line)
-  ;; Flymake navigation
-  (define-key my/leader-actions-map (kbd "x") #'consult-flymake) ;; Gives you something like `trouble.nvim'
-  (evil-define-key 'normal 'global (kbd "] d") 'flymake-goto-next-error) ;; Go to next Flymake error
-  (evil-define-key 'normal 'global (kbd "[ d") 'flymake-goto-prev-error) ;; Go to previous Flymake error
-  ;; Dired commands for file management
-  (define-key my/leader-actions-map (kbd "d") #'dired)
-  (define-key my/leader-actions-map (kbd "j") #'dired-jump)
-  (define-key my/leader-actions-map (kbd "f") #'find-file)
-  (evil-define-key 'normal 'global (kbd "<leader> f") 'find-file)
-  ;; Magit keybindings for Git integration
-  (define-key my/leader-git-map (kbd "g") #'magit-status)      ;; Open Magit status
-  (define-key my/leader-git-map (kbd "l") #'magit-log-current) ;; Show current log
-  (define-key my/leader-git-map (kbd "d") #'magit-diff-buffer-file) ;; Show diff for the current file
-  ;; Buffer management keybindings
-  (evil-define-key 'normal 'global (kbd "] b") 'switch-to-next-buffer) ;; Switch to next buffer
-  (evil-define-key 'normal 'global (kbd "[ b") 'switch-to-prev-buffer) ;; Switch to previous buffer
-  (define-key my/leader-buffer-map (kbd "b") #'consult-buffer) ;; Open consult buffer list
-  (define-key my/leader-buffer-map (kbd "i") #'ibuffer) ;; Open Ibuffer
-  (define-key my/leader-buffer-map (kbd "d") #'kill-current-buffer) ;; Kill current buffer
-  (define-key my/leader-buffer-map (kbd "k") #'kill-current-buffer) ;; Kill current buffer
-  (define-key my/leader-buffer-map (kbd "x") #'kill-current-buffer) ;; Kill current buffer
-  (define-key my/leader-buffer-map (kbd "s") #'save-buffer) ;; Save buffer
-  (define-key my/leader-buffer-map (kbd "l") #'consult-buffer) ;; Consult buffer
-  (evil-define-key 'normal 'global (kbd "<leader>SPC") 'consult-buffer) ;; Consult buffer
-  ;; Project management keybindings
-  (define-key my/leader-project-map (kbd "b") #'consult-project-buffer) ;; Consult project buffer
-  (define-key my/leader-project-map (kbd "p") #'project-switch-project) ;; Switch project
-  (define-key my/leader-project-map (kbd "f") #'project-find-file) ;; Find file in project
-  (define-key my/leader-project-map (kbd "g") #'project-find-regexp) ;; Find regexp in project
-  (define-key my/leader-project-map (kbd "k") #'project-kill-buffers) ;; Kill project buffers
-  (define-key my/leader-project-map (kbd "D") #'project-dired) ;; Dired for project
-  ;; Yank from kill ring
-  (evil-define-key 'normal 'global (kbd "<leader> P") 'consult-yank-from-kill-ring)
-  ;; Embark actions for contextual commands
-  (evil-define-key 'normal 'global (kbd "<leader> .") 'embark-act)
-  ;; Help keybindings
-  (define-key my/leader-help-map (kbd "m") #'describe-mode) ;; Describe current mode
-  (define-key my/leader-help-map (kbd "f") #'describe-function) ;; Describe function
-  (define-key my/leader-help-map (kbd "v") #'describe-variable) ;; Describe variable
-  (define-key my/leader-help-map (kbd "k") #'describe-key) ;; Describe key
-  ;; Tab navigation
-  (evil-define-key 'normal 'global (kbd "] t") 'tab-next) ;; Go to next tab
-  (evil-define-key 'normal 'global (kbd "[ t") 'tab-previous) ;; Go to previous tab
-  ;; If you use Magit, start editing in insert state
-  (add-hook 'git-commit-setup-hook 'evil-insert-state)
-  ;; Remap K to docs
-  (evil-define-key 'normal 'global (kbd "K") 'eldoc-box-help-at-point)
-  ;; Commenting functionality for single and multiple lines
-  (evil-define-key 'normal 'global (kbd "gcc")
-                   (lambda ()
-                     (interactive)
-                     (if (not (use-region-p))
-                         (comment-or-uncomment-region (line-beginning-position) (line-end-position)))))
-  (evil-define-key 'visual 'global (kbd "gc")
-                   (lambda ()
-                     (interactive)
-                     (if (use-region-p)
-                         (comment-or-uncomment-region (region-beginning) (region-end)))))
-  ;; Enable evil mode
-  (evil-mode 1))
+  (setq evil-want-fine-undo t)
+  (evil-mode 1)
+  ;; Leader bindings via general.el
+  (my/leader-def
+    ;; Top-level
+    "SPC" '(consult-buffer              :which-key "switch buffer")
+    "/"   '(consult-line                :which-key "search buffer")
+    ":"   '(execute-extended-command    :which-key "M-x")
+    "."   '(embark-act                  :which-key "embark act")
+    "f"   '(find-file                   :which-key "find file")
+    "P"   '(consult-yank-from-kill-ring :which-key "yank ring")
+    "u"   '(vundo                       :which-key "undo tree")
+
+    ;; Buffers
+    "b"   '(:ignore t             :which-key "buffers")
+    "bb"  '(consult-buffer        :which-key "switch")
+    "bl"  '(mode-line-other-buffer :which-key "last buffer")
+    "bi"  '(ibuffer               :which-key "ibuffer")
+    "bd"  '(kill-current-buffer   :which-key "kill")
+    "bk"  '(kill-current-buffer   :which-key "kill")
+    "bs"  '(save-buffer           :which-key "save")
+
+    ;; Git
+    "g"   '(:ignore t                   :which-key "git")
+    "gg"  '(magit-status                :which-key "status")
+    "gl"  '(magit-log-current           :which-key "log")
+    "gd"  '(magit-diff-buffer-file      :which-key "diff file")
+
+    ;; Help
+    "h"   '(:ignore t             :which-key "help")
+    "hm"  '(describe-mode         :which-key "mode")
+    "hf"  '(describe-function     :which-key "function")
+    "hv"  '(describe-variable     :which-key "variable")
+    "hk"  '(describe-key          :which-key "key")
+
+    ;; Project
+    "p"   '(:ignore t                   :which-key "project")
+    "pb"  '(consult-project-buffer      :which-key "buffers")
+    "pp"  '(project-switch-project      :which-key "switch project")
+    "pf"  '(project-find-file           :which-key "find file")
+    "pg"  '(project-find-regexp         :which-key "grep")
+    "pk"  '(project-kill-buffers        :which-key "kill buffers")
+    "pD"  '(project-dired               :which-key "dired")
+
+    ;; Search
+    "s"   '(:ignore t             :which-key "search")
+    "sf"  '(consult-find          :which-key "find file")
+    "sg"  '(consult-grep          :which-key "grep")
+    "sG"  '(consult-git-grep      :which-key "git grep")
+    "sr"  '(consult-ripgrep       :which-key "ripgrep")
+    "sh"  '(consult-info          :which-key "info")
+
+    ;; Actions
+    "x"   '(:ignore t             :which-key "actions")
+    "xx"  '(consult-flymake       :which-key "errors")
+    "xd"  '(dired                 :which-key "dired")
+    "xj"  '(dired-jump            :which-key "dired jump")
+    "xf"  '(find-file             :which-key "find file")
+
+    ;; Theme
+    "t"   '(:ignore t               :which-key "theme")
+    "tt"  '(modus-themes-toggle     :which-key "toggle light/dark")
+    "ts"  '(consult-theme           :which-key "select theme")
+
+    ;; Workspaces — populated in Task 7 when tabspaces is added
+    "TAB" '(:ignore t             :which-key "workspaces"))
+
+  ;; Non-leader normal-state bindings
+  (general-define-key
+    :states 'normal
+    "]b" 'switch-to-next-buffer
+    "[b" 'switch-to-prev-buffer
+    "]t" 'tab-next
+    "[t" 'tab-previous
+    "]d" 'flymake-goto-next-error
+    "[d" 'flymake-goto-prev-error
+    "K"  'eldoc-box-help-at-point)
+
+  ;; Comment operators
+  (general-define-key
+    :states 'normal
+    "gcc" (lambda () (interactive)
+            (comment-or-uncomment-region (line-beginning-position) (line-end-position))))
+  (general-define-key
+    :states 'visual
+    "gc" (lambda () (interactive)
+           (when (use-region-p)
+             (comment-or-uncomment-region (region-beginning) (region-end)))))
+
+  (add-hook 'git-commit-setup-hook 'evil-insert-state))
 
 (use-package evil-collection
   :after evil
@@ -214,17 +227,7 @@
 ;; QoL features
 (use-package which-key
   :ensure nil
-  :defer t
-  :hook
-  (after-init . which-key-mode)
-  :config
-  (which-key-add-key-based-replacements
-    "SPC b" '("buffers" . "buffer commands")
-    "SPC g" '("git" . "git commands")
-    "SPC h" '("help" . "help commands")
-    "SPC p" '("project" . "project commands")
-    "SPC s" '("search" . "search commands")
-    "SPC x" '("actions" . "action commands")))
+  :hook (after-init . which-key-mode))
 
 (use-package vertico
   :ensure t
@@ -303,6 +306,11 @@
   :ensure t
   :config
   (setq wgrep-auto-save-buffer t))
+
+(use-package project
+  :ensure nil
+  :custom
+  (project-switch-commands 'project-find-file))
 
 (use-package dired
   :ensure nil

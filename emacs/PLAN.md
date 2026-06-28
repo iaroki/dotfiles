@@ -73,7 +73,7 @@ Inside `use-package emacs` `:init`:
 
 ---
 
-## Task 4 — Keybinding organization with `general.el` (`init.el`)
+## ~~Task 4 — Keybinding organization with `general.el` (`init.el`)~~ ✓
 
 **Problem**: prefix submenus in which-key show `+prefix` instead of category names. Keybindings are scattered across `define-prefix-command`, `evil-define-key`, `define-key`, and `which-key-add-key-based-replacements` calls — hard to extend.
 
