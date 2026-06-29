@@ -123,6 +123,18 @@
   (interactive)
   (mapc #'kill-buffer (delq (current-buffer) (buffer-list))))
 
+(defun my/eshell-toggle ()
+  "Toggle an eshell window at the bottom of the frame."
+  (interactive)
+  (if-let (win (get-buffer-window "*eshell*"))
+      (delete-window win)
+    (let ((buf (get-buffer-create "*eshell*")))
+      (display-buffer-in-side-window buf
+        '((side . bottom) (window-height . 0.45)))
+      (select-window (get-buffer-window buf))
+      (unless (eq major-mode 'eshell-mode)
+        (eshell)))))
+
 ;; Keybinding framework — provides my/leader-def with inline :which-key labels
 (use-package general
   :ensure t
@@ -243,7 +255,12 @@
     ;; Explorer
     "e"   '(:ignore t           :which-key "explorer")
     "ee"  '(neotree-toggle      :which-key "toggle")
-    "ef"  '(neotree-find        :which-key "find file"))
+    "ef"  '(neotree-find        :which-key "find file")
+
+    ;; Open / tools
+    "o"   '(:ignore t            :which-key "open")
+    "oe"  '(my/eshell-toggle     :which-key "eshell")
+    "oE"  '(eshell               :which-key "eshell (new)"))
 
   ;; Non-leader normal-state bindings
   (general-define-key
@@ -276,6 +293,12 @@
 (use-package evil-collection
   :after evil
   :ensure t
+  :custom
+  ;; In REPL buffers (eshell etc.) submit the prompt with RET in *insert* state;
+  ;; newline moves to normal state. Default is the reverse, which makes RET only
+  ;; execute commands from normal mode. Must be set before evil-collection-init.
+  (evil-collection-binding-overrides '((repl-submit  :state insert)
+                                       (repl-newline :state normal)))
   :config
   (evil-collection-init))
 
@@ -824,3 +847,29 @@
 (use-package make-mode
   :ensure nil
   :hook (makefile-mode . (lambda () (setq-local indent-tabs-mode t))))
+
+(defun my/eshell-quit-or-delete-char (arg)
+  "Delete a forward char, or at an empty prompt kill eshell and close its window.
+This mirrors a terminal's C-d: end-of-file at an empty prompt closes the
+session, otherwise it deletes the character under the cursor."
+  (interactive "p")
+  (if (string-empty-p (string-trim (or (eshell-get-old-input) "")))
+      (let ((win (selected-window)))
+        (kill-buffer)
+        (when (window-live-p win) (ignore-errors (delete-window win))))
+    (unless (eobp) (delete-char arg))))
+
+(use-package eshell
+  :ensure nil
+  :custom
+  (eshell-scroll-to-bottom-on-input t)
+  (eshell-destroy-buffer-when-process-dies t)
+  :hook
+  (eshell-mode . evil-insert-state)
+  :config
+  ;; RET/<return> submission is handled by evil-collection (repl-submit, set to
+  ;; insert state above). Here we only add C-d (evil's insert default is
+  ;; evil-shift-left-line) and C-l, which evil-collection leaves untouched.
+  (evil-define-key 'insert eshell-mode-map
+    (kbd "C-d") #'my/eshell-quit-or-delete-char
+    (kbd "C-l") #'eshell/clear-scrollback))

@@ -700,7 +700,7 @@ Note: treemacs has its own project tracking independent of project.el. `treemacs
 
 ---
 
-## Task 22 — Eshell keybindings (`init.el`)
+## ~~Task 22 — Eshell keybindings (`init.el`)~~ ✓
 
 Wire eshell into the leader map under `SPC o` (open/tools) with a popup-style helper that toggles the eshell window:
 
@@ -712,7 +712,7 @@ Wire eshell into the leader map under `SPC o` (open/tools) with a popup-style he
       (delete-window win)
     (let ((buf (get-buffer-create "*eshell*")))
       (display-buffer-in-side-window buf
-        '((side . bottom) (window-height . 0.3)))
+        '((side . bottom) (window-height . 0.45)))
       (select-window (get-buffer-window buf))
       (unless (eq major-mode 'eshell-mode)
         (eshell)))))
@@ -726,19 +726,64 @@ Add to `my/leader-def`:
 "oE"  '(eshell               :which-key "eshell (new)")
 ```
 
-Add evil-friendly eshell settings:
+### RET submits in insert state (evil-collection)
+
+**Gotcha**: `evil-collection` owns eshell's RET bindings. Its
+`evil-collection-repl-submit-state` defaults to `'normal`, so out of the box
+`eshell-send-input` is bound to RET in **normal** state and `newline` to RET in
+**insert** state — meaning Enter only executes commands from normal mode. Do
+**not** try to fix this with a manual `evil-define-key`/`define-key` on
+`eshell-mode-map`: evil-collection applies its bindings on
+`eshell-first-time-mode-hook` (which runs *after* `use-package eshell :config`),
+so it silently overwrites yours.
+
+The supported fix is to flip the submit state to `insert` **before**
+`evil-collection-init`. In the `use-package evil-collection` block:
 
 ```elisp
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :custom
+  (evil-collection-binding-overrides '((repl-submit  :state insert)
+                                       (repl-newline :state normal)))
+  :config
+  (evil-collection-init))
+```
+
+Result: insert RET → `eshell-send-input`, normal RET → `newline`,
+`S-<return>` → `newline` (force-newline) in either state.
+
+### eshell settings + C-d / C-l
+
+C-d should close the eshell session; at a non-empty prompt it deletes a char.
+Note `eshell-delchar-or-maybe-eof` does **not** exist in Emacs 30 — define a
+helper instead. C-d and C-l can be bound with `evil-define-key` because
+evil-collection does not touch them.
+
+```elisp
+(defun my/eshell-quit-or-delete-char (arg)
+  "Delete a forward char, or at an empty prompt kill eshell and close its window."
+  (interactive "p")
+  (if (string-empty-p (string-trim (or (eshell-get-old-input) "")))
+      (let ((win (selected-window)))
+        (kill-buffer)
+        (when (window-live-p win) (ignore-errors (delete-window win))))
+    (unless (eobp) (delete-char arg))))
+
 (use-package eshell
   :ensure nil
   :custom
   (eshell-scroll-to-bottom-on-input t)
   (eshell-destroy-buffer-when-process-dies t)
   :hook
-  (eshell-mode . (lambda ()
-                   (evil-insert-state)
-                   (define-key eshell-mode-map (kbd "C-l")
-                     (lambda () (interactive) (eshell/clear-scrollback))))))
+  (eshell-mode . evil-insert-state)
+  :config
+  ;; RET/<return> submission is handled by evil-collection (see above).
+  ;; Only add C-d (evil's insert default is evil-shift-left-line) and C-l.
+  (evil-define-key 'insert eshell-mode-map
+    (kbd "C-d") #'my/eshell-quit-or-delete-char
+    (kbd "C-l") #'eshell/clear-scrollback))
 ```
 
 ---
