@@ -187,7 +187,7 @@
     ":"   '(execute-extended-command    :which-key "M-x")
     "."   '(embark-act                  :which-key "embark act")
     "f"   '(dirvish                     :which-key "files")
-    "P"   '(consult-yank-from-kill-ring :which-key "yank ring")
+    "y"   '(consult-yank-from-kill-ring :which-key "yank ring")
     "u"   '(vundo                       :which-key "undo tree")
 
     ;; Buffers
@@ -282,7 +282,18 @@
     "oE"  '(eshell               :which-key "eshell (new)")
     "ot"  '(my/ghostel-here      :which-key "terminal (here)")
     "oT"  '(my/ghostel-root      :which-key "terminal (project root)")
-    "ol"  '(ghostel-list-buffers :which-key "list terminals"))
+    "ol"  '(ghostel-list-buffers :which-key "list terminals")
+
+    ;; Passwords (pass)
+    "P"   '(:ignore t                       :which-key "pass")
+    "Pp"  '(password-store-copy             :which-key "copy password")
+    "Pi"  '(password-store-insert           :which-key "insert")
+    "Pg"  '(password-store-generate         :which-key "generate")
+    "Pe"  '(password-store-edit             :which-key "edit")
+    "Pf"  '(password-store-copy-field       :which-key "copy field")
+    "Po"  '(password-store-otp-token-copy   :which-key "copy OTP")
+    "Pu"  '(password-store-url              :which-key "open URL")
+    "PP"  '(pass                            :which-key "pass UI"))
 
   ;; Non-leader normal-state bindings
   (general-define-key
@@ -996,3 +1007,24 @@ Bound to SPC o T — falls back to `default-directory' outside a project."
   :ensure t
   :after evil
   :hook (ghostel-mode . evil-ghostel-mode))
+
+;; pass — Unix password manager (completing-read interface to `pass').  Requires
+;; the `pass' CLI and a configured GPG key; OTP needs the pass-otp extension.
+(use-package password-store
+  :ensure t
+  :defer t
+  :commands (password-store-copy password-store-insert password-store-generate
+             password-store-edit password-store-copy-field password-store-url)
+  :custom
+  (password-store-password-length 20))
+
+(use-package password-store-otp
+  :ensure t
+  :defer t
+  :commands (password-store-otp-token-copy))
+
+;; Browsable tree-view UI for the password store (M-x pass / SPC P P).
+(use-package pass
+  :ensure t
+  :defer t
+  :commands (pass))

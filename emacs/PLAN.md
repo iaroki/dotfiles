@@ -799,14 +799,22 @@ The real entry points: `ghostel` (new/switch terminal), `ghostel-project`
 (project-scoped terminal), `ghostel-list-buffers`, plus `ghostel-next/previous/other`.
 
 **Native module**: ghostel needs `ghostel-module.so`. After install run once:
-`M-x ghostel-download-module` (prebuilt) or `M-x ghostel-module-compile`.
-`ghostel-shell` defaults to `$SHELL` (zsh here) — no config needed.
+`M-x ghostel-download-module` (prebuilt) or `M-x ghostel-module-compile`. Expose
+both via `:commands` so `M-x` finds them before the deferred package loads.
+
+**Shell — bash vs zsh**: `ghostel-shell` defaults to `(getenv "SHELL")`, which is
+**bash** under a GUI launch (the launcher doesn't set the login shell). Fix in
+two places: add `"SHELL"` to `exec-path-from-shell-variables` (Task 1-era block),
+and set `ghostel-shell` explicitly.
 
 ```elisp
 (use-package ghostel
   :ensure t
   :defer t
-  :commands (ghostel ghostel-project ghostel-list-buffers))
+  :commands (ghostel ghostel-project ghostel-list-buffers
+             ghostel-download-module ghostel-module-compile)
+  :custom
+  (ghostel-shell (or (executable-find "zsh") shell-file-name)))
 ```
 
 Evil integration via the companion `evil-ghostel` package (terminal-aware evil
@@ -820,49 +828,114 @@ ghostel buffer:
   :hook (ghostel-mode . evil-ghostel-mode))
 ```
 
-Leader bindings added to the `SPC o` (open) group:
+**Per-workspace, project-grouped terminals**: the default single `*ghostel*`
+buffer is shared across all tabs. Wrap the commands to (a) start in the right
+directory and (b) encode the project group into the buffer name
+(`*ghostel:GROUP:SUFFIX*`) so centaur-tabs groups the terminal with the
+project's files. The group **must** be in the name — centaur-tabs computes a
+buffer's group on first sight and caches it, so a post-creation tag is too late.
 
 ```elisp
-"ot"  '(ghostel              :which-key "terminal")
-"oT"  '(ghostel-project      :which-key "terminal (project)")
+(defun my/centaur-tabs-project-group ()
+  (when-let* ((proj (project-current)))
+    (file-name-nondirectory (directory-file-name (project-root proj)))))
+
+(defun my/ghostel--open (suffix dir)
+  (require 'ghostel)
+  (let* ((group (or (my/centaur-tabs-project-group) "Other"))
+         (default-directory dir)
+         (ghostel-buffer-name (format "*ghostel:%s:%s*" group suffix))
+         (buf (ghostel)))
+    (when (and buf (fboundp 'centaur-tabs-buffer-update-groups))
+      (centaur-tabs-buffer-update-groups))
+    buf))
+
+(defun my/ghostel-here ()           ; SPC o t — visited file's directory
+  (interactive) (my/ghostel--open "here" default-directory))
+
+(defun my/ghostel-root ()           ; SPC o T — project root
+  (interactive)
+  (my/ghostel--open "root" (or (when-let* ((p (project-current))) (project-root p))
+                               default-directory)))
+```
+
+`my/centaur-tabs-buffer-groups` parses the group back out of the name first:
+
+```elisp
+(list (or (and (string-match "\\`\\*ghostel:\\(.+\\):[^:]+\\*\\'" (buffer-name))
+               (match-string 1 (buffer-name)))
+          (when-let* ((proj (project-current)))
+            (file-name-nondirectory (directory-file-name (project-root proj))))
+          "Other"))
+```
+
+> **Latent bug fixed**: the centaur-tabs `:config` called
+> `(centaur-tabs-group-buffer-groups)` right after setting
+> `centaur-tabs-buffer-groups-function` — that function resets it back to the
+> default major-mode grouping, so the project grouping never ran. Removed it
+> (replaced with a guarded `centaur-tabs-display-update`). Now all tabs group by
+> project.
+
+Leader bindings in the `SPC o` (open) group:
+
+```elisp
+"ot"  '(my/ghostel-here      :which-key "terminal (here)")
+"oT"  '(my/ghostel-root      :which-key "terminal (project root)")
 "ol"  '(ghostel-list-buffers :which-key "list terminals")
 ```
 
 ---
 
-## Task 24 — `pass` and `pass-otp` integration (`init.el`)
+## ~~Task 24 — `pass` and `pass-otp` integration (`init.el`)~~ ✓
 
-`password-store.el` provides a completing-read interface to `pass` (the standard Unix password manager). `password-store-otp` adds TOTP/OTP support.
+`password-store.el` provides a completing-read interface to `pass` (the standard
+Unix password manager). `password-store-otp` adds TOTP/OTP support. `pass` adds a
+browsable tree-view UI (`M-x pass`). All three are on MELPA.
 
 ```elisp
 (use-package password-store
   :ensure t
   :defer t
+  :commands (password-store-copy password-store-insert password-store-generate
+             password-store-edit password-store-copy-field password-store-url)
   :custom
   (password-store-password-length 20))
 
 (use-package password-store-otp
   :ensure t
-  :defer t)
+  :defer t
+  :commands (password-store-otp-token-copy))
 
 (use-package pass
   :ensure t
-  :defer t)
+  :defer t
+  :commands (pass))
 ```
 
-Add to `my/leader-def` under a new `P` (private/passwords) group:
+**Prefix conflict**: `SPC P` was already bound to `consult-yank-from-kill-ring`.
+A key can't be both a command and a prefix, so the yank-ring binding was moved to
+`SPC y` and `SPC P` became the passwords group.
 
 ```elisp
-"P"   '(:ignore t                          :which-key "pass")
-"Pp"  '(password-store-copy               :which-key "copy password")
-"Pi"  '(password-store-insert             :which-key "insert")
-"Pg"  '(password-store-generate           :which-key "generate")
-"Pe"  '(password-store-edit               :which-key "edit")
-"Po"  '(password-store-otp-token-copy     :which-key "copy OTP")
-"Pu"  '(password-store-url                :which-key "open URL")
+"y"   '(consult-yank-from-kill-ring :which-key "yank ring")   ; moved off P
+
+"P"   '(:ignore t                     :which-key "pass")
+"Pp"  '(password-store-copy           :which-key "copy password")
+"Pi"  '(password-store-insert         :which-key "insert")
+"Pg"  '(password-store-generate       :which-key "generate")
+"Pe"  '(password-store-edit           :which-key "edit")
+"Pf"  '(password-store-copy-field     :which-key "copy field")
+"Po"  '(password-store-otp-token-copy :which-key "copy OTP")
+"Pu"  '(password-store-url            :which-key "open URL")
+"PP"  '(pass                          :which-key "pass UI")
 ```
 
-Requires `pass` installed (`apt install pass` / `brew install pass`) and a GPG key set up. OTP requires `pass-otp` extension.
+The exact OTP command is `password-store-otp-token-copy` (not
+`password-store-otp-copy`).
+
+Requires `pass` installed (`apt install pass` / `brew install pass`) and a GPG key
+set up. OTP requires the `pass-otp` extension. (All present on this machine, with a
+store at `~/.password-store`.)
 
 ---
 
