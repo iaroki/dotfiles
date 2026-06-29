@@ -61,6 +61,7 @@
   (truncate-lines t)
   (use-dialog-box nil)
   (use-short-answers t)
+  (confirm-kill-emacs #'y-or-n-p)       ; ask y/n before quitting Emacs
   (warning-minimum-level :emergency)
   (read-process-output-max (* 1024 1024))
   (package-quickstart t)
