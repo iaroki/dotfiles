@@ -530,7 +530,35 @@
               (when (and (not (derived-mode-p 'dired-mode))
                          (not (bound-and-true-p centaur-tabs-local-mode)))
                 (centaur-tabs-local-mode 1))))))))
-  (add-hook 'window-buffer-change-functions #'my/dirvish-hide-preview-tabs))
+  (add-hook 'window-buffer-change-functions #'my/dirvish-hide-preview-tabs)
+  ;; Strip the centaur-tabs bar from file-content preview buffers.  Unlike the
+  ;; window hook above (which only fires for the dirvish file-manager layout),
+  ;; this runs in the "PREVIEW :: …" buffer itself, so it also covers the
+  ;; `dirvish-peek' minibuffer preview shown during `project-find-file'.
+  (add-hook 'dirvish-preview-setup-hook
+            (lambda ()
+              (when (and (fboundp 'centaur-tabs-mode-on-p)
+                         (centaur-tabs-mode-on-p)
+                         (not (bound-and-true-p centaur-tabs-local-mode)))
+                (centaur-tabs-local-mode 1))))
+  ;; Don't peek-preview project *directories* while choosing a project: the
+  ;; project picker (`tabspaces-prompt-project-dir' / `project-prompt-project-dir')
+  ;; uses the same `project-file' completion category as `project-find-file', so
+  ;; suppress just that category for the duration of the prompt.  File previews
+  ;; in `project-find-file' are unaffected.
+  (defun my/disable-peek-for-project-prompt (orig &rest args)
+    "Run ORIG without dirvish previewing `project-file' candidates."
+    (if (boundp 'dirvish-peek-categories)
+        (let ((dirvish-peek-categories
+               (remq 'project-file dirvish-peek-categories)))
+          (apply orig args))
+      (apply orig args)))
+  (with-eval-after-load 'tabspaces
+    (advice-add 'tabspaces-prompt-project-dir :around
+                #'my/disable-peek-for-project-prompt))
+  (with-eval-after-load 'project
+    (advice-add 'project-prompt-project-dir :around
+                #'my/disable-peek-for-project-prompt)))
 
 (defun my/dirvish-project ()
   "Open dirvish at the current buffer's directory."
