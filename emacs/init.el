@@ -13,6 +13,25 @@
           ("nongnu" . 2)
           ("melpa" . 1))))
 
+;; Inherit the shell environment (PATH, GOPATH, etc.) when Emacs is launched
+;; from a GUI/desktop launcher, where it would otherwise miss the variables set
+;; in the login shell.  Runs early so later packages (eglot, tree-sitter grammar
+;; installs, formatters) can find their executables.
+(use-package exec-path-from-shell
+  :ensure t
+  :if (or (memq window-system '(mac ns x pgtk))
+          (daemonp))
+  :custom
+  ;; Use an interactive login shell: this machine's PATH (linuxbrew, via
+  ;; `brew shellenv') is set in ~/.zshrc, which only interactive shells source.
+  ;; A login-only (-l) shell would miss go/gopls/npm/node etc.
+  (exec-path-from-shell-arguments '("-l" "-i"))
+  (exec-path-from-shell-variables
+   '("PATH" "MANPATH" "GOPATH" "GOBIN" "GOROOT"
+     "LANG" "LC_ALL" "SSH_AUTH_SOCK" "GPG_TTY"))
+  :config
+  (exec-path-from-shell-initialize))
+
 ;; Emacs options
 (use-package emacs
   :ensure nil
