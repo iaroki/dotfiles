@@ -10,3 +10,4 @@ transient/
 tree-sitter/
 package-quickstart*
 .cache/
+org-roam.db

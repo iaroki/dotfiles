@@ -128,6 +128,17 @@
   (gcmh-high-cons-threshold (* 64 1024 1024)))
 
 ;; Themes
+;; Mixed fonts: with `variable-pitch-mode' on (e.g. in org), spacing-sensitive
+;; elements — code blocks, tables, verbatim — stay monospaced automatically.
+(setopt modus-themes-mixed-fonts t)
+;; Headings: proportional (variable-pitch) and progressively smaller per level.
+(setopt modus-themes-headings
+        '((1 . (variable-pitch 1.5))
+          (2 . (variable-pitch 1.3))
+          (3 . (variable-pitch 1.2))
+          (4 . (variable-pitch 1.1))
+          (5 . (variable-pitch 1.05))
+          (t . (variable-pitch 1.0))))
 (setopt modus-themes-to-toggle '(modus-operandi-tinted modus-vivendi))
 (load-theme 'modus-operandi-tinted :no-confirm)
 
@@ -218,7 +229,8 @@
     "p"   '(:ignore t                   :which-key "project")
     "pb"  '(consult-project-buffer      :which-key "buffers")
     "pp"  '(tabspaces-open-or-create-project-and-workspace :which-key "switch project")
-    "pf"  '(my/dirvish-project          :which-key "files")
+    "pf"  '(project-find-file           :which-key "find file")
+    "p/"  '(my/dirvish-project          :which-key "dirvish")
     "pg"  '(project-find-regexp         :which-key "grep")
     "pk"  '(project-kill-buffers        :which-key "kill buffers")
     "pD"  '(project-dired               :which-key "dired")
@@ -293,7 +305,21 @@
     "Pf"  '(password-store-copy-field       :which-key "copy field")
     "Po"  '(password-store-otp-token-copy   :which-key "copy OTP")
     "Pu"  '(password-store-url              :which-key "open URL")
-    "PP"  '(pass                            :which-key "pass UI"))
+    "PP"  '(pass                            :which-key "pass UI")
+
+    ;; Notes / Org
+    "n"   '(:ignore t              :which-key "notes")
+    "na"  '(org-agenda             :which-key "agenda")
+    "nc"  '(org-capture            :which-key "capture")
+    "nl"  '(org-store-link         :which-key "store link")
+    "np"  '(org-present            :which-key "present")
+    "nr"  '(:ignore t              :which-key "roam")
+    "nrf" '(org-roam-node-find     :which-key "find node")
+    "nri" '(org-roam-node-insert   :which-key "insert link")
+    "nrc" '(org-roam-capture       :which-key "capture")
+    "nrb" '(org-roam-buffer-toggle :which-key "backlinks")
+    "nrs" '(org-roam-db-sync       :which-key "sync db")
+    "nrg" '(org-roam-graph         :which-key "graph"))
 
   ;; Non-leader normal-state bindings
   (general-define-key
@@ -1028,3 +1054,89 @@ Bound to SPC o T — falls back to `default-directory' outside a project."
   :ensure t
   :defer t
   :commands (pass))
+
+;; --- Org ---------------------------------------------------------------------
+(use-package org
+  :ensure nil
+  :defer t
+  :custom
+  (org-directory "~/org")
+  (org-default-notes-file (expand-file-name "inbox.org" "~/org"))
+  ;; Indentation ON (sub-headings/body indented under parents).  The block
+  ;; bracket beside src blocks is provided by `org-modern-indent' below, which
+  ;; works *with* org-indent (unlike `org-modern-block-fringe', which it disables).
+  (org-startup-indented t)
+  (org-startup-folded 'content)
+  (org-hide-emphasis-markers t)
+  (org-pretty-entities t)
+  (org-ellipsis " ▾")
+  (org-src-fontify-natively t)
+  (org-src-tab-acts-natively t)
+  (org-return-follows-link t)
+  (org-capture-templates
+   '(("t" "Task" entry (file+headline "~/org/inbox.org" "Tasks")
+      "* TODO %?\n  %U\n  %a")
+     ("n" "Note" entry (file+headline "~/org/inbox.org" "Notes")
+      "* %?\n  %U"))))
+
+(use-package org-modern
+  :ensure t
+  :hook (org-mode . org-modern-mode)
+  :custom
+  ;; `org-modern-star' is a *symbol* (nil/fold/replace) in this version; the
+  ;; glyphs go in `org-modern-replace-stars'.  Trailing spaces keep the bullet
+  ;; from crowding the heading text.
+  (org-modern-star 'replace)
+  (org-modern-replace-stars '("◉ " "○ " "✸ " "✿ "))
+  (org-modern-table t)
+  (org-modern-keyword t)
+  (org-modern-block-name t))
+
+;; Draws org-modern's block bracket (the vertical line beside src/example blocks)
+;; in a way that coexists with `org-indent-mode' — org-modern's own block-fringe
+;; is disabled whenever org-indent is on.  Not on MELPA, so install via :vc.
+;; Hook depth 90 makes it run after org-indent has set up.
+(use-package org-modern-indent
+  :vc (:url "https://github.com/jdtsmith/org-modern-indent" :rev :newest)
+  :commands (org-modern-indent-mode)
+  :init
+  (add-hook 'org-mode-hook #'org-modern-indent-mode 90))
+
+(use-package olivetti
+  :ensure t
+  :defer t
+  :custom (olivetti-body-width 0.68))
+
+(defun my/org-visual-setup ()
+  "Visual tweaks for `org-mode' buffers.
+Proportional (variable-pitch) prose with Fira Sans; code/tables stay
+monospaced via `modus-themes-mixed-fonts'.  No olivetti centering."
+  (variable-pitch-mode 1)
+  (display-line-numbers-mode -1)
+  (visual-line-mode 1))
+(add-hook 'org-mode-hook #'my/org-visual-setup)
+
+;; Presentation mode: big text, inline images, hidden cursor, centered layout.
+(use-package org-present
+  :ensure t
+  :defer t
+  :hook
+  (org-present-mode      . (lambda ()
+                             (org-present-big)
+                             (org-display-inline-images)
+                             (org-present-hide-cursor)
+                             (olivetti-mode 1)))
+  (org-present-mode-quit . (lambda ()
+                             (org-present-small)
+                             (org-remove-inline-images)
+                             (org-present-show-cursor)
+                             (olivetti-mode -1))))
+
+(use-package org-roam
+  :ensure t
+  :defer t
+  :custom
+  (org-roam-directory "~/org/roam")
+  (org-roam-completion-everywhere t)
+  :config
+  (org-roam-db-autosync-mode))

@@ -939,7 +939,30 @@ store at `~/.password-store`.)
 
 ---
 
-## Task 25 — Org-mode, org-roam, org-modern, presentation (`init.el`)
+## ~~Task 25 — Org-mode, org-roam, org-modern, presentation (`init.el`)~~ ✓
+
+**Packages**: `org` (built-in), `org-modern`, `org-modern-indent` (`:vc`, not on
+MELPA), `org-roam`, `org-present`, `olivetti`
+
+### Implementation notes / deviations from the original sketch
+
+- **`org-modern-star` is a symbol, not a glyph list** in the current org-modern.
+  Use `(org-modern-star 'replace)` + `(org-modern-replace-stars '("◉ " "○ " "✸ "
+  "✿ "))`. Trailing spaces stop the bullet crowding the heading text.
+- **Indentation vs block bracket conflict**: `org-modern-block-fringe` (the line
+  beside src blocks) is auto-disabled when `org-indent-mode` is on. To keep
+  *both* indentation and the block bracket, keep `org-startup-indented t` and add
+  **`org-modern-indent`** (install via `:vc` from
+  `github.com/jdtsmith/org-modern-indent`; hook `org-modern-indent-mode` at depth
+  90). Do **not** set `org-modern-block-fringe`.
+- **Variable-pitch + monospace code**: enable `modus-themes-mixed-fonts t` (before
+  `load-theme`) so code/tables stay monospaced when `variable-pitch-mode` is on —
+  no manual fixed-pitch face remapping needed.
+- **Heading sizes per level**: set via `modus-themes-headings` (not org faces),
+  proportional and progressively smaller: 1→1.5, 2→1.3, 3→1.2, 4→1.1, 5→1.05.
+- **No olivetti for normal viewing** — the centered layout with fringe lines was
+  unwanted. `my/org-visual-setup` = variable-pitch + line-numbers off +
+  visual-line-mode. olivetti is kept only for `org-present`.
 
 **Packages**: `org` (built-in), `org-modern`, `org-roam`, `org-present`, `olivetti`
 
