@@ -139,8 +139,49 @@
           (4 . (variable-pitch 1.1))
           (5 . (variable-pitch 1.05))
           (t . (variable-pitch 1.0))))
-(setopt modus-themes-to-toggle '(modus-operandi-tinted modus-vivendi))
-(load-theme 'modus-operandi-tinted :no-confirm)
+;; Gruvbox-flavoured modus derivatives (see themes/modus-gruvbox-*-theme.el).
+;; These build on the modus engine but leave stock modus-operandi/vivendi intact.
+(add-to-list 'custom-theme-load-path
+             (expand-file-name "themes" user-emacs-directory))
+;; SPC t t toggles light (gruvbox soft) <-> dark (gruvbox black).
+(setopt modus-themes-to-toggle '(modus-gruvbox-light modus-gruvbox-dark))
+;; Register BOTH themes (load the other with :no-enable) so they land in
+;; `custom-known-themes' — otherwise `modus-themes-toggle' errors that the
+;; not-yet-loaded theme "is not part of modus-themes-items".
+(load-theme 'modus-gruvbox-dark :no-confirm :no-enable)
+(load-theme 'modus-gruvbox-light :no-confirm)
+
+;; centaur-tabs is a third-party package modus doesn't theme; blend its tab bar
+;; into the current background.  Runs on every theme switch, plus once when
+;; centaur-tabs first loads (see its :config).
+(defun my/sync-centaur-tabs-to-theme (&rest _)
+  "Recolour centaur-tabs faces to match the active modus background.
+Active and inactive tabs both use the main background (like the mode line);
+the active tab is set apart by bold text plus the thin accent under-bar.
+Adjacent tabs are separated by a very thin, barely-visible side border."
+  (when (featurep 'centaur-tabs)
+    (let* ((bg     (modus-themes-get-color-value 'bg-main))
+           (fg     (modus-themes-get-color-value 'fg-main))
+           (dim    (modus-themes-get-color-value 'fg-dim))
+           (sep    (modus-themes-get-color-value 'bg-dim)) ; faint tab separator
+           (accent (modus-themes-get-color-value 'blue))
+           (modif  (modus-themes-get-color-value 'yellow))
+           ;; 1px left/right border only (vertical -1 keeps the tab height).
+           (border `(:line-width (1 . -1) :color ,sep)))
+      (set-face-attribute 'centaur-tabs-default nil :background bg :foreground bg :box nil)
+      (set-face-attribute 'centaur-tabs-unselected nil :background bg :foreground dim :box border)
+      (set-face-attribute 'centaur-tabs-selected nil :background bg :foreground fg :weight 'bold :box border)
+      (set-face-attribute 'centaur-tabs-unselected-modified nil :background bg :foreground modif :box border)
+      (set-face-attribute 'centaur-tabs-selected-modified nil :background bg :foreground modif :weight 'bold :box border)
+      (when (facep 'centaur-tabs-active-bar-face)
+        (set-face-attribute 'centaur-tabs-active-bar-face nil :background accent))
+      (when (facep 'centaur-tabs-modified-marker-selected)
+        (set-face-attribute 'centaur-tabs-modified-marker-selected nil :background bg :foreground modif))
+      (when (facep 'centaur-tabs-modified-marker-unselected)
+        (set-face-attribute 'centaur-tabs-modified-marker-unselected nil :background bg :foreground dim))
+      (setq centaur-tabs-background-color bg)
+      (centaur-tabs-headline-match))))
+(add-hook 'modus-themes-after-load-theme-hook #'my/sync-centaur-tabs-to-theme)
 
 (defun my/consult-workspace-buffers ()
   "Show only buffers in the current workspace."
@@ -692,7 +733,10 @@
   ;; grouping, which silently undid the project grouping below.
   (setq centaur-tabs-buffer-groups-function #'my/centaur-tabs-buffer-groups)
   (when (bound-and-true-p centaur-tabs-mode)
-    (centaur-tabs-display-update)))
+    (centaur-tabs-display-update))
+  ;; Blend the tab bar into the (already-loaded) theme background.  The
+  ;; after-load-theme hook only fires on toggles, not the initial load-theme.
+  (my/sync-centaur-tabs-to-theme))
 
 (use-package magit
   :ensure t
