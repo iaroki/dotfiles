@@ -32,6 +32,20 @@
   :config
   (exec-path-from-shell-initialize))
 
+;; Deterministic fallback: ensure Homebrew/linuxbrew (where gopls,
+;; yaml-language-server, bash-language-server, terraform-ls, … all live) is on
+;; `exec-path' and PATH.  `brew shellenv' is set in ~/.zshrc, so a GUI launch
+;; doesn't inherit it, and importing it through an interactive shell can be
+;; flaky with a heavy zshrc — this guarantees eglot can find the servers.
+;; No-op on machines without linuxbrew.
+(dolist (dir '("/home/linuxbrew/.linuxbrew/bin" "/home/linuxbrew/.linuxbrew/sbin"
+               "~/.local/bin"))
+  (let ((d (expand-file-name dir)))
+    (when (file-directory-p d)
+      (add-to-list 'exec-path d)
+      (unless (member d (split-string (or (getenv "PATH") "") path-separator))
+        (setenv "PATH" (concat d path-separator (getenv "PATH")))))))
+
 ;; Emacs options
 (use-package emacs
   :ensure nil
@@ -717,7 +731,9 @@ Adjacent tabs are separated by a very thin, barely-visible side border."
   (centaur-tabs-set-bar 'under)
   (x-underline-at-descent-line t)
   (centaur-tabs-show-new-tab-button nil)
-  (centaur-tabs-excluded-prefixes '("*scratch" "*Messages" "*Warnings" "*Backtrace" "magit-" "COMMIT_EDITMSG" "*which-key*"))
+  (centaur-tabs-excluded-prefixes '("*scratch" "*Messages" "*Warnings" "*Backtrace"
+                                    "magit-" "COMMIT_EDITMSG" "*which-key*"
+                                    "*EGLOT" "*eglot" "*temp" "*Flymake" "*Async"))
   :config
   (defun my/centaur-tabs-buffer-groups ()
     ;; ghostel terminals encode their project group in the buffer name
