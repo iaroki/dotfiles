@@ -788,32 +788,44 @@ evil-collection does not touch them.
 
 ---
 
-## Task 23 — Ghostty terminal integration (`init.el`)
+## ~~Task 23 — `ghostel` in-Emacs terminal (`init.el`)~~ ✓
 
-`ghostty.el` integrates Emacs with the Ghostty terminal emulator — primarily used to open files in Emacs from Ghostty and to send commands from Emacs to a Ghostty pane.
+> **Reality check**: `ghostel` (github.com/dakra/ghostel, on MELPA) is **not**
+> an integration with an external Ghostty terminal. It is an **in-Emacs terminal
+> emulator powered by libghostty** (vterm/eat-style). There is no
+> `ghostel-send-region`; the original plan's bindings were wrong.
 
-Install from MELPA or source:
+The real entry points: `ghostel` (new/switch terminal), `ghostel-project`
+(project-scoped terminal), `ghostel-list-buffers`, plus `ghostel-next/previous/other`.
+
+**Native module**: ghostel needs `ghostel-module.so`. After install run once:
+`M-x ghostel-download-module` (prebuilt) or `M-x ghostel-module-compile`.
+`ghostel-shell` defaults to `$SHELL` (zsh here) — no config needed.
 
 ```elisp
-(use-package ghostty
+(use-package ghostel
   :ensure t
-  :defer t)
+  :defer t
+  :commands (ghostel ghostel-project ghostel-list-buffers))
 ```
 
-Add to the `o` (open) leader group:
+Evil integration via the companion `evil-ghostel` package (terminal-aware evil
+operators + cursor sync). `evil-ghostel-mode` is buffer-local, enabled per
+ghostel buffer:
 
 ```elisp
-"ot"  '(ghostty               :which-key "ghostty")
-"oT"  '(ghostty-send-region   :which-key "send region to ghostty")
+(use-package evil-ghostel
+  :ensure t
+  :after evil
+  :hook (ghostel-mode . evil-ghostel-mode))
 ```
 
-If `ghostty.el` is not on MELPA yet, install via `use-package` with a `:vc` source (Emacs 30+) or clone manually into `lisp/`:
+Leader bindings added to the `SPC o` (open) group:
 
 ```elisp
-(use-package ghostty
-  :ensure nil
-  :load-path "lisp/ghostty"
-  :defer t)
+"ot"  '(ghostel              :which-key "terminal")
+"oT"  '(ghostel-project      :which-key "terminal (project)")
+"ol"  '(ghostel-list-buffers :which-key "list terminals")
 ```
 
 ---

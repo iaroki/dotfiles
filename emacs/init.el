@@ -27,7 +27,7 @@
   ;; A login-only (-l) shell would miss go/gopls/npm/node etc.
   (exec-path-from-shell-arguments '("-l" "-i"))
   (exec-path-from-shell-variables
-   '("PATH" "MANPATH" "GOPATH" "GOBIN" "GOROOT"
+   '("PATH" "MANPATH" "GOPATH" "GOBIN" "GOROOT" "SHELL"
      "LANG" "LC_ALL" "SSH_AUTH_SOCK" "GPG_TTY"))
   :config
   (exec-path-from-shell-initialize))
@@ -279,7 +279,10 @@
     ;; Open / tools
     "o"   '(:ignore t            :which-key "open")
     "oe"  '(my/eshell-toggle     :which-key "eshell")
-    "oE"  '(eshell               :which-key "eshell (new)"))
+    "oE"  '(eshell               :which-key "eshell (new)")
+    "ot"  '(my/ghostel-here      :which-key "terminal (here)")
+    "oT"  '(my/ghostel-root      :which-key "terminal (project root)")
+    "ol"  '(ghostel-list-buffers :which-key "list terminals"))
 
   ;; Non-leader normal-state bindings
   (general-define-key
@@ -638,12 +641,21 @@
   (centaur-tabs-excluded-prefixes '("*scratch" "*Messages" "*Warnings" "*Backtrace" "magit-" "COMMIT_EDITMSG" "*which-key*"))
   :config
   (defun my/centaur-tabs-buffer-groups ()
-    (list (or (when-let* ((proj (project-current)))
+    ;; ghostel terminals encode their project group in the buffer name
+    ;; ("*ghostel:GROUP:SUFFIX*") since they visit no file; parse it out first.
+    (list (or (and (string-match "\\`\\*ghostel:\\(.+\\):[^:]+\\*\\'"
+                                 (buffer-name))
+                   (match-string 1 (buffer-name)))
+              (when-let* ((proj (project-current)))
                 (file-name-nondirectory
                  (directory-file-name (project-root proj))))
               "Other")))
+  ;; NOTE: do *not* call `centaur-tabs-group-buffer-groups' here — it resets
+  ;; `centaur-tabs-buffer-groups-function' back to the default (major-mode)
+  ;; grouping, which silently undid the project grouping below.
   (setq centaur-tabs-buffer-groups-function #'my/centaur-tabs-buffer-groups)
-  (centaur-tabs-group-buffer-groups))
+  (when (bound-and-true-p centaur-tabs-mode)
+    (centaur-tabs-display-update)))
 
 (use-package magit
   :ensure t
@@ -920,3 +932,67 @@ session, otherwise it deletes the character under the cursor."
   (evil-define-key 'insert eshell-mode-map
     (kbd "C-d") #'my/eshell-quit-or-delete-char
     (kbd "C-l") #'eshell/clear-scrollback))
+
+;; In-Emacs terminal emulator powered by libghostty (vterm-like).  Needs a
+;; native module: run `M-x ghostel-download-module' (prebuilt) or
+;; `M-x ghostel-module-compile' once after install.
+(use-package ghostel
+  :ensure t
+  :defer t
+  :commands (ghostel ghostel-project ghostel-list-buffers
+             ghostel-download-module ghostel-module-compile)
+  :custom
+  ;; Force zsh: `ghostel-shell' defaults to $SHELL, which is bash under a GUI
+  ;; launch.  Prefer zsh explicitly, fall back to Emacs' shell-file-name.
+  (ghostel-shell (or (executable-find "zsh") shell-file-name)))
+
+;; Scope ghostel terminals per project so each tabspaces workspace gets its own
+;; (the default single "*ghostel*" buffer is shared across all tabs).  Also tag
+;; each terminal with its project's centaur-tabs group name so it appears in the
+;; same tab group as the project's files (see `my/centaur-tabs-buffer-groups'),
+;; rather than the "Other" group alongside *Messages*/*Warnings*.
+(defvar ghostel-buffer-name)            ; declare special for the let below
+
+(defun my/centaur-tabs-project-group ()
+  "Return the centaur-tabs group name for the current project, or nil."
+  (when-let* ((proj (project-current)))
+    (file-name-nondirectory (directory-file-name (project-root proj)))))
+
+(defun my/ghostel--open (suffix dir)
+  "Open or switch to a workspace-local ghostel terminal named by SUFFIX in DIR.
+The project group is encoded into the buffer name (\"*ghostel:GROUP:SUFFIX*\")
+so centaur-tabs can group the terminal with the project's files — the group is
+parsed back out in `my/centaur-tabs-buffer-groups'.  The name must carry it
+because centaur-tabs computes a buffer's group on first sight and caches it,
+before any post-creation tagging could run."
+  (require 'ghostel)
+  (let* ((group (or (my/centaur-tabs-project-group) "Other"))
+         (default-directory dir)
+         (ghostel-buffer-name (format "*ghostel:%s:%s*" group suffix))
+         (buf (ghostel)))
+    ;; Force a regroup in case this buffer name was ever cached differently.
+    (when (and buf (fboundp 'centaur-tabs-buffer-update-groups))
+      (centaur-tabs-buffer-update-groups))
+    buf))
+
+(defun my/ghostel-here ()
+  "Open or switch to a workspace-local ghostel terminal in the current directory.
+Bound to SPC o t — starts in the visited file's `default-directory'."
+  (interactive)
+  (my/ghostel--open "here" default-directory))
+
+(defun my/ghostel-root ()
+  "Open or switch to a workspace-local ghostel terminal at the project root.
+Bound to SPC o T — falls back to `default-directory' outside a project."
+  (interactive)
+  (my/ghostel--open "root"
+                    (or (when-let* ((proj (project-current)))
+                          (project-root proj))
+                        default-directory)))
+
+;; Evil integration for ghostel buffers: terminal-aware operators and cursor
+;; sync across evil states.  Buffer-local mode, enabled per ghostel buffer.
+(use-package evil-ghostel
+  :ensure t
+  :after evil
+  :hook (ghostel-mode . evil-ghostel-mode))

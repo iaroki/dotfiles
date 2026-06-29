@@ -8,8 +8,8 @@
    '(ansible centaur-tabs colorful-mode corfu diff-hl dirvish
              dockerfile-mode doom-modeline eldoc-box embark-consult
              evil-collection exec-path-from-shell flymake-ruff gcmh
-             general hl-todo indent-guide just-mode magit marginalia
-             markdown-mode neotree nerd-icons-completion
+             general ghostel hl-todo indent-guide just-mode magit
+             marginalia markdown-mode neotree nerd-icons-completion
              nerd-icons-corfu nerd-icons-dired nyan-mode orderless
              pulsar rainbow-delimiters tabspaces terraform-mode
              treemacs-evil treemacs-nerd-icons vertico vundo wgrep)))
