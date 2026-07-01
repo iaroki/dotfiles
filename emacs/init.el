@@ -967,8 +967,11 @@ Adjacent tabs are separated by a very thin, barely-visible side border."
   :custom
   (terraform-indent-level 4))
 
+;; `terraform-ts-mode' is not on any ELPA; it lives on Codeberg and is
+;; installed via package-vc.  It auto-fetches/compiles the HCL tree-sitter
+;; grammar on first activation (needs a C compiler + git on PATH).
 (use-package terraform-ts-mode
-  :ensure nil
+  :vc (:url "https://codeberg.org/ccbash-oss/terraform-ts-mode" :rev :newest)
   :mode ("\\.tf\\'" "\\.tfvars\\'"))
 
 (add-to-list 'auto-mode-alist '("\\.hcl\\'" . terraform-ts-mode))
