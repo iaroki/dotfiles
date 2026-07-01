@@ -459,6 +459,21 @@ Adjacent tabs are separated by a very thin, barely-visible side border."
   ;; Truncate long git branch names in the modeline to 8 chars.
   (doom-modeline-vcs-max-length 13))
 
+;; Make the project-name part of the modeline buffer path stand out (bold +
+;; accent colour).  We force the colour explicitly rather than rely on the
+;; default `font-lock-string-face' inheritance (which renders flat here), and
+;; re-derive it from the *active* theme on every enable so it adapts to the
+;; gruvbox light/dark toggle.
+(defun my/doom-modeline-highlight-project (&rest _)
+  "Restyle `doom-modeline-project-dir' to be bold and colourful."
+  (when (facep 'doom-modeline-project-dir)
+    (set-face-attribute 'doom-modeline-project-dir nil
+                        :weight 'bold
+                        :foreground (face-attribute 'font-lock-keyword-face
+                                                    :foreground nil 'default))))
+(add-hook 'enable-theme-functions #'my/doom-modeline-highlight-project)
+(my/doom-modeline-highlight-project)
+
 (use-package nyan-mode
   :ensure t
   :hook (after-init . nyan-mode)
@@ -885,6 +900,25 @@ Adjacent tabs are separated by a very thin, barely-visible side border."
         (dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile")
         (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
 
+(defun my/treesit-install-all-grammars (&optional force)
+  "Install every grammar listed in `treesit-language-source-alist'.
+Already-installed grammars are skipped unless FORCE (a prefix arg) is
+non-nil, in which case they are recompiled.  Reports a summary at the end."
+  (interactive "P")
+  (let (installed skipped failed)
+    (dolist (lang (mapcar #'car treesit-language-source-alist))
+      (cond
+       ((and (not force) (treesit-language-available-p lang))
+        (push lang skipped))
+       (t
+        (condition-case err
+            (progn (treesit-install-language-grammar lang)
+                   (push lang installed))
+          (error (push (cons lang (error-message-string err)) failed))))))
+    (message "treesit grammars: %d installed, %d already present, %d failed%s"
+             (length installed) (length skipped) (length failed)
+             (if failed (format " -> %s" (mapcar #'car failed)) ""))))
+
 (setq major-mode-remap-alist
       '((yaml-mode . yaml-ts-mode)
         (go-mode . go-ts-mode)
@@ -991,6 +1025,17 @@ Adjacent tabs are separated by a very thin, barely-visible side border."
   :ensure t
   :custom
   (terraform-indent-level 4))
+
+;; Groovy + Jenkinsfile support.  No tree-sitter Groovy mode exists yet, so use
+;; the mature `groovy-mode'.  The Jenkinsfile regexp matches any basename that
+;; starts with "Jenkinsfile" (e.g. Jenkinsfile, Jenkinsfile.prod,
+;; Jenkinsfile-release), anchored to the start of the file name component.
+(use-package groovy-mode
+  :ensure t
+  :defer t
+  :mode ("\\.groovy\\'"
+         "\\.gradle\\'"
+         "\\(?:\\`\\|/\\)Jenkinsfile[^/]*\\'"))
 
 ;; `terraform-ts-mode' is not on any ELPA; it lives on Codeberg and is
 ;; installed via package-vc.  It auto-fetches/compiles the HCL tree-sitter
