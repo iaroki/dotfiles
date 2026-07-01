@@ -33,12 +33,16 @@
   (exec-path-from-shell-initialize))
 
 ;; Deterministic fallback: ensure Homebrew/linuxbrew (where gopls,
-;; yaml-language-server, bash-language-server, terraform-ls, … all live) is on
-;; `exec-path' and PATH.  `brew shellenv' is set in ~/.zshrc, so a GUI launch
-;; doesn't inherit it, and importing it through an interactive shell can be
-;; flaky with a heavy zshrc — this guarantees eglot can find the servers.
-;; No-op on machines without linuxbrew.
+;; yaml-language-server, bash-language-server, terraform-ls, eza, gls, … all
+;; live) is on `exec-path' and PATH.  `brew shellenv' is set in ~/.zshrc, so a
+;; GUI launch doesn't inherit it, and importing it through an interactive shell
+;; can be flaky with a heavy zshrc — this guarantees eglot (and dirvish's eza
+;; preview / gls listing) can find their executables.  Covers linuxbrew,
+;; macOS Homebrew on Apple Silicon (/opt/homebrew) and Intel (/usr/local).
+;; Each entry is a no-op on machines that don't have that directory.
 (dolist (dir '("/home/linuxbrew/.linuxbrew/bin" "/home/linuxbrew/.linuxbrew/sbin"
+               "/opt/homebrew/bin" "/opt/homebrew/sbin"
+               "/usr/local/bin" "/usr/local/sbin"
                "~/.local/bin"))
   (let ((d (expand-file-name dir)))
     (when (file-directory-p d)
@@ -83,6 +87,9 @@
   (scroll-margin 5)
   :hook
   (prog-mode . display-line-numbers-mode)
+  ;; `yaml-ts-mode' derives from `text-mode', not `prog-mode', so the hook
+  ;; above misses it — enable line numbers for YAML explicitly.
+  (yaml-ts-mode . display-line-numbers-mode)
   (before-save . delete-trailing-whitespace)
   :config
   ;; Fonts
@@ -362,6 +369,7 @@ Adjacent tabs are separated by a very thin, barely-visible side border."
 
     ;; Open / tools
     "o"   '(:ignore t            :which-key "open")
+    "o/"  '(dirvish              :which-key "dirvish")
     "oe"  '(my/eshell-toggle     :which-key "eshell")
     "oE"  '(eshell               :which-key "eshell (new)")
     "ot"  '(my/ghostel-here      :which-key "terminal (here)")
@@ -647,6 +655,51 @@ Adjacent tabs are separated by a very thin, barely-visible side border."
         `(shell . ("eza" "-a" "--color=always" "--icons=always"
                    "--group-directories-first" ,file))))
     (add-to-list 'dirvish-preview-dispatchers 'eza))
+  ;; macOS ships BSD `ls', which rejects the GNU-only switches in
+  ;; `dired-listing-switches' (e.g. --group-directories-first).  That breaks the
+  ;; listing (raw -l columns, details not hidden).  Prefer GNU `ls' from
+  ;; coreutils (`brew install coreutils' -> `gls'); if it isn't installed, drop
+  ;; the unsupported flag so BSD `ls' still produces a clean listing.
+  (when (eq system-type 'darwin)
+    (if (executable-find "gls")
+        (setq insert-directory-program "gls")
+      (setq dired-listing-switches "-lAh")))
+  ;; --- Emacs 30.2 compatibility shims for dirvish 2.3.0 ---
+  ;; On Emacs 30.2 `dired-hide-details-mode' was hardened to signal "Not a Dired
+  ;; buffer" when the current buffer isn't Dired.  dirvish 2.3.0's
+  ;; `dirvish--maybe-toggle-details' (the final step of `dirvish--build-layout')
+  ;; calls it while a non-Dired buffer is current, so on 30.2 the layout build
+  ;; aborts and the full-frame layout never completes — half-built panes, no
+  ;; preview, details unhidden.  30.1's `dired-hide-details-mode' had no such
+  ;; guard, hence macOS-only.  These advices are only needed on 30.2+.
+  (when (version<= "30.2" emacs-version)
+    ;; (1) Run the details toggle in the session's root Dired buffer so the
+    ;; 30.2 guard passes and the build finishes.
+    (defun my/dirvish-toggle-details-in-root (orig &rest args)
+      (let* ((dv  (ignore-errors (dirvish-curr)))
+             (buf (and dv (cdr (dv-index dv)))))
+        (cond ((buffer-live-p buf) (with-current-buffer buf (apply orig args)))
+              ((derived-mode-p 'dired-mode) (apply orig args)))))
+    (advice-add 'dirvish--maybe-toggle-details :around
+                #'my/dirvish-toggle-details-in-root)
+    ;; (2) With the build fixed, the initial preview stays blank until the
+    ;; selection changes: `dirvish--preview-update' is debounced by filename
+    ;; (see `dirvish--run-with-delay') and the first update fires before the
+    ;; preview window exists, then records the current file so later redisplays
+    ;; for the same file are skipped (j/k in a one-file dir shows nothing).
+    ;; Force a direct, debounce-free preview update for the file at point once
+    ;; the layout is built.
+    (defun my/dirvish-force-initial-preview (dv)
+      (when (dv-curr-layout dv)
+        (run-with-timer
+         0 nil
+         (lambda ()
+           (when-let* ((win (dv-root-window dv)) ((window-live-p win)))
+             (with-selected-window win
+               (when-let* ((idx (ignore-errors (dired-get-filename nil t))))
+                 (dirvish--preview-update dv (file-local-name idx)))))))))
+    (advice-add 'dirvish--build-layout :after
+                #'my/dirvish-force-initial-preview))
   ;; Dirvish installs `dirvish-mode-map' as the buffer-local map (it merely
   ;; inherits `dired-mode-map' as a parent).  Both evil's overriding-map status
   ;; and its auxiliary keymaps key off the exact keymap object and do NOT follow
