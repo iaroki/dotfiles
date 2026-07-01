@@ -432,7 +432,10 @@ Adjacent tabs are separated by a very thin, barely-visible side border."
   (doom-modeline-modal-icon t)
   (doom-modeline-major-mode-icon t)
   (doom-modeline-workspace-name nil)
-  (doom-modeline-buffer-file-name-style 'file-name))
+  ;; Show project name + truncated path to the file, e.g. "myproj/f/b/main.go".
+  (doom-modeline-buffer-file-name-style 'truncate-with-project)
+  ;; Truncate long git branch names in the modeline to 8 chars.
+  (doom-modeline-vcs-max-length 13))
 
 (use-package nyan-mode
   :ensure t
