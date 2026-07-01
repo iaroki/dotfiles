@@ -68,6 +68,7 @@
   (ring-bell-function 'ignore)
   (split-width-threshold 300)
   (switch-to-buffer-obey-display-actions t)
+  (help-window-select t)                ; focus follows *Help*/doc windows so `q` closes them
   (indent-tabs-mode nil)
   (tab-always-indent 'complete)
   (tab-width 2)
@@ -133,6 +134,21 @@
   (file-name-shadow-mode 1)
   ;; Set the default coding system for files to UTF-8.
   (modify-coding-system-alist 'file "" 'utf-8))
+
+;; Focus follows pop-up windows: when any buffer is displayed in a new window
+;; (Help, xref, grep, occur, flymake diagnostics, compilation, *eldoc*, …) move
+;; the cursor into it so it can be acted on and closed with `q'.  Side windows
+;; (which-key, dirvish-side, eshell, neotree, transient/magit menus) set the
+;; `window-side' parameter and are intentionally skipped — grabbing focus there
+;; would break them.
+(defun my/auto-focus-popup (window)
+  "Select WINDOW on display unless it is a side window."
+  (unless (window-parameter window 'window-side)
+    (select-window window)))
+
+(add-to-list 'display-buffer-alist
+             '("." nil (body-function . my/auto-focus-popup))
+             :append)
 
 ;; Dynamic GC: high threshold while active, collect during idle
 (use-package gcmh
@@ -412,8 +428,14 @@ Adjacent tabs are separated by a very thin, barely-visible side border."
   ;; In REPL buffers (eshell etc.) submit the prompt with RET in *insert* state;
   ;; newline moves to normal state. Default is the reverse, which makes RET only
   ;; execute commands from normal mode. Must be set before evil-collection-init.
+  ;; Don't let evil-collection bind `K' to `eldoc-doc-buffer' in eglot (and
+  ;; other) buffers — that shadows our global `K' -> `eldoc-box-help-at-point'
+  ;; only when a language server is running, so docs would pop a bottom window
+  ;; in LSP buffers but a childframe elsewhere.  Disabling it keeps the
+  ;; eldoc-box childframe everywhere.
   (evil-collection-binding-overrides '((repl-submit  :state insert)
-                                       (repl-newline :state normal)))
+                                       (repl-newline :state normal)
+                                       (lookup-doc   :enabled nil)))
   :config
   (evil-collection-init))
 
