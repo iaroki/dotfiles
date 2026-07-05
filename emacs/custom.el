@@ -6,7 +6,9 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages nil)
  '(package-vc-selected-packages
-   '((org-modern-indent :url
+   '((terraform-ts-mode :url
+                        "https://codeberg.org/ccbash-oss/terraform-ts-mode")
+     (org-modern-indent :url
                         "https://github.com/jdtsmith/org-modern-indent"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
