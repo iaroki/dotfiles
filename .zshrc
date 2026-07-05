@@ -3,6 +3,7 @@ source ~/.zaliases
 # App vars
 export PASSWORD_STORE_GPG_OPTS="--armor"
 export FZF_DEFAULT_OPTS="--reverse --border"
+export PASSWORD_STORE_GPG_OPTS="--armor"
 # Do not store commands that start with a space
 setopt HIST_IGNORE_SPACE
 # Lines configured by zsh-newuser-install
