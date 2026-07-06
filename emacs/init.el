@@ -95,7 +95,7 @@
   ;; Fonts
   ;; Set your favourite font family and height here.  The :height is
   ;; 10x the point size you most commonly find on other applications.
-  (set-face-attribute 'default nil :family "Iosevka Nerd Font" :height 160)
+  (set-face-attribute 'default nil :family "Iosevka Nerd Font" :height 180)
   ;; Set your favourite font for elements that are designed to always
   ;; be monospaced.  The height SHOULD BE a floating point, which is
   ;; interpreted as relative to the `default'.
