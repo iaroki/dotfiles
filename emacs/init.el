@@ -842,6 +842,46 @@ Adjacent tabs are separated by a very thin, barely-visible side border."
   ;; `centaur-tabs-buffer-groups-function' back to the default (major-mode)
   ;; grouping, which silently undid the project grouping below.
   (setq centaur-tabs-buffer-groups-function #'my/centaur-tabs-buffer-groups)
+  ;; Whitelist which buffers get a tab.  The default `centaur-tabs-hide-tab'
+  ;; works off `centaur-tabs-excluded-prefixes' — a blacklist that can never
+  ;; enumerate every transient system buffer (magit, *EGLOT … events*, *Help*,
+  ;; *compilation*, *vc-diff*, package menus, …), so those keep popping up in
+  ;; the bar and shove the last-visited file out of view.  Invert the logic:
+  ;; a buffer earns a tab only if it visits a real file or is a ghostel
+  ;; terminal; everything else is hidden.  Result: a project's tab bar shows
+  ;; just its open files and its ghostel.
+  ;;
+  ;; This is the lever that actually decides tab *membership*.  centaur-tabs
+  ;; builds each group's tabs from `centaur-tabs-buffer-list-function'; the
+  ;; default keeps every live, non-space buffer, so magit / *EGLOT … events*
+  ;; land in the project group next to the files.  Restrict the list to real
+  ;; files and ghostel terminals so nothing else can ever get a tab.
+  (defun my/centaur-tabs-buffer-list ()
+    "Return only the buffers that deserve a tab.
+Keep file-visiting buffers and ghostel terminals; drop magit, EGLOT, help,
+compilation and every other transient system buffer."
+    (seq-filter
+     (lambda (b)
+       (or (buffer-file-name b)
+           (string-prefix-p "*ghostel" (buffer-name b))))
+     (buffer-list)))
+  (setq centaur-tabs-buffer-list-function #'my/centaur-tabs-buffer-list)
+  ;;
+  ;; Complementary: `centaur-tabs-hide-tab-function' governs whether the bar
+  ;; is drawn at all in the window showing buffer X.  Suppress it whenever X
+  ;; itself is a system buffer, so viewing magit/EGLOT shows no stray bar.
+  (defun my/centaur-tabs-hide-tab (x)
+    "Return non-nil to hide the tab bar while viewing buffer X.
+Show the bar only for file-visiting buffers and ghostel terminals; hide it
+for every other (system) buffer.  Dedicated windows (dirvish previews) too."
+    (let ((name (format "%s" x)))
+      (or
+       ;; Dedicated windows (dirvish preview, side windows) show no tabs.
+       (window-dedicated-p (selected-window))
+       ;; Otherwise: keep only real files and ghostel terminals.
+       (not (or (buffer-file-name x)
+                (string-prefix-p "*ghostel" name))))))
+  (setq centaur-tabs-hide-tab-function #'my/centaur-tabs-hide-tab)
   (when (bound-and-true-p centaur-tabs-mode)
     (centaur-tabs-display-update))
   ;; Blend the tab bar into the (already-loaded) theme background.  The
