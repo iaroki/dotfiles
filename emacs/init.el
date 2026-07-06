@@ -954,7 +954,7 @@ for every other (system) buffer.  Dedicated windows (dirvish previews) too."
 
 (use-package eglot
   :ensure nil
-  :hook ((c-ts-mode c++-ts-mode go-ts-mode yaml-ts-mode bash-ts-mode python-ts-mode terraform-ts-mode) . eglot-ensure)
+  :hook ((c-ts-mode c++-ts-mode go-ts-mode yaml-ts-mode bash-ts-mode python-ts-mode) . eglot-ensure)
   :custom
   (eglot-events-buffer-size 0)
   (eglot-autoshutdown t)
@@ -1146,12 +1146,22 @@ non-nil, in which case they are recompiled.  Reports a summary at the end."
 ;; grammar on first activation (needs a C compiler + git on PATH).
 (use-package terraform-ts-mode
   :vc (:url "https://codeberg.org/ccbash-oss/terraform-ts-mode" :rev :newest)
-  :mode ("\\.tf\\'" "\\.tfvars\\'"))
+  :mode ("\\.tf\\'" "\\.tfvars\\'")
+  :config
+  ;; The package unconditionally does `(add-hook 'terraform-ts-mode-hook
+  ;; #'eglot-ensure)' at load time, which starts terraform-ls for EVERY
+  ;; terraform-ts-mode buffer — including terragrunt `.hcl' files, where it
+  ;; floods flymake with "unexpected block" diagnostics.  Drop the global
+  ;; hook; our own `terraform-ts-mode-hook' below starts eglot for real
+  ;; Terraform (.tf/.tfvars) only.
+  (remove-hook 'terraform-ts-mode-hook #'eglot-ensure))
 
 (add-to-list 'auto-mode-alist '("\\.hcl\\'" . terraform-ts-mode))
 
 (defun my/terragrunt-format-buffer ()
-  "Format current .hcl buffer with `terragrunt hcl fmt'."
+  "Format the just-saved .hcl file with `terragrunt hcl fmt', then reload.
+Runs on `after-save-hook' so the buffer's contents are already on disk;
+running this before the save would revert unsaved edits."
   (when (and buffer-file-name
              (string-match-p "\\.hcl\\'" buffer-file-name)
              (executable-find "terragrunt"))
@@ -1161,7 +1171,14 @@ non-nil, in which case they are recompiled.  Reports a summary at the end."
 (add-hook 'terraform-ts-mode-hook
   (lambda ()
     (if (and buffer-file-name (string-match-p "\\.hcl\\'" buffer-file-name))
-        (add-hook 'before-save-hook #'my/terragrunt-format-buffer nil t)
+        ;; Terragrunt HCL: terraform-ls only understands real Terraform, so it
+        ;; flags terragrunt-only blocks (include, dependency, remote_state,
+        ;; generate, inputs, …) as "unexpected block".  Do NOT start eglot
+        ;; here — just format with `terragrunt hcl fmt' on save.
+        (add-hook 'after-save-hook #'my/terragrunt-format-buffer nil t)
+      ;; Real Terraform (.tf / .tfvars): start the language server and let it
+      ;; format the buffer on save.
+      (eglot-ensure)
       (add-hook 'before-save-hook #'eglot-format-buffer nil t))))
 
 (use-package markdown-mode
