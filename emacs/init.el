@@ -95,7 +95,18 @@
   ;; Fonts
   ;; Set your favourite font family and height here.  The :height is
   ;; 10x the point size you most commonly find on other applications.
-  (set-face-attribute 'default nil :family "Iosevka Nerd Font" :height 180)
+  ;;
+  ;; The comfortable size differs per platform (Retina macOS vs typical
+  ;; Linux DPI), so keep one height per OS and pick the right one from
+  ;; `system-type'.  Tune these two numbers to taste.
+  (defvar my/font-size-macos 200
+    "Default face `:height' used on macOS.")
+  (defvar my/font-size-linux 140
+    "Default face `:height' used on GNU/Linux.")
+  (defvar my/font-size
+    (if (eq system-type 'darwin) my/font-size-macos my/font-size-linux)
+    "Platform-appropriate default face `:height', chosen from `system-type'.")
+  (set-face-attribute 'default nil :family "Iosevka Nerd Font" :height my/font-size)
   ;; Set your favourite font for elements that are designed to always
   ;; be monospaced.  The height SHOULD BE a floating point, which is
   ;; interpreted as relative to the `default'.
