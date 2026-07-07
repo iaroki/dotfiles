@@ -440,6 +440,19 @@ Adjacent tabs are separated by a very thin, barely-visible side border."
            (when (use-region-p)
              (comment-or-uncomment-region (region-beginning) (region-end)))))
 
+  ;; Visual-mode paste: `P` preserves the register/clipboard so the same text
+  ;; can be pasted over multiple selections (mirrors Doom Emacs). `p` keeps
+  ;; evil's default of yanking the replaced selection into the kill-ring.
+  (defun my/evil-visual-paste-no-kill (count &optional register)
+    "Like `evil-visual-paste', but don't add the replaced text to the kill-ring."
+    (interactive "*P<x>")
+    (let ((evil-kill-on-visual-paste nil))
+      (evil-visual-paste count register)))
+
+  (general-define-key
+    :states 'visual
+    "P" 'my/evil-visual-paste-no-kill)
+
   (add-hook 'git-commit-setup-hook 'evil-insert-state))
 
 (use-package evil-collection
@@ -1289,7 +1302,13 @@ Bound to SPC o T — falls back to `default-directory' outside a project."
 (use-package evil-ghostel
   :ensure t
   :after evil
-  :hook (ghostel-mode . evil-ghostel-mode))
+  :hook (ghostel-mode . evil-ghostel-mode)
+  :config
+  ;; ESC stays routed to the terminal (see `evil-ghostel-escape'), so bind an
+  ;; explicit escape hatch: C-z forces evil *normal* state (not the default
+  ;; emacs state) so the SPC leader — buffer/tab switching, etc. — is reachable.
+  (evil-define-key* 'insert evil-ghostel-mode-map
+                    (kbd "C-z") #'evil-force-normal-state))
 
 ;; pass — Unix password manager (completing-read interface to `pass').  Requires
 ;; the `pass' CLI and a configured GPG key; OTP needs the pass-otp extension.
