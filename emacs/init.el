@@ -320,6 +320,7 @@ Adjacent tabs are separated by a very thin, barely-visible side border."
     "pb"  '(consult-project-buffer      :which-key "buffers")
     "pp"  '(tabspaces-open-or-create-project-and-workspace :which-key "switch project")
     "pf"  '(project-find-file           :which-key "find file")
+    "ps"  '(consult-ripgrep             :which-key "ripgrep")
     "p/"  '(my/dirvish-project          :which-key "dirvish")
     "pg"  '(project-find-regexp         :which-key "grep")
     "pk"  '(project-kill-buffers        :which-key "kill buffers")
@@ -331,6 +332,7 @@ Adjacent tabs are separated by a very thin, barely-visible side border."
     "sg"  '(consult-grep          :which-key "grep")
     "sG"  '(consult-git-grep      :which-key "git grep")
     "sr"  '(consult-ripgrep       :which-key "ripgrep")
+    "sp"  '(consult-ripgrep       :which-key "project ripgrep")
     "sh"  '(consult-info          :which-key "info")
 
     ;; Actions
