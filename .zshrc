@@ -6,6 +6,8 @@ source ~/.zaliases
 export PASSWORD_STORE_GPG_OPTS="--armor"
 export FZF_DEFAULT_OPTS="--reverse --border"
 export PASSWORD_STORE_GPG_OPTS="--armor"
+export PASSWORD_STORE_ENABLE_EXTENSIONS=true
+export PASSWORD_STORE_EXTENSIONS_DIR="$HOME/.passage/extensions"
 # Do not store commands that start with a space
 setopt HIST_IGNORE_SPACE
 # Lines configured by zsh-newuser-install
@@ -17,7 +19,7 @@ bindkey -v
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/msytnyk/.zshrc'
-
+fpath=("$HOME/.local/share/zsh/site-functions" $fpath)
 autoload -Uz compinit
 compinit
 # End of lines added by compinstall
