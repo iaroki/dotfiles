@@ -1,3 +1,5 @@
+# PATH expansion
+export PATH="$HOME/.local/bin:$PATH"
 # Import aliases
 source ~/.zaliases
 # App vars
