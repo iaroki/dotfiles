@@ -635,7 +635,25 @@ Adjacent tabs are separated by a very thin, barely-visible side border."
 (use-package project
   :ensure nil
   :custom
-  (project-switch-commands 'project-find-file))
+  (project-switch-commands 'project-find-file)
+  ;; Treat git submodules as their own projects instead of merging them
+  ;; into the superproject.
+  (project-vc-merge-submodules nil)
+  :config
+  (defun my/project-remember-submodules (dir)
+    "Register every git submodule under DIR as a known project."
+    (interactive (list (or (and-let* ((proj (project-current)))
+                             (project-root proj))
+                           (read-directory-name "Parent repo: "))))
+    (let* ((default-directory dir)
+           (paths (process-lines "git" "submodule" "foreach"
+                                 "--quiet" "--recursive" "echo $displaypath"))
+           (count 0))
+      (dolist (path paths)
+        (when-let* ((proj (project-current nil (expand-file-name path dir))))
+          (project-remember-project proj)
+          (setq count (1+ count))))
+      (message "Registered %d submodule project(s)" count))))
 
 (use-package dirvish
   :ensure t
@@ -923,6 +941,14 @@ for every other (system) buffer.  Dedicated windows (dirvish previews) too."
         #'magit-display-buffer-same-window-except-diff-v1)
   ;; skip diff buffer before commit
   (setq magit-commit-show-diff nil)
+  ;; always verify and show commit signatures (log hashes get signature
+  ;; faces; revision/diff buffers show the verification output)
+  (put 'magit-log-mode 'magit-log-default-arguments
+       '("--graph" "-n256" "--decorate" "--show-signature"))
+  (put 'magit-revision-mode 'magit-diff-default-arguments
+       '("--stat" "--no-ext-diff" "--show-signature"))
+  (put 'magit-diff-mode 'magit-diff-default-arguments
+       '("--stat" "--no-ext-diff" "--show-signature"))
   (setopt magit-format-file-function #'magit-format-file-nerd-icons)
   (add-to-list 'display-buffer-alist
     '("\\`magit-revision:"
